@@ -1,5 +1,5 @@
 # GPX stats helper library
-This java library provides static helper methods to read from GPX 1.1 files and calculate the following parameters: 
+This Java library provides static helper methods to read from GPX 1.1 files and calculate the following parameters: 
 + Total distance [km]
 + Ascent/descent elevation [m]
 + Lowest/highest elevation [m]
