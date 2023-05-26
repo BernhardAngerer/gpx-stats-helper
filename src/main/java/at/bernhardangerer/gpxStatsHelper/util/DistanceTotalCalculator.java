@@ -24,8 +24,8 @@ public final class DistanceTotalCalculator {
      * @param el2 End point elevation
      * @return Distance in Meters
      */
-    public static double calcDistance(final double lat1, final double lat2, final double lon1,
-                                      final double lon2, final double el1, final double el2) {
+    static double calcDistance(final double lat1, final double lat2, final double lon1,
+                               final double lon2, final double el1, final double el2) {
         final int radiusEarth = 6371; // Radius of the earth
         final double latDistance = Math.toRadians(lat2 - lat1);
         final double lonDistance = Math.toRadians(lon2 - lon1);
@@ -39,7 +39,7 @@ public final class DistanceTotalCalculator {
         return Math.sqrt(distance);
     }
 
-    public static Double fromTrkpts(final WptType fromTrkpt, final WptType toTrkpt) {
+    static Double fromTrkpts(final WptType fromTrkpt, final WptType toTrkpt) {
         if (fromTrkpt != null && fromTrkpt.getLat() != null && fromTrkpt.getLon() != null && fromTrkpt.getEle() != null
             && toTrkpt != null && toTrkpt.getLat() != null && toTrkpt.getLon() != null && toTrkpt.getEle() != null) {
             return calcDistance(fromTrkpt.getLat().doubleValue(), toTrkpt.getLat().doubleValue(),
@@ -49,7 +49,7 @@ public final class DistanceTotalCalculator {
         return null;
     }
 
-    public static Double fromTrkptList(final List<WptType> trkptList) {
+    static Double fromTrkptList(final List<WptType> trkptList) {
         if (trkptList != null && trkptList.size() >= 2) {
             double distance = 0;
             for (int count = 0; (count + 1) < trkptList.size(); count++) {
@@ -65,14 +65,14 @@ public final class DistanceTotalCalculator {
         return null;
     }
 
-    public static Double fromTrkseg(final TrksegType trackSegment) {
+    static Double fromTrkseg(final TrksegType trackSegment) {
         if (trackSegment != null) {
             return fromTrkptList(trackSegment.getTrkpt());
         }
         return null;
     }
 
-    public static Double fromTrksegList(final List<TrksegType> trksegList) {
+    static Double fromTrksegList(final List<TrksegType> trksegList) {
         if (trksegList != null && !trksegList.isEmpty()) {
             double distance = 0;
             for (final TrksegType trackSegment : trksegList) {

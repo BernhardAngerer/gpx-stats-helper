@@ -17,7 +17,7 @@ public final class SpeedAvgCalculator {
     private SpeedAvgCalculator() {
     }
 
-    public static DistanceDuration fromTrkpts(final WptType fromTrkpt, final WptType toTrkpt) {
+    static DistanceDuration fromTrkpts(final WptType fromTrkpt, final WptType toTrkpt) {
         if (fromTrkpt != null && fromTrkpt.getEle() != null && toTrkpt != null && toTrkpt.getEle() != null
                 && fromTrkpt.getTime() != null && toTrkpt.getTime() != null) {
             final Double distance = DistanceTotalCalculator.fromTrkpts(fromTrkpt, toTrkpt);
@@ -32,7 +32,7 @@ public final class SpeedAvgCalculator {
         return null;
     }
 
-    public static DistanceDuration fromTrkptList(final List<WptType> trkptList) {
+    static DistanceDuration fromTrkptList(final List<WptType> trkptList) {
         if (trkptList != null && trkptList.size() >= 2) {
             final DistanceDuration distanceDuration = new DistanceDuration();
             for (int count = 0; (count + 1) < trkptList.size(); count++) {
@@ -47,14 +47,14 @@ public final class SpeedAvgCalculator {
         return null;
     }
 
-    public static DistanceDuration fromTrkseg(final TrksegType trackSegment) {
+    static DistanceDuration fromTrkseg(final TrksegType trackSegment) {
         if (trackSegment != null) {
             return fromTrkptList(trackSegment.getTrkpt());
         }
         return null;
     }
 
-    public static DistanceDuration fromTrksegList(final List<TrksegType> trksegList) {
+    static DistanceDuration fromTrksegList(final List<TrksegType> trksegList) {
         if (trksegList != null && !trksegList.isEmpty()) {
             final DistanceDuration distanceDuration = new DistanceDuration();
             for (final TrksegType trackSegment : trksegList) {

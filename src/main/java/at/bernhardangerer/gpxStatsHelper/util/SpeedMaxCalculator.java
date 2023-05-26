@@ -13,7 +13,7 @@ public final class SpeedMaxCalculator {
     private SpeedMaxCalculator() {
     }
 
-    public static double fromTrkpts(final WptType fromTrkpt, final WptType toTrkpt) {
+    static double fromTrkpts(final WptType fromTrkpt, final WptType toTrkpt) {
         if (fromTrkpt != null && fromTrkpt.getEle() != null && toTrkpt != null && toTrkpt.getEle() != null
                 && fromTrkpt.getTime() != null && toTrkpt.getTime() != null) {
             final Double distance = DistanceTotalCalculator.fromTrkpts(fromTrkpt, toTrkpt);
@@ -25,7 +25,7 @@ public final class SpeedMaxCalculator {
         return 0;
     }
 
-    public static double fromTrkptList(final List<WptType> trkptList) {
+    static double fromTrkptList(final List<WptType> trkptList) {
         if (trkptList != null && trkptList.size() >= 2) {
             double speedMax = 0;
             for (int count = 0; (count + 1) < trkptList.size(); count++) {
@@ -37,14 +37,14 @@ public final class SpeedMaxCalculator {
         return 0;
     }
 
-    public static double fromTrkseg(final TrksegType trackSegment) {
+    static double fromTrkseg(final TrksegType trackSegment) {
         if (trackSegment != null) {
             return fromTrkptList(trackSegment.getTrkpt());
         }
         return 0;
     }
 
-    public static double fromTrksegList(final List<TrksegType> trksegList) {
+    static double fromTrksegList(final List<TrksegType> trksegList) {
         if (trksegList != null && !trksegList.isEmpty()) {
             double speedMax = 0;
             for (final TrksegType trackSegment : trksegList) {

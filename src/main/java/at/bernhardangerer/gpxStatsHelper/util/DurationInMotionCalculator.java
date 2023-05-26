@@ -17,7 +17,7 @@ public final class DurationInMotionCalculator {
     private DurationInMotionCalculator() {
     }
 
-    public static Long fromTrkpts(final WptType fromTrkpt, final WptType toTrkpt) {
+    static Long fromTrkpts(final WptType fromTrkpt, final WptType toTrkpt) {
         if (fromTrkpt != null && fromTrkpt.getEle() != null && toTrkpt != null && toTrkpt.getEle() != null
                 && fromTrkpt.getTime() != null && toTrkpt.getTime() != null) {
             final Double distance = DistanceTotalCalculator.fromTrkpts(fromTrkpt, toTrkpt);
@@ -32,7 +32,7 @@ public final class DurationInMotionCalculator {
         return null;
     }
 
-    public static Long fromTrkptList(final List<WptType> trkptList) {
+    static Long fromTrkptList(final List<WptType> trkptList) {
         if (trkptList != null && trkptList.size() >= 2) {
             Long durationInSec = null;
             for (int count = 0; (count + 1) < trkptList.size(); count++) {
@@ -49,14 +49,14 @@ public final class DurationInMotionCalculator {
         return null;
     }
 
-    public static Long fromTrkseg(final TrksegType trackSegment) {
+    static Long fromTrkseg(final TrksegType trackSegment) {
         if (trackSegment != null) {
             return fromTrkptList(trackSegment.getTrkpt());
         }
         return null;
     }
 
-    public static Long fromTrksegList(final List<TrksegType> trksegList) {
+    static Long fromTrksegList(final List<TrksegType> trksegList) {
         if (trksegList != null && !trksegList.isEmpty()) {
             return trksegList.stream().map(trksegType -> fromTrkseg(trksegType)).filter(Objects::nonNull).reduce(0L, Long::sum);
         }

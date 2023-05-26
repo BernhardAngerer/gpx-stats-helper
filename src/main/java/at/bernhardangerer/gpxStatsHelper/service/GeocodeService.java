@@ -11,7 +11,6 @@ import java.net.URISyntaxException;
 public final class GeocodeService {
 
     private static final String BASE_URL = "https://nominatim.openstreetmap.org/reverse";
-
     private final ApiClient client;
 
     public GeocodeService() {

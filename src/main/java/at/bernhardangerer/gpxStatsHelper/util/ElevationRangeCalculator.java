@@ -14,7 +14,7 @@ public final class ElevationRangeCalculator {
     private ElevationRangeCalculator() {
     }
 
-    public static ElevationRange fromTrkptList(final List<WptType> trkptList) {
+    static ElevationRange fromTrkptList(final List<WptType> trkptList) {
         if (trkptList != null && !trkptList.isEmpty()) {
             final ElevationRange range = new ElevationRange();
             range.setHighest(trkptList.stream().max(Comparator.comparing(WptType::getEle)).map(wptType -> wptType.getEle()).get());
@@ -24,14 +24,14 @@ public final class ElevationRangeCalculator {
         return null;
     }
 
-    public static ElevationRange fromTrkseg(final TrksegType trackSegment) {
+    static ElevationRange fromTrkseg(final TrksegType trackSegment) {
         if (trackSegment != null) {
             return fromTrkptList(trackSegment.getTrkpt());
         }
         return null;
     }
 
-    public static ElevationRange fromTrksegList(final List<TrksegType> trksegList) {
+    static ElevationRange fromTrksegList(final List<TrksegType> trksegList) {
         if (trksegList != null && !trksegList.isEmpty()) {
             final ElevationRange range = new ElevationRange();
             range.setHighest(trksegList.stream().map(trksegType -> fromTrkseg(trksegType).getHighest()).max(BigDecimal::compareTo).get());
