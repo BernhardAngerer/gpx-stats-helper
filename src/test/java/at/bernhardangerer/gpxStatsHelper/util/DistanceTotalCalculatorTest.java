@@ -1,9 +1,9 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import com.topografix.model.GpxType;
-import com.topografix.model.TrkType;
-import com.topografix.model.TrksegType;
-import com.topografix.model.WptType;
+import com.topografix.model.Gpx;
+import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -54,7 +54,7 @@ class DistanceTotalCalculatorTest {
             </trk>
             </gpx>
             """;
-    private static final GpxType GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
+    private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
 
     @Test
     void calcDistance() {
@@ -65,85 +65,85 @@ class DistanceTotalCalculatorTest {
 
     @Test
     void fromTrkpts() {
-        final WptType fromTrkpt = new WptType();
-        fromTrkpt.setLat(BigDecimal.valueOf(47.80743));
-        fromTrkpt.setLon(BigDecimal.valueOf(12.378228));
-        fromTrkpt.setEle(BigDecimal.valueOf(587));
-        final WptType toTrkpt = new WptType();
-        toTrkpt.setLat(BigDecimal.valueOf(47.807343));
-        toTrkpt.setLon(BigDecimal.valueOf(12.378138));
-        toTrkpt.setEle(BigDecimal.valueOf(588));
+        final Waypoint fromWaypoint = new Waypoint();
+        fromWaypoint.setLat(BigDecimal.valueOf(47.80743));
+        fromWaypoint.setLon(BigDecimal.valueOf(12.378228));
+        fromWaypoint.setEle(BigDecimal.valueOf(587));
+        final Waypoint toWaypoint = new Waypoint();
+        toWaypoint.setLat(BigDecimal.valueOf(47.807343));
+        toWaypoint.setLon(BigDecimal.valueOf(12.378138));
+        toWaypoint.setEle(BigDecimal.valueOf(588));
 
-        Double distance = DistanceTotalCalculator.fromTrkpts(fromTrkpt, toTrkpt);
+        Double distance = DistanceTotalCalculator.fromTrackpoints(fromWaypoint, toWaypoint);
         assertNotNull(distance);
         assertTrue(distance > 0);
         assertEquals(11.822080163097478, distance);
 
-        distance = DistanceTotalCalculator.fromTrkpts(null, null);
+        distance = DistanceTotalCalculator.fromTrackpoints(null, null);
         assertNull(distance);
     }
 
     @Test
     void fromTrkptList() {
-        final List<WptType> trkptList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
+        final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
-        Double distance = DistanceTotalCalculator.fromTrkptList(trkptList);
+        Double distance = DistanceTotalCalculator.fromWaypointList(waypointList);
         assertNotNull(distance);
         assertTrue(distance > 0);
         assertEquals(69.93321548302377, distance);
 
-        distance = DistanceTotalCalculator.fromTrkptList(null);
+        distance = DistanceTotalCalculator.fromWaypointList(null);
         assertNull(distance);
 
-        distance = DistanceTotalCalculator.fromTrkptList(new ArrayList<>());
+        distance = DistanceTotalCalculator.fromWaypointList(new ArrayList<>());
         assertNull(distance);
     }
 
     @Test
     void fromTrkseg() {
-        final TrksegType trkseg = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
+        final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
-        Double distance = DistanceTotalCalculator.fromTrkseg(trkseg);
+        Double distance = DistanceTotalCalculator.fromTrackSegment(trackSegment);
         assertNotNull(distance);
         assertTrue(distance > 0);
         assertEquals(69.93321548302377, distance);
 
-        distance = DistanceTotalCalculator.fromTrkseg(null);
+        distance = DistanceTotalCalculator.fromTrackSegment(null);
         assertNull(distance);
 
-        distance = DistanceTotalCalculator.fromTrkseg(new TrksegType());
+        distance = DistanceTotalCalculator.fromTrackSegment(new TrackSegment());
         assertNull(distance);
     }
 
     @Test
     void fromTrksegList() {
-        final List<TrksegType> trksegList = GPX_TYPE.getTrk().get(0).getTrkseg();
+        final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
-        Double distance = DistanceTotalCalculator.fromTrksegList(trksegList);
+        Double distance = DistanceTotalCalculator.fromTrackSegmentList(trackSegmentList);
         assertNotNull(distance);
         assertTrue(distance > 0);
         assertEquals(149.9041198759723, distance);
 
-        distance = DistanceTotalCalculator.fromTrksegList(null);
+        distance = DistanceTotalCalculator.fromTrackSegmentList(null);
         assertNull(distance);
 
-        distance = DistanceTotalCalculator.fromTrksegList(new ArrayList<>());
+        distance = DistanceTotalCalculator.fromTrackSegmentList(new ArrayList<>());
         assertNull(distance);
     }
 
     @Test
     void fromTrk() {
-        final TrkType track = GPX_TYPE.getTrk().get(0);
+        final Track track = GPX_TYPE.getTrk().get(0);
 
-        Double distance = DistanceTotalCalculator.fromTrk(track);
+        Double distance = DistanceTotalCalculator.fromTrack(track);
         assertNotNull(distance);
         assertTrue(distance > 0);
         assertEquals(149.9041198759723, distance);
 
-        distance = DistanceTotalCalculator.fromTrk(null);
+        distance = DistanceTotalCalculator.fromTrack(null);
         assertNull(distance);
 
-        distance = DistanceTotalCalculator.fromTrk(new TrkType());
+        distance = DistanceTotalCalculator.fromTrack(new Track());
         assertNull(distance);
     }
 }

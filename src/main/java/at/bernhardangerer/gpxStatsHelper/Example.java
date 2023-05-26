@@ -19,8 +19,8 @@ import at.bernhardangerer.gpxStatsHelper.util.GpxConverter;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedAvgCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedMaxCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedUtil;
-import com.topografix.model.GpxType;
-import com.topografix.model.TrkType;
+import com.topografix.model.Gpx;
+import com.topografix.model.Track;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,28 +55,28 @@ public final class Example {
             throws IOException, URISyntaxException, WebserviceCallException, InterruptedException {
         final File file = new File(Objects.requireNonNull(
                 Example.class.getClassLoader().getResource("example/example1.gpx")).getFile());
-        final GpxType gpx = GpxConverter.convertGpxFromFile(file);
+        final Gpx gpx = GpxConverter.convertGpxFromFile(file);
 
         if (gpx.getMetadata().getName() != null) {
             System.out.println("GPX name: \"" + gpx.getMetadata().getName() + "\"");
         }
         int count = 1;
-        for (final TrkType track : gpx.getTrk()) {
+        for (final Track track : gpx.getTrk()) {
             System.out.println("### track nr. " + count
                     + (track.getName() != null ? " - \"" + track.getName() : "\"") + " ###");
 
-            final Double distance = DistanceTotalCalculator.fromTrk(track);
+            final Double distance = DistanceTotalCalculator.fromTrack(track);
             System.out.println("total distance: " + DECIMAL_FORMAT.format(distance / 1000) + " km");
 
-            final ElevationDelta delta = ElevationDeltaCalculator.fromTrk(track);
+            final ElevationDelta delta = ElevationDeltaCalculator.fromTrack(track);
             System.out.println("ascent: " + delta.getAscent().setScale(0, RoundingMode.HALF_UP) + " m");
             System.out.println("descent: " + delta.getDescent().setScale(0, RoundingMode.HALF_UP) + " m");
 
-            final ElevationRange range = ElevationRangeCalculator.fromTrk(track);
+            final ElevationRange range = ElevationRangeCalculator.fromTrack(track);
             System.out.println("highest point: " + range.getHighest().setScale(0, RoundingMode.HALF_UP) + " m.s.l.");
             System.out.println("lowest point: " + range.getLowest().setScale(0, RoundingMode.HALF_UP) + " m.s.l.");
 
-            final FirstLastWpt firstLast = FirstLastWptCalculator.fromTrk(track);
+            final FirstLastWpt firstLast = FirstLastWptCalculator.fromTrack(track);
 
             System.out.println("start time: " + DATE_TIME_FORMATTER.format(DateTimeUtil.utcToCet(firstLast.getFirst().getTime())) + " h");
             System.out.println("end time: " + DATE_TIME_FORMATTER.format(DateTimeUtil.utcToCet(firstLast.getLast().getTime())) + " h");
@@ -84,13 +84,13 @@ public final class Example {
             final Duration durationTotal = calcDateTimeDifference(firstLast.getFirst().getTime(), firstLast.getLast().getTime());
             System.out.println("total duration: " + durationTotal.format() + " h");
 
-            final Long durationInMotion = DurationInMotionCalculator.fromTrk(track);
+            final Long durationInMotion = DurationInMotionCalculator.fromTrack(track);
             System.out.println("duration in motion: " + convertFromSeconds(durationInMotion).format() + " h");
 
-            final Double speedMax = SpeedMaxCalculator.fromTrk(track);
+            final Double speedMax = SpeedMaxCalculator.fromTrack(track);
             System.out.println("maximum speed: " + DECIMAL_FORMAT.format(speedMax) + " km/h");
 
-            final DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrk(track);
+            final DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrack(track);
             System.out.println("average speed: " + DECIMAL_FORMAT.format(SpeedUtil.calculateSpeed(distanceDuration)) + " km/h");
 
             System.out.println("start position: Lat " + firstLast.getFirst().getLat() + " / Lon " + firstLast.getFirst().getLon());

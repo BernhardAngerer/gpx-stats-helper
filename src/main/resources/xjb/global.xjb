@@ -2,6 +2,7 @@
 <jaxb:bindings version="2.1"
                xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
                xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd">
 
@@ -11,4 +12,19 @@
                       name="java.time.LocalDateTime"
                       adapter="at.bernhardangerer.gpxStatsHelper.util.LocalDateTimeAdapter"/>
     </jaxb:globalBindings>
+
+    <jaxb:bindings schemaLocation="../xsd/gpx11.xsd">
+        <jaxb:bindings node="//xs:complexType[@name='gpxType']">
+            <jaxb:class name="Gpx"/>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='wptType']">
+            <jaxb:class name="Waypoint"/>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='trkType']">
+            <jaxb:class name="Track"/>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='trksegType']">
+            <jaxb:class name="TrackSegment"/>
+        </jaxb:bindings>
+    </jaxb:bindings>
 </jaxb:bindings>

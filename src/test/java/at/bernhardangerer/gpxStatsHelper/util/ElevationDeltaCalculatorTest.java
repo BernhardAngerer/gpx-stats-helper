@@ -1,10 +1,10 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
 import at.bernhardangerer.gpxStatsHelper.model.ElevationDelta;
-import com.topografix.model.GpxType;
-import com.topografix.model.TrkType;
-import com.topografix.model.TrksegType;
-import com.topografix.model.WptType;
+import com.topografix.model.Gpx;
+import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -54,84 +54,84 @@ class ElevationDeltaCalculatorTest {
             </trk>
             </gpx>
             """;
-    private static final GpxType GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
+    private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
 
     @Test
     void fromTrkpts() {
-        final WptType fromTrkpt = new WptType();
-        fromTrkpt.setEle(BigDecimal.valueOf(587));
-        final WptType toTrkpt = new WptType();
-        toTrkpt.setEle(BigDecimal.valueOf(590));
+        final Waypoint fromWaypoint = new Waypoint();
+        fromWaypoint.setEle(BigDecimal.valueOf(587));
+        final Waypoint toWaypoint = new Waypoint();
+        toWaypoint.setEle(BigDecimal.valueOf(590));
 
-        BigDecimal elevationDelta = ElevationDeltaCalculator.fromTrkpts(fromTrkpt, toTrkpt);
+        BigDecimal elevationDelta = ElevationDeltaCalculator.fromWaypoints(fromWaypoint, toWaypoint);
         assertNotNull(elevationDelta);
         assertEquals(BigDecimal.valueOf(3), elevationDelta);
 
-        elevationDelta = ElevationDeltaCalculator.fromTrkpts(null, null);
+        elevationDelta = ElevationDeltaCalculator.fromWaypoints(null, null);
         assertNull(elevationDelta);
     }
 
     @Test
     void fromTrkptList() {
-        final List<WptType> trkptList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
+        final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
-        ElevationDelta delta = ElevationDeltaCalculator.fromTrkptList(trkptList);
+        ElevationDelta delta = ElevationDeltaCalculator.fromWaypointList(waypointList);
         assertNotNull(delta);
         assertEquals(BigDecimal.ONE, delta.getAscent());
         assertEquals(BigDecimal.valueOf(2), delta.getDescent());
 
-        delta = ElevationDeltaCalculator.fromTrkptList(null);
+        delta = ElevationDeltaCalculator.fromWaypointList(null);
         assertNull(delta);
 
-        delta = ElevationDeltaCalculator.fromTrkptList(new ArrayList<>());
+        delta = ElevationDeltaCalculator.fromWaypointList(new ArrayList<>());
         assertNull(delta);
     }
 
     @Test
     void fromTrkseg() {
-        final TrksegType trkseg = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
+        final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
-        ElevationDelta delta = ElevationDeltaCalculator.fromTrkseg(trkseg);
+        ElevationDelta delta = ElevationDeltaCalculator.fromTrackSegment(trackSegment);
         assertNotNull(delta);
         assertEquals(BigDecimal.ONE, delta.getAscent());
         assertEquals(BigDecimal.valueOf(2), delta.getDescent());
 
-        delta = ElevationDeltaCalculator.fromTrkseg(null);
+        delta = ElevationDeltaCalculator.fromTrackSegment(null);
         assertNull(delta);
 
-        delta = ElevationDeltaCalculator.fromTrkseg(new TrksegType());
+        delta = ElevationDeltaCalculator.fromTrackSegment(new TrackSegment());
         assertNull(delta);
     }
 
     @Test
     void fromTrksegList() {
-        final List<TrksegType> trksegList = GPX_TYPE.getTrk().get(0).getTrkseg();
+        final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
-        ElevationDelta delta = ElevationDeltaCalculator.fromTrksegList(trksegList);
+        ElevationDelta delta = ElevationDeltaCalculator.fromTrackSegmentList(trackSegmentList);
         assertNotNull(delta);
         assertEquals(BigDecimal.ONE, delta.getAscent());
         assertEquals(BigDecimal.valueOf(4), delta.getDescent());
 
-        delta = ElevationDeltaCalculator.fromTrksegList(null);
+        delta = ElevationDeltaCalculator.fromTrackSegmentList(null);
         assertNull(delta);
 
-        delta = ElevationDeltaCalculator.fromTrksegList(new ArrayList<>());
+        delta = ElevationDeltaCalculator.fromTrackSegmentList(new ArrayList<>());
         assertNull(delta);
     }
 
     @Test
     void fromTrk() {
-        final TrkType track = GPX_TYPE.getTrk().get(0);
+        final Track track = GPX_TYPE.getTrk().get(0);
 
-        ElevationDelta delta = ElevationDeltaCalculator.fromTrk(track);
+        ElevationDelta delta = ElevationDeltaCalculator.fromTrack(track);
         assertNotNull(delta);
         assertEquals(BigDecimal.ONE, delta.getAscent());
         assertEquals(BigDecimal.valueOf(4), delta.getDescent());
 
-        delta = ElevationDeltaCalculator.fromTrk(null);
+        delta = ElevationDeltaCalculator.fromTrack(null);
         assertNull(delta);
 
-        delta = ElevationDeltaCalculator.fromTrk(new TrkType());
+        delta = ElevationDeltaCalculator.fromTrack(new Track());
         assertNull(delta);
     }
 }

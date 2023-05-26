@@ -1,9 +1,9 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import com.topografix.model.GpxType;
-import com.topografix.model.TrkType;
-import com.topografix.model.TrksegType;
-import com.topografix.model.WptType;
+import com.topografix.model.Gpx;
+import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -55,94 +55,94 @@ class DurationInMotionCalculatorTest {
             </trk>
             </gpx>
             """;
-    private static final GpxType GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
+    private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
 
     @Test
     void fromTrkpts() {
-        final WptType fromTrkpt = new WptType();
-        fromTrkpt.setLat(BigDecimal.valueOf(47.80743));
-        fromTrkpt.setLon(BigDecimal.valueOf(12.378228));
-        fromTrkpt.setEle(BigDecimal.valueOf(587));
-        fromTrkpt.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 16));
-        final WptType toTrkpt = new WptType();
-        toTrkpt.setLat(BigDecimal.valueOf(47.807343));
-        toTrkpt.setLon(BigDecimal.valueOf(12.378138));
-        toTrkpt.setEle(BigDecimal.valueOf(588));
-        toTrkpt.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 20));
+        final Waypoint fromWaypoint = new Waypoint();
+        fromWaypoint.setLat(BigDecimal.valueOf(47.80743));
+        fromWaypoint.setLon(BigDecimal.valueOf(12.378228));
+        fromWaypoint.setEle(BigDecimal.valueOf(587));
+        fromWaypoint.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 16));
+        final Waypoint toWaypoint = new Waypoint();
+        toWaypoint.setLat(BigDecimal.valueOf(47.807343));
+        toWaypoint.setLon(BigDecimal.valueOf(12.378138));
+        toWaypoint.setEle(BigDecimal.valueOf(588));
+        toWaypoint.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 20));
 
-        Long durationInSec = DurationInMotionCalculator.fromTrkpts(fromTrkpt, toTrkpt);
+        Long durationInSec = DurationInMotionCalculator.fromWaypoints(fromWaypoint, toWaypoint);
         assertNotNull(durationInSec);
         assertTrue(durationInSec > 0);
         assertEquals(4, durationInSec);
 
-        durationInSec = DurationInMotionCalculator.fromTrkpts(null, null);
+        durationInSec = DurationInMotionCalculator.fromWaypoints(null, null);
         assertNull(durationInSec);
 
-        durationInSec = DurationInMotionCalculator.fromTrkpts(new WptType(), new WptType());
+        durationInSec = DurationInMotionCalculator.fromWaypoints(new Waypoint(), new Waypoint());
         assertNull(durationInSec);
     }
 
     @Test
     void fromTrkptList() {
-        final List<WptType> trkptList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
+        final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
-        Long durationInSec = DurationInMotionCalculator.fromTrkptList(trkptList);
+        Long durationInSec = DurationInMotionCalculator.fromWaypointList(waypointList);
         assertNotNull(durationInSec);
         assertTrue(durationInSec > 0);
         assertEquals(54, durationInSec);
 
-        durationInSec = DurationInMotionCalculator.fromTrkptList(null);
+        durationInSec = DurationInMotionCalculator.fromWaypointList(null);
         assertNull(durationInSec);
 
-        durationInSec = DurationInMotionCalculator.fromTrkptList(new ArrayList<>());
+        durationInSec = DurationInMotionCalculator.fromWaypointList(new ArrayList<>());
         assertNull(durationInSec);
     }
 
     @Test
     void fromTrkseg() {
-        final TrksegType trkseg = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
+        final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
-        Long durationInSec = DurationInMotionCalculator.fromTrkseg(trkseg);
+        Long durationInSec = DurationInMotionCalculator.fromTrackSegment(trackSegment);
         assertNotNull(durationInSec);
         assertTrue(durationInSec > 0);
         assertEquals(54, durationInSec);
 
-        durationInSec = DurationInMotionCalculator.fromTrkseg(null);
+        durationInSec = DurationInMotionCalculator.fromTrackSegment(null);
         assertNull(durationInSec);
 
-        durationInSec = DurationInMotionCalculator.fromTrkseg(new TrksegType());
+        durationInSec = DurationInMotionCalculator.fromTrackSegment(new TrackSegment());
         assertNull(durationInSec);
     }
 
     @Test
     void fromTrksegList() {
-        final List<TrksegType> trksegList = GPX_TYPE.getTrk().get(0).getTrkseg();
+        final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
-        Long durationInSec = DurationInMotionCalculator.fromTrksegList(trksegList);
+        Long durationInSec = DurationInMotionCalculator.fromTrackSegmentList(trackSegmentList);
         assertNotNull(durationInSec);
         assertTrue(durationInSec > 0);
         assertEquals(132, durationInSec);
 
-        durationInSec = DurationInMotionCalculator.fromTrksegList(null);
+        durationInSec = DurationInMotionCalculator.fromTrackSegmentList(null);
         assertNull(durationInSec);
 
-        durationInSec = DurationInMotionCalculator.fromTrksegList(new ArrayList<>());
+        durationInSec = DurationInMotionCalculator.fromTrackSegmentList(new ArrayList<>());
         assertNull(durationInSec);
     }
 
     @Test
     void fromTrk() {
-        final TrkType track = GPX_TYPE.getTrk().get(0);
+        final Track track = GPX_TYPE.getTrk().get(0);
 
-        Long durationInSec = DurationInMotionCalculator.fromTrk(track);
+        Long durationInSec = DurationInMotionCalculator.fromTrack(track);
         assertNotNull(durationInSec);
         assertTrue(durationInSec > 0);
         assertEquals(132, durationInSec);
 
-        durationInSec = DurationInMotionCalculator.fromTrk(null);
+        durationInSec = DurationInMotionCalculator.fromTrack(null);
         assertNull(durationInSec);
 
-        durationInSec = DurationInMotionCalculator.fromTrk(new TrkType());
+        durationInSec = DurationInMotionCalculator.fromTrack(new Track());
         assertNull(durationInSec);
     }
 }

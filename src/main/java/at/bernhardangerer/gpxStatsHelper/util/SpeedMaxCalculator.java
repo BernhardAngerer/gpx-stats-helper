@@ -1,8 +1,8 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import com.topografix.model.TrkType;
-import com.topografix.model.TrksegType;
-import com.topografix.model.WptType;
+import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ public final class SpeedMaxCalculator {
     private SpeedMaxCalculator() {
     }
 
-    static double fromTrkpts(final WptType fromTrkpt, final WptType toTrkpt) {
-        if (fromTrkpt != null && fromTrkpt.getEle() != null && toTrkpt != null && toTrkpt.getEle() != null
-                && fromTrkpt.getTime() != null && toTrkpt.getTime() != null) {
-            final Double distance = DistanceTotalCalculator.fromTrkpts(fromTrkpt, toTrkpt);
-            final long duration = calcDateTimeDifferenceInSeconds(fromTrkpt.getTime(), toTrkpt.getTime());
+    static double fromWaypoints(final Waypoint fromWaypoint, final Waypoint toWaypoint) {
+        if (fromWaypoint != null && fromWaypoint.getEle() != null && toWaypoint != null && toWaypoint.getEle() != null
+                && fromWaypoint.getTime() != null && toWaypoint.getTime() != null) {
+            final Double distance = DistanceTotalCalculator.fromTrackpoints(fromWaypoint, toWaypoint);
+            final long duration = calcDateTimeDifferenceInSeconds(fromWaypoint.getTime(), toWaypoint.getTime());
             if (distance != null) {
                 return SpeedUtil.calculateSpeed(distance, duration);
             }
@@ -25,11 +25,11 @@ public final class SpeedMaxCalculator {
         return 0;
     }
 
-    static double fromTrkptList(final List<WptType> trkptList) {
-        if (trkptList != null && trkptList.size() >= 2) {
+    static double fromWaypointList(final List<Waypoint> waypointList) {
+        if (waypointList != null && waypointList.size() >= 2) {
             double speedMax = 0;
-            for (int count = 0; (count + 1) < trkptList.size(); count++) {
-                final double speed = fromTrkpts(trkptList.get(count), trkptList.get(count + 1));
+            for (int count = 0; (count + 1) < waypointList.size(); count++) {
+                final double speed = fromWaypoints(waypointList.get(count), waypointList.get(count + 1));
                 speedMax = Math.max(speed, speedMax);
             }
             return speedMax;
@@ -37,18 +37,18 @@ public final class SpeedMaxCalculator {
         return 0;
     }
 
-    static double fromTrkseg(final TrksegType trackSegment) {
+    static double fromTrackSegment(final TrackSegment trackSegment) {
         if (trackSegment != null) {
-            return fromTrkptList(trackSegment.getTrkpt());
+            return fromWaypointList(trackSegment.getTrkpt());
         }
         return 0;
     }
 
-    static double fromTrksegList(final List<TrksegType> trksegList) {
-        if (trksegList != null && !trksegList.isEmpty()) {
+    static double fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
+        if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
             double speedMax = 0;
-            for (final TrksegType trackSegment : trksegList) {
-                final double speed = fromTrkseg(trackSegment);
+            for (final TrackSegment trackSegment : trackSegmentList) {
+                final double speed = fromTrackSegment(trackSegment);
                 speedMax = Math.max(speed, speedMax);
             }
             return speedMax;
@@ -56,9 +56,9 @@ public final class SpeedMaxCalculator {
         return 0;
     }
 
-    public static double fromTrk(final TrkType track) {
+    public static double fromTrack(final Track track) {
         if (track != null) {
-            return fromTrksegList(track.getTrkseg());
+            return fromTrackSegmentList(track.getTrkseg());
         }
         return 0;
     }

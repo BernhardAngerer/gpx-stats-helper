@@ -1,6 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import com.topografix.model.GpxType;
+import com.topografix.model.Gpx;
 
 import javax.xml.bind.JAXB;
 import java.io.File;
@@ -11,16 +11,16 @@ public final class GpxConverter {
     private GpxConverter() {
     }
 
-    public static GpxType convertGpxFromString(final String gpx) {
+    public static Gpx convertGpxFromString(final String gpx) {
         if (gpx != null) {
-            return JAXB.unmarshal(new StringReader(gpx), GpxType.class);
+            return JAXB.unmarshal(new StringReader(gpx), Gpx.class);
         }
         return null;
     }
 
-    public static GpxType convertGpxFromFile(final File gpxFile) {
+    public static Gpx convertGpxFromFile(final File gpxFile) {
         if (gpxFile != null) {
-            return JAXB.unmarshal(gpxFile, GpxType.class);
+            return JAXB.unmarshal(gpxFile, Gpx.class);
         }
         return null;
     }

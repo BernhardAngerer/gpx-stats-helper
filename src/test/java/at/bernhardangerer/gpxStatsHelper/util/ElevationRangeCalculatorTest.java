@@ -1,10 +1,10 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
 import at.bernhardangerer.gpxStatsHelper.model.ElevationRange;
-import com.topografix.model.GpxType;
-import com.topografix.model.TrkType;
-import com.topografix.model.TrksegType;
-import com.topografix.model.WptType;
+import com.topografix.model.Gpx;
+import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -54,69 +54,69 @@ class ElevationRangeCalculatorTest {
             </trk>
             </gpx>
             """;
-    private static final GpxType GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
+    private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
 
     @Test
     void fromTrkptList() {
-        final List<WptType> trkptList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
+        final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
-        ElevationRange range = ElevationRangeCalculator.fromTrkptList(trkptList);
+        ElevationRange range = ElevationRangeCalculator.fromWaypointList(waypointList);
         assertNotNull(range);
         assertEquals(BigDecimal.valueOf(588), range.getHighest());
         assertEquals(BigDecimal.valueOf(586), range.getLowest());
 
-        range = ElevationRangeCalculator.fromTrkptList(null);
+        range = ElevationRangeCalculator.fromWaypointList(null);
         assertNull(range);
 
-        range = ElevationRangeCalculator.fromTrkptList(new ArrayList<>());
+        range = ElevationRangeCalculator.fromWaypointList(new ArrayList<>());
         assertNull(range);
     }
 
     @Test
     void fromTrkseg() {
-        final TrksegType trkseg = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
+        final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
-        ElevationRange range = ElevationRangeCalculator.fromTrkseg(trkseg);
+        ElevationRange range = ElevationRangeCalculator.fromTrackSegment(trackSegment);
         assertNotNull(range);
         assertEquals(BigDecimal.valueOf(588), range.getHighest());
         assertEquals(BigDecimal.valueOf(586), range.getLowest());
 
-        range = ElevationRangeCalculator.fromTrkseg(null);
+        range = ElevationRangeCalculator.fromTrackSegment(null);
         assertNull(range);
 
-        range = ElevationRangeCalculator.fromTrkseg(new TrksegType());
+        range = ElevationRangeCalculator.fromTrackSegment(new TrackSegment());
         assertNull(range);
     }
 
     @Test
     void fromTrksegList() {
-        final List<TrksegType> trksegList = GPX_TYPE.getTrk().get(0).getTrkseg();
+        final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
-        ElevationRange range = ElevationRangeCalculator.fromTrksegList(trksegList);
+        ElevationRange range = ElevationRangeCalculator.fromTrackSegmentList(trackSegmentList);
         assertNotNull(range);
         assertEquals(BigDecimal.valueOf(598), range.getHighest());
         assertEquals(BigDecimal.valueOf(586), range.getLowest());
 
-        range = ElevationRangeCalculator.fromTrksegList(null);
+        range = ElevationRangeCalculator.fromTrackSegmentList(null);
         assertNull(range);
 
-        range = ElevationRangeCalculator.fromTrksegList(new ArrayList<>());
+        range = ElevationRangeCalculator.fromTrackSegmentList(new ArrayList<>());
         assertNull(range);
     }
 
     @Test
     void fromTrk() {
-        final TrkType track = GPX_TYPE.getTrk().get(0);
+        final Track track = GPX_TYPE.getTrk().get(0);
 
-        ElevationRange range = ElevationRangeCalculator.fromTrk(track);
+        ElevationRange range = ElevationRangeCalculator.fromTrack(track);
         assertNotNull(range);
         assertEquals(BigDecimal.valueOf(598), range.getHighest());
         assertEquals(BigDecimal.valueOf(586), range.getLowest());
 
-        range = ElevationRangeCalculator.fromTrk(null);
+        range = ElevationRangeCalculator.fromTrack(null);
         assertNull(range);
 
-        range = ElevationRangeCalculator.fromTrk(new TrkType());
+        range = ElevationRangeCalculator.fromTrack(new Track());
         assertNull(range);
     }
 }

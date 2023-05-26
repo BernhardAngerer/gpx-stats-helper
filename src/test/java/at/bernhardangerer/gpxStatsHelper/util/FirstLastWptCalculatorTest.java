@@ -1,8 +1,8 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
 import at.bernhardangerer.gpxStatsHelper.model.FirstLastWpt;
-import com.topografix.model.GpxType;
-import com.topografix.model.TrkType;
+import com.topografix.model.Gpx;
+import com.topografix.model.Track;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -51,21 +51,21 @@ class FirstLastWptCalculatorTest {
             </trk>
             </gpx>
             """;
-    private static final GpxType GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
+    private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
 
     @Test
     void fromTrk() {
-        final TrkType track = GPX_TYPE.getTrk().get(0);
+        final Track track = GPX_TYPE.getTrk().get(0);
 
-        FirstLastWpt range = FirstLastWptCalculator.fromTrk(track);
+        FirstLastWpt range = FirstLastWptCalculator.fromTrack(track);
         assertNotNull(range);
         assertEquals(LocalDateTime.parse("2021-09-07T13:37:42Z", DATE_TIME_FORMATTER), range.getFirst().getTime());
         assertEquals(LocalDateTime.parse("2021-09-07T16:14:16Z", DATE_TIME_FORMATTER), range.getLast().getTime());
 
-        range = FirstLastWptCalculator.fromTrk(null);
+        range = FirstLastWptCalculator.fromTrack(null);
         assertNull(range);
 
-        range = FirstLastWptCalculator.fromTrk(new TrkType());
+        range = FirstLastWptCalculator.fromTrack(new Track());
         assertNull(range);
     }
 }

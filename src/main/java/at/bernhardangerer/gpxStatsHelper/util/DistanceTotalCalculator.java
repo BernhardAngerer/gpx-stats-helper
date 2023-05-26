@@ -1,8 +1,8 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import com.topografix.model.TrkType;
-import com.topografix.model.TrksegType;
-import com.topografix.model.WptType;
+import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
 
 import java.util.List;
 
@@ -39,21 +39,21 @@ public final class DistanceTotalCalculator {
         return Math.sqrt(distance);
     }
 
-    static Double fromTrkpts(final WptType fromTrkpt, final WptType toTrkpt) {
-        if (fromTrkpt != null && fromTrkpt.getLat() != null && fromTrkpt.getLon() != null && fromTrkpt.getEle() != null
-            && toTrkpt != null && toTrkpt.getLat() != null && toTrkpt.getLon() != null && toTrkpt.getEle() != null) {
-            return calcDistance(fromTrkpt.getLat().doubleValue(), toTrkpt.getLat().doubleValue(),
-                fromTrkpt.getLon().doubleValue(), toTrkpt.getLon().doubleValue(),
-                fromTrkpt.getEle().doubleValue(), toTrkpt.getEle().doubleValue());
+    static Double fromTrackpoints(final Waypoint fromWaypoint, final Waypoint toWaypoint) {
+        if (fromWaypoint != null && fromWaypoint.getLat() != null && fromWaypoint.getLon() != null && fromWaypoint.getEle() != null
+            && toWaypoint != null && toWaypoint.getLat() != null && toWaypoint.getLon() != null && toWaypoint.getEle() != null) {
+            return calcDistance(fromWaypoint.getLat().doubleValue(), toWaypoint.getLat().doubleValue(),
+                fromWaypoint.getLon().doubleValue(), toWaypoint.getLon().doubleValue(),
+                fromWaypoint.getEle().doubleValue(), toWaypoint.getEle().doubleValue());
         }
         return null;
     }
 
-    static Double fromTrkptList(final List<WptType> trkptList) {
-        if (trkptList != null && trkptList.size() >= 2) {
+    static Double fromWaypointList(final List<Waypoint> waypointList) {
+        if (waypointList != null && waypointList.size() >= 2) {
             double distance = 0;
-            for (int count = 0; (count + 1) < trkptList.size(); count++) {
-                final Double dist = fromTrkpts(trkptList.get(count), trkptList.get(count + 1));
+            for (int count = 0; (count + 1) < waypointList.size(); count++) {
+                final Double dist = fromTrackpoints(waypointList.get(count), waypointList.get(count + 1));
                 if (dist != null) {
                     distance = distance + dist;
                 } else {
@@ -65,18 +65,18 @@ public final class DistanceTotalCalculator {
         return null;
     }
 
-    static Double fromTrkseg(final TrksegType trackSegment) {
+    static Double fromTrackSegment(final TrackSegment trackSegment) {
         if (trackSegment != null) {
-            return fromTrkptList(trackSegment.getTrkpt());
+            return fromWaypointList(trackSegment.getTrkpt());
         }
         return null;
     }
 
-    static Double fromTrksegList(final List<TrksegType> trksegList) {
-        if (trksegList != null && !trksegList.isEmpty()) {
+    static Double fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
+        if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
             double distance = 0;
-            for (final TrksegType trackSegment : trksegList) {
-                final Double dist = fromTrkseg(trackSegment);
+            for (final TrackSegment trackSegment : trackSegmentList) {
+                final Double dist = fromTrackSegment(trackSegment);
                 if (dist != null) {
                     distance = distance + dist;
                 } else {
@@ -88,9 +88,9 @@ public final class DistanceTotalCalculator {
         return null;
     }
 
-    public static Double fromTrk(final TrkType track) {
+    public static Double fromTrack(final Track track) {
         if (track != null) {
-            return fromTrksegList(track.getTrkseg());
+            return fromTrackSegmentList(track.getTrkseg());
         }
         return null;
     }

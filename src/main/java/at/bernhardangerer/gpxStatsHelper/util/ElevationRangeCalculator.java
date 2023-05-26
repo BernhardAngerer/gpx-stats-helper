@@ -1,9 +1,9 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
 import at.bernhardangerer.gpxStatsHelper.model.ElevationRange;
-import com.topografix.model.TrkType;
-import com.topografix.model.TrksegType;
-import com.topografix.model.WptType;
+import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -14,36 +14,44 @@ public final class ElevationRangeCalculator {
     private ElevationRangeCalculator() {
     }
 
-    static ElevationRange fromTrkptList(final List<WptType> trkptList) {
-        if (trkptList != null && !trkptList.isEmpty()) {
+    static ElevationRange fromWaypointList(final List<Waypoint> waypointList) {
+        if (waypointList != null && !waypointList.isEmpty()) {
             final ElevationRange range = new ElevationRange();
-            range.setHighest(trkptList.stream().max(Comparator.comparing(WptType::getEle)).map(wptType -> wptType.getEle()).get());
-            range.setLowest(trkptList.stream().min(Comparator.comparing(WptType::getEle)).map(wptType -> wptType.getEle()).get());
+            range.setHighest(waypointList.stream()
+                    .max(Comparator.comparing(Waypoint::getEle))
+                    .map(wptType -> wptType.getEle()).get());
+            range.setLowest(waypointList.stream()
+                    .min(Comparator.comparing(Waypoint::getEle))
+                    .map(wptType -> wptType.getEle()).get());
             return range;
         }
         return null;
     }
 
-    static ElevationRange fromTrkseg(final TrksegType trackSegment) {
+    static ElevationRange fromTrackSegment(final TrackSegment trackSegment) {
         if (trackSegment != null) {
-            return fromTrkptList(trackSegment.getTrkpt());
+            return fromWaypointList(trackSegment.getTrkpt());
         }
         return null;
     }
 
-    static ElevationRange fromTrksegList(final List<TrksegType> trksegList) {
-        if (trksegList != null && !trksegList.isEmpty()) {
+    static ElevationRange fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
+        if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
             final ElevationRange range = new ElevationRange();
-            range.setHighest(trksegList.stream().map(trksegType -> fromTrkseg(trksegType).getHighest()).max(BigDecimal::compareTo).get());
-            range.setLowest(trksegList.stream().map(trksegType -> fromTrkseg(trksegType).getLowest()).min(BigDecimal::compareTo).get());
+            range.setHighest(trackSegmentList.stream()
+                    .map(trksegType -> fromTrackSegment(trksegType).getHighest())
+                    .max(BigDecimal::compareTo).get());
+            range.setLowest(trackSegmentList.stream()
+                    .map(trksegType -> fromTrackSegment(trksegType).getLowest())
+                    .min(BigDecimal::compareTo).get());
             return range;
         }
         return null;
     }
 
-    public static ElevationRange fromTrk(final TrkType track) {
+    public static ElevationRange fromTrack(final Track track) {
         if (track != null) {
-            return fromTrksegList(track.getTrkseg());
+            return fromTrackSegmentList(track.getTrkseg());
         }
         return null;
     }

@@ -1,10 +1,10 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
 import at.bernhardangerer.gpxStatsHelper.model.DistanceDuration;
-import com.topografix.model.GpxType;
-import com.topografix.model.TrkType;
-import com.topografix.model.TrksegType;
-import com.topografix.model.WptType;
+import com.topografix.model.Gpx;
+import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -57,99 +57,99 @@ class SpeedAvgCalculatorTest {
             </trk>
             </gpx>
             """;
-    private static final GpxType GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
+    private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
 
     @Test
     void fromTrkpts() {
-        final WptType fromTrkpt = new WptType();
-        fromTrkpt.setLat(BigDecimal.valueOf(47.80743));
-        fromTrkpt.setLon(BigDecimal.valueOf(12.378228));
-        fromTrkpt.setEle(BigDecimal.valueOf(587));
-        fromTrkpt.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 16));
-        final WptType toTrkpt = new WptType();
-        toTrkpt.setLat(BigDecimal.valueOf(47.807343));
-        toTrkpt.setLon(BigDecimal.valueOf(12.378138));
-        toTrkpt.setEle(BigDecimal.valueOf(588));
-        toTrkpt.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 20));
+        final Waypoint fromWaypoint = new Waypoint();
+        fromWaypoint.setLat(BigDecimal.valueOf(47.80743));
+        fromWaypoint.setLon(BigDecimal.valueOf(12.378228));
+        fromWaypoint.setEle(BigDecimal.valueOf(587));
+        fromWaypoint.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 16));
+        final Waypoint toWaypoint = new Waypoint();
+        toWaypoint.setLat(BigDecimal.valueOf(47.807343));
+        toWaypoint.setLon(BigDecimal.valueOf(12.378138));
+        toWaypoint.setEle(BigDecimal.valueOf(588));
+        toWaypoint.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 20));
 
-        DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrkpts(fromTrkpt, toTrkpt);
+        DistanceDuration distanceDuration = SpeedAvgCalculator.fromWaypoints(fromWaypoint, toWaypoint);
         assertNotNull(distanceDuration);
         assertTrue(distanceDuration.getDistance() > 0);
         assertTrue(distanceDuration.getDuration() > 0);
         assertEquals(10.63987214678773, calculateSpeed(distanceDuration));
 
-        distanceDuration = SpeedAvgCalculator.fromTrkpts(null, null);
+        distanceDuration = SpeedAvgCalculator.fromWaypoints(null, null);
         assertNull(distanceDuration);
 
-        distanceDuration = SpeedAvgCalculator.fromTrkpts(new WptType(), new WptType());
+        distanceDuration = SpeedAvgCalculator.fromWaypoints(new Waypoint(), new Waypoint());
         assertNull(distanceDuration);
     }
 
     @Test
     void fromTrkptList() {
-        final List<WptType> trkptList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
+        final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
-        DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrkptList(trkptList);
+        DistanceDuration distanceDuration = SpeedAvgCalculator.fromWaypointList(waypointList);
         assertNotNull(distanceDuration);
         assertTrue(distanceDuration.getDistance() > 0);
         assertTrue(distanceDuration.getDuration() > 0);
         assertEquals(4.675064466160021, calculateSpeed(distanceDuration));
 
-        distanceDuration = SpeedAvgCalculator.fromTrkptList(null);
+        distanceDuration = SpeedAvgCalculator.fromWaypointList(null);
         assertNull(distanceDuration);
 
-        distanceDuration = SpeedAvgCalculator.fromTrkptList(new ArrayList<>());
+        distanceDuration = SpeedAvgCalculator.fromWaypointList(new ArrayList<>());
         assertNull(distanceDuration);
     }
 
     @Test
     void fromTrkseg() {
-        final TrksegType trkseg = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
+        final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
-        DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrkseg(trkseg);
+        DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrackSegment(trackSegment);
         assertNotNull(distanceDuration);
         assertTrue(distanceDuration.getDistance() > 0);
         assertTrue(distanceDuration.getDuration() > 0);
         assertEquals(4.675064466160021, calculateSpeed(distanceDuration));
 
-        distanceDuration = SpeedAvgCalculator.fromTrkseg(null);
+        distanceDuration = SpeedAvgCalculator.fromTrackSegment(null);
         assertNull(distanceDuration);
 
-        distanceDuration = SpeedAvgCalculator.fromTrkseg(new TrksegType());
+        distanceDuration = SpeedAvgCalculator.fromTrackSegment(new TrackSegment());
         assertNull(distanceDuration);
     }
 
     @Test
     void fromTrksegList() {
-        final List<TrksegType> trksegList = GPX_TYPE.getTrk().get(0).getTrkseg();
+        final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
-        DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrksegList(trksegList);
+        DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrackSegmentList(trackSegmentList);
         assertNotNull(distanceDuration);
         assertTrue(distanceDuration.getDistance() > 0);
         assertTrue(distanceDuration.getDuration() > 0);
         assertEquals(7.444563520907939, calculateSpeed(distanceDuration));
 
-        distanceDuration = SpeedAvgCalculator.fromTrksegList(null);
+        distanceDuration = SpeedAvgCalculator.fromTrackSegmentList(null);
         assertNull(distanceDuration);
 
-        distanceDuration = SpeedAvgCalculator.fromTrksegList(new ArrayList<>());
+        distanceDuration = SpeedAvgCalculator.fromTrackSegmentList(new ArrayList<>());
         assertNull(distanceDuration);
     }
 
     @Test
     void fromTrk() {
-        final TrkType track = GPX_TYPE.getTrk().get(0);
+        final Track track = GPX_TYPE.getTrk().get(0);
 
-        DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrk(track);
+        DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrack(track);
         assertNotNull(distanceDuration);
         assertTrue(distanceDuration.getDistance() > 0);
         assertTrue(distanceDuration.getDuration() > 0);
         assertEquals(7.444563520907939, calculateSpeed(distanceDuration));
 
-        distanceDuration = SpeedAvgCalculator.fromTrk(null);
+        distanceDuration = SpeedAvgCalculator.fromTrack(null);
         assertNull(distanceDuration);
 
-        distanceDuration = SpeedAvgCalculator.fromTrk(new TrkType());
+        distanceDuration = SpeedAvgCalculator.fromTrack(new Track());
         assertNull(distanceDuration);
     }
 }

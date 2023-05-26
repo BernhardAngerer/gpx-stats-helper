@@ -1,9 +1,9 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import com.topografix.model.GpxType;
-import com.topografix.model.TrkType;
-import com.topografix.model.TrksegType;
-import com.topografix.model.WptType;
+import com.topografix.model.Gpx;
+import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -53,89 +53,89 @@ class SpeedMaxCalculatorTest {
             </trk>
             </gpx>
             """;
-    private static final GpxType GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
+    private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
 
     @Test
     void fromTrkpts() {
-        final WptType fromTrkpt = new WptType();
-        fromTrkpt.setLat(BigDecimal.valueOf(47.80743));
-        fromTrkpt.setLon(BigDecimal.valueOf(12.378228));
-        fromTrkpt.setEle(BigDecimal.valueOf(587));
-        fromTrkpt.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 16));
-        final WptType toTrkpt = new WptType();
-        toTrkpt.setLat(BigDecimal.valueOf(47.807343));
-        toTrkpt.setLon(BigDecimal.valueOf(12.378138));
-        toTrkpt.setEle(BigDecimal.valueOf(588));
-        toTrkpt.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 20));
+        final Waypoint fromWaypoint = new Waypoint();
+        fromWaypoint.setLat(BigDecimal.valueOf(47.80743));
+        fromWaypoint.setLon(BigDecimal.valueOf(12.378228));
+        fromWaypoint.setEle(BigDecimal.valueOf(587));
+        fromWaypoint.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 16));
+        final Waypoint toWaypoint = new Waypoint();
+        toWaypoint.setLat(BigDecimal.valueOf(47.807343));
+        toWaypoint.setLon(BigDecimal.valueOf(12.378138));
+        toWaypoint.setEle(BigDecimal.valueOf(588));
+        toWaypoint.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 20));
 
-        double speedMax = SpeedMaxCalculator.fromTrkpts(fromTrkpt, toTrkpt);
+        double speedMax = SpeedMaxCalculator.fromWaypoints(fromWaypoint, toWaypoint);
         assertTrue(speedMax > 0);
         assertEquals(10.63987214678773, speedMax);
 
-        speedMax = SpeedMaxCalculator.fromTrkpts(null, null);
+        speedMax = SpeedMaxCalculator.fromWaypoints(null, null);
         assertEquals(0, speedMax);
 
-        speedMax = SpeedMaxCalculator.fromTrkpts(new WptType(), new WptType());
+        speedMax = SpeedMaxCalculator.fromWaypoints(new Waypoint(), new Waypoint());
         assertEquals(0, speedMax);
     }
 
     @Test
     void fromTrkptList() {
-        final List<WptType> trkptList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
+        final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
-        double speedMax = SpeedMaxCalculator.fromTrkptList(trkptList);
+        double speedMax = SpeedMaxCalculator.fromWaypointList(waypointList);
         assertTrue(speedMax > 0);
         assertEquals(18.85037290593836, speedMax);
 
-        speedMax = SpeedMaxCalculator.fromTrkptList(null);
+        speedMax = SpeedMaxCalculator.fromWaypointList(null);
         assertEquals(0, speedMax);
 
-        speedMax = SpeedMaxCalculator.fromTrkptList(new ArrayList<>());
+        speedMax = SpeedMaxCalculator.fromWaypointList(new ArrayList<>());
         assertEquals(0, speedMax);
     }
 
     @Test
     void fromTrkseg() {
-        final TrksegType trkseg = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
+        final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
-        double speedMax = SpeedMaxCalculator.fromTrkseg(trkseg);
+        double speedMax = SpeedMaxCalculator.fromTrackSegment(trackSegment);
         assertTrue(speedMax > 0);
         assertEquals(18.85037290593836, speedMax);
 
-        speedMax = SpeedMaxCalculator.fromTrkseg(null);
+        speedMax = SpeedMaxCalculator.fromTrackSegment(null);
         assertEquals(0, speedMax);
 
-        speedMax = SpeedMaxCalculator.fromTrkseg(new TrksegType());
+        speedMax = SpeedMaxCalculator.fromTrackSegment(new TrackSegment());
         assertEquals(0, speedMax);
     }
 
     @Test
     void fromTrksegList() {
-        final List<TrksegType> trksegList = GPX_TYPE.getTrk().get(0).getTrkseg();
+        final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
-        double speedMax = SpeedMaxCalculator.fromTrksegList(trksegList);
+        double speedMax = SpeedMaxCalculator.fromTrackSegmentList(trackSegmentList);
         assertTrue(speedMax > 0);
         assertEquals(103.58302205126809, speedMax);
 
-        speedMax = SpeedMaxCalculator.fromTrksegList(null);
+        speedMax = SpeedMaxCalculator.fromTrackSegmentList(null);
         assertEquals(0, speedMax);
 
-        speedMax = SpeedMaxCalculator.fromTrksegList(new ArrayList<>());
+        speedMax = SpeedMaxCalculator.fromTrackSegmentList(new ArrayList<>());
         assertEquals(0, speedMax);
     }
 
     @Test
     void fromTrk() {
-        final TrkType track = GPX_TYPE.getTrk().get(0);
+        final Track track = GPX_TYPE.getTrk().get(0);
 
-        double speedMax = SpeedMaxCalculator.fromTrk(track);
+        double speedMax = SpeedMaxCalculator.fromTrack(track);
         assertTrue(speedMax > 0);
         assertEquals(103.58302205126809, speedMax);
 
-        speedMax = SpeedMaxCalculator.fromTrk(null);
+        speedMax = SpeedMaxCalculator.fromTrack(null);
         assertEquals(0, speedMax);
 
-        speedMax = SpeedMaxCalculator.fromTrk(new TrkType());
+        speedMax = SpeedMaxCalculator.fromTrack(new Track());
         assertEquals(0, speedMax);
     }
 }

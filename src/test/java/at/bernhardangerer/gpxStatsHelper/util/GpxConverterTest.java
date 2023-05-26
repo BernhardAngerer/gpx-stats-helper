@@ -1,9 +1,9 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import com.topografix.model.GpxType;
-import com.topografix.model.TrkType;
-import com.topografix.model.TrksegType;
-import com.topografix.model.WptType;
+import com.topografix.model.Gpx;
+import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -17,7 +17,7 @@ class GpxConverterTest {
 
     @Test
     void convertGpx() {
-        final String gpx = """
+        final String gpxString = """
             <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             <gpx version="1.1" creator="me"
             xsi:schemaLocation="http://www.topografix.com/GPX/1/1
@@ -44,24 +44,24 @@ class GpxConverterTest {
             </trk>
             </gpx>
             """;
-        final GpxType gpxType = GpxConverter.convertGpxFromString(gpx);
-        assertNotNull(gpxType);
-        final List<TrkType> trkList = gpxType.getTrk();
-        assertNotNull(trkList);
-        assertFalse(trkList.isEmpty());
-        assertEquals(1, trkList.size());
-        final List<TrksegType> trksegList = trkList.get(0).getTrkseg();
-        assertNotNull(trksegList);
-        assertFalse(trksegList.isEmpty());
-        assertEquals(1, trksegList.size());
-        final List<WptType> trkptList = trksegList.get(0).getTrkpt();
-        assertNotNull(trkptList);
-        assertFalse(trkptList.isEmpty());
-        assertEquals(6, trkptList.size());
-        final WptType trkpt = trkptList.get(0);
-        assertNotNull(trkpt);
-        assertEquals(BigDecimal.valueOf(47.80743), trkpt.getLat());
-        assertEquals(BigDecimal.valueOf(12.378228), trkpt.getLon());
-        assertEquals(BigDecimal.valueOf(587), trkpt.getEle());
+        final Gpx gpx = GpxConverter.convertGpxFromString(gpxString);
+        assertNotNull(gpx);
+        final List<Track> trackList = gpx.getTrk();
+        assertNotNull(trackList);
+        assertFalse(trackList.isEmpty());
+        assertEquals(1, trackList.size());
+        final List<TrackSegment> trackSegmentList = trackList.get(0).getTrkseg();
+        assertNotNull(trackSegmentList);
+        assertFalse(trackSegmentList.isEmpty());
+        assertEquals(1, trackSegmentList.size());
+        final List<Waypoint> waypointList = trackSegmentList.get(0).getTrkpt();
+        assertNotNull(waypointList);
+        assertFalse(waypointList.isEmpty());
+        assertEquals(6, waypointList.size());
+        final Waypoint waypoint = waypointList.get(0);
+        assertNotNull(waypoint);
+        assertEquals(BigDecimal.valueOf(47.80743), waypoint.getLat());
+        assertEquals(BigDecimal.valueOf(12.378228), waypoint.getLon());
+        assertEquals(BigDecimal.valueOf(587), waypoint.getEle());
     }
 }

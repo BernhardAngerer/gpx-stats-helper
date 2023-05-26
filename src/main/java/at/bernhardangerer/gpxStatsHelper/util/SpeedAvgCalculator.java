@@ -1,9 +1,9 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
 import at.bernhardangerer.gpxStatsHelper.model.DistanceDuration;
-import com.topografix.model.TrkType;
-import com.topografix.model.TrksegType;
-import com.topografix.model.WptType;
+import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
 
 import java.util.List;
 
@@ -17,11 +17,11 @@ public final class SpeedAvgCalculator {
     private SpeedAvgCalculator() {
     }
 
-    static DistanceDuration fromTrkpts(final WptType fromTrkpt, final WptType toTrkpt) {
-        if (fromTrkpt != null && fromTrkpt.getEle() != null && toTrkpt != null && toTrkpt.getEle() != null
-                && fromTrkpt.getTime() != null && toTrkpt.getTime() != null) {
-            final Double distance = DistanceTotalCalculator.fromTrkpts(fromTrkpt, toTrkpt);
-            final long duration = calcDateTimeDifferenceInSeconds(fromTrkpt.getTime(), toTrkpt.getTime());
+    static DistanceDuration fromWaypoints(final Waypoint fromWaypoint, final Waypoint toWaypoint) {
+        if (fromWaypoint != null && fromWaypoint.getEle() != null && toWaypoint != null && toWaypoint.getEle() != null
+                && fromWaypoint.getTime() != null && toWaypoint.getTime() != null) {
+            final Double distance = DistanceTotalCalculator.fromTrackpoints(fromWaypoint, toWaypoint);
+            final long duration = calcDateTimeDifferenceInSeconds(fromWaypoint.getTime(), toWaypoint.getTime());
             if (distance != null) {
                 final double speed = SpeedUtil.calculateSpeed(distance, duration);
                 if (speed > MOTION_MIN_SPEED) {
@@ -32,11 +32,11 @@ public final class SpeedAvgCalculator {
         return null;
     }
 
-    static DistanceDuration fromTrkptList(final List<WptType> trkptList) {
-        if (trkptList != null && trkptList.size() >= 2) {
+    static DistanceDuration fromWaypointList(final List<Waypoint> waypointList) {
+        if (waypointList != null && waypointList.size() >= 2) {
             final DistanceDuration distanceDuration = new DistanceDuration();
-            for (int count = 0; (count + 1) < trkptList.size(); count++) {
-                final DistanceDuration tempDistanceDuration = fromTrkpts(trkptList.get(count), trkptList.get(count + 1));
+            for (int count = 0; (count + 1) < waypointList.size(); count++) {
+                final DistanceDuration tempDistanceDuration = fromWaypoints(waypointList.get(count), waypointList.get(count + 1));
                 if (tempDistanceDuration != null) {
                     distanceDuration.setDistance(distanceDuration.getDistance() + tempDistanceDuration.getDistance());
                     distanceDuration.setDuration(distanceDuration.getDuration() + tempDistanceDuration.getDuration());
@@ -47,18 +47,18 @@ public final class SpeedAvgCalculator {
         return null;
     }
 
-    static DistanceDuration fromTrkseg(final TrksegType trackSegment) {
+    static DistanceDuration fromTrackSegment(final TrackSegment trackSegment) {
         if (trackSegment != null) {
-            return fromTrkptList(trackSegment.getTrkpt());
+            return fromWaypointList(trackSegment.getTrkpt());
         }
         return null;
     }
 
-    static DistanceDuration fromTrksegList(final List<TrksegType> trksegList) {
-        if (trksegList != null && !trksegList.isEmpty()) {
+    static DistanceDuration fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
+        if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
             final DistanceDuration distanceDuration = new DistanceDuration();
-            for (final TrksegType trackSegment : trksegList) {
-                final DistanceDuration tempDistanceDuration = fromTrkseg(trackSegment);
+            for (final TrackSegment trackSegment : trackSegmentList) {
+                final DistanceDuration tempDistanceDuration = fromTrackSegment(trackSegment);
                 if (tempDistanceDuration != null) {
                     distanceDuration.setDistance(distanceDuration.getDistance() + tempDistanceDuration.getDistance());
                     distanceDuration.setDuration(distanceDuration.getDuration() + tempDistanceDuration.getDuration());
@@ -69,9 +69,9 @@ public final class SpeedAvgCalculator {
         return null;
     }
 
-    public static DistanceDuration fromTrk(final TrkType track) {
+    public static DistanceDuration fromTrack(final Track track) {
         if (track != null) {
-            return fromTrksegList(track.getTrkseg());
+            return fromTrackSegmentList(track.getTrkseg());
         }
         return null;
     }
