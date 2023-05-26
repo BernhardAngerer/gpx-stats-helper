@@ -29,6 +29,7 @@ import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Objects;
 
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.calcDateTimeDifference;
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.convertFromSeconds;
@@ -41,14 +42,28 @@ public final class Example {
     private Example() {
     }
 
+    /**
+     * An example to load an example GPX file and calculate statistic parameters.
+     *
+     * @param args
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws WebserviceCallException
+     * @throws InterruptedException
+     */
     public static void main(final String[] args)
             throws IOException, URISyntaxException, WebserviceCallException, InterruptedException {
-        final File file = new File(Example.class.getClassLoader().getResource("example/example1.gpx").getFile());
+        final File file = new File(Objects.requireNonNull(
+                Example.class.getClassLoader().getResource("example/example1.gpx")).getFile());
         final GpxType gpx = GpxConverter.convertGpxFromFile(file);
 
+        if (gpx.getMetadata().getName() != null) {
+            System.out.println("GPX name: \"" + gpx.getMetadata().getName() + "\"");
+        }
         int count = 1;
         for (final TrkType track : gpx.getTrk()) {
-            System.out.println("### track nr. " + count + " ###");
+            System.out.println("### track nr. " + count
+                    + (track.getName() != null ? " - \"" + track.getName() : "\"") + " ###");
 
             final Double distance = DistanceTotalCalculator.fromTrk(track);
             System.out.println("total distance: " + DECIMAL_FORMAT.format(distance / 1000) + " km");
