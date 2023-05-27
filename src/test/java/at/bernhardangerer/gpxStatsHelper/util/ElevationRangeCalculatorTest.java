@@ -57,7 +57,7 @@ class ElevationRangeCalculatorTest {
     private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
 
     @Test
-    void fromTrkptList() {
+    void fromWaypointList() {
         final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
         ElevationRange range = ElevationRangeCalculator.fromWaypointList(waypointList);
@@ -73,7 +73,7 @@ class ElevationRangeCalculatorTest {
     }
 
     @Test
-    void fromTrkseg() {
+    void fromTrackSegment() {
         final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
         ElevationRange range = ElevationRangeCalculator.fromTrackSegment(trackSegment);
@@ -89,7 +89,7 @@ class ElevationRangeCalculatorTest {
     }
 
     @Test
-    void fromTrksegList() {
+    void fromTrackSegmentList() {
         final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
         ElevationRange range = ElevationRangeCalculator.fromTrackSegmentList(trackSegmentList);
@@ -105,7 +105,7 @@ class ElevationRangeCalculatorTest {
     }
 
     @Test
-    void fromTrk() {
+    void fromTrack() {
         final Track track = GPX_TYPE.getTrk().get(0);
 
         ElevationRange range = ElevationRangeCalculator.fromTrack(track);

@@ -1,6 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.FirstLastWpt;
+import at.bernhardangerer.gpxStatsHelper.model.FirstLastWaypoint;
 import com.topografix.model.Gpx;
 import com.topografix.model.Track;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-class FirstLastWptCalculatorTest {
+class FirstLastWaypointCalculatorTest {
 
     private static final String GPX = """
             <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -54,18 +54,18 @@ class FirstLastWptCalculatorTest {
     private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
 
     @Test
-    void fromTrk() {
+    void fromTrack() {
         final Track track = GPX_TYPE.getTrk().get(0);
 
-        FirstLastWpt range = FirstLastWptCalculator.fromTrack(track);
+        FirstLastWaypoint range = FirstLastWaypointCalculator.fromTrack(track);
         assertNotNull(range);
         assertEquals(LocalDateTime.parse("2021-09-07T13:37:42Z", DATE_TIME_FORMATTER), range.getFirst().getTime());
         assertEquals(LocalDateTime.parse("2021-09-07T16:14:16Z", DATE_TIME_FORMATTER), range.getLast().getTime());
 
-        range = FirstLastWptCalculator.fromTrack(null);
+        range = FirstLastWaypointCalculator.fromTrack(null);
         assertNull(range);
 
-        range = FirstLastWptCalculator.fromTrack(new Track());
+        range = FirstLastWaypointCalculator.fromTrack(new Track());
         assertNull(range);
     }
 }

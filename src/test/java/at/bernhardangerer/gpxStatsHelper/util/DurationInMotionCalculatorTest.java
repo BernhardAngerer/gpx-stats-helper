@@ -58,7 +58,7 @@ class DurationInMotionCalculatorTest {
     private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
 
     @Test
-    void fromTrkpts() {
+    void fromWaypoints() {
         final Waypoint fromWaypoint = new Waypoint();
         fromWaypoint.setLat(BigDecimal.valueOf(47.80743));
         fromWaypoint.setLon(BigDecimal.valueOf(12.378228));
@@ -83,7 +83,7 @@ class DurationInMotionCalculatorTest {
     }
 
     @Test
-    void fromTrkptList() {
+    void fromWaypointList() {
         final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
         Long durationInSec = DurationInMotionCalculator.fromWaypointList(waypointList);
@@ -99,7 +99,7 @@ class DurationInMotionCalculatorTest {
     }
 
     @Test
-    void fromTrkseg() {
+    void fromTrackSegment() {
         final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
         Long durationInSec = DurationInMotionCalculator.fromTrackSegment(trackSegment);
@@ -115,7 +115,7 @@ class DurationInMotionCalculatorTest {
     }
 
     @Test
-    void fromTrksegList() {
+    void fromTrackSegmentList() {
         final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
         Long durationInSec = DurationInMotionCalculator.fromTrackSegmentList(trackSegmentList);
@@ -131,7 +131,7 @@ class DurationInMotionCalculatorTest {
     }
 
     @Test
-    void fromTrk() {
+    void fromTrack() {
         final Track track = GPX_TYPE.getTrk().get(0);
 
         Long durationInSec = DurationInMotionCalculator.fromTrack(track);

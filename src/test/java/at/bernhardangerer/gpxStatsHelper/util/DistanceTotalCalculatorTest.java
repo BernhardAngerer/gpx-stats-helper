@@ -64,7 +64,7 @@ class DistanceTotalCalculatorTest {
     }
 
     @Test
-    void fromTrkpts() {
+    void fromTrackpoints() {
         final Waypoint fromWaypoint = new Waypoint();
         fromWaypoint.setLat(BigDecimal.valueOf(47.80743));
         fromWaypoint.setLon(BigDecimal.valueOf(12.378228));
@@ -84,7 +84,7 @@ class DistanceTotalCalculatorTest {
     }
 
     @Test
-    void fromTrkptList() {
+    void fromWaypointList() {
         final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
         Double distance = DistanceTotalCalculator.fromWaypointList(waypointList);
@@ -100,7 +100,7 @@ class DistanceTotalCalculatorTest {
     }
 
     @Test
-    void fromTrkseg() {
+    void fromTrackSegment() {
         final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
         Double distance = DistanceTotalCalculator.fromTrackSegment(trackSegment);
@@ -116,7 +116,7 @@ class DistanceTotalCalculatorTest {
     }
 
     @Test
-    void fromTrksegList() {
+    void fromTrackSegmentList() {
         final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
         Double distance = DistanceTotalCalculator.fromTrackSegmentList(trackSegmentList);
@@ -132,7 +132,7 @@ class DistanceTotalCalculatorTest {
     }
 
     @Test
-    void fromTrk() {
+    void fromTrack() {
         final Track track = GPX_TYPE.getTrk().get(0);
 
         Double distance = DistanceTotalCalculator.fromTrack(track);

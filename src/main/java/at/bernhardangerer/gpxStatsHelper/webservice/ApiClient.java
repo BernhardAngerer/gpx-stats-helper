@@ -17,6 +17,15 @@ public final class ApiClient {
         this.client = HttpClient.newHttpClient();
     }
 
+    /**
+     * Do an HTTP request to the provided endpoint URI.
+     *
+     * @param uri
+     * @return String representation of the webservice call.
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws WebserviceCallException
+     */
     public String sendHttpRequest(final URI uri) throws IOException, InterruptedException, WebserviceCallException {
         return send(HttpRequest.newBuilder().uri(uri).build());
     }

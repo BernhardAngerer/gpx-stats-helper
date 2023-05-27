@@ -8,14 +8,34 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
 public final class DateTimeUtil {
+
+    private static final String UTC = "UTC";
+
     private DateTimeUtil() {
     }
 
-    public static LocalDateTime utcToCet(final LocalDateTime utcTime) {
-        final ZonedDateTime utcTimeZoned = ZonedDateTime.of(utcTime, ZoneId.of("UTC"));
-        return utcTimeZoned.withZoneSameInstant(ZoneId.of("CET")).toLocalDateTime();
+    /**
+     * Convert LocalDateTime in UTC to another time zone.
+     *
+     * @param utcTime
+     * @param timeZone
+     * @return LocalDateTime into the provided time zone
+     */
+    public static LocalDateTime convertFromUtcTime(final LocalDateTime utcTime, String timeZone) {
+        if (timeZone != null && !UTC.equals(timeZone)) {
+            final ZonedDateTime utcTimeZoned = ZonedDateTime.of(utcTime, ZoneId.of(UTC));
+            return utcTimeZoned.withZoneSameInstant(ZoneId.of(timeZone)).toLocalDateTime();
+        }
+        return utcTime;
     }
 
+    /**
+     * Calculate time differance between two provided LocalDateTime.
+     *
+     * @param startTime
+     * @param endTime
+     * @return Duration
+     */
     public static Duration calcDateTimeDifference(final LocalDateTime startTime, final LocalDateTime endTime) {
         final Duration duration = new Duration();
         LocalDateTime tempDateTime = LocalDateTime.from(startTime);
@@ -46,10 +66,23 @@ public final class DateTimeUtil {
         return duration;
     }
 
+    /**
+     * Calculate time difference in seconds between two provided LocalDateTime.
+     *
+     * @param startTime
+     * @param endTime
+     * @return time difference in seconds
+     */
     public static long calcDateTimeDifferenceInSeconds(final LocalDateTime startTime, final LocalDateTime endTime) {
         return ChronoUnit.SECONDS.between(startTime, endTime);
     }
 
+    /**
+     * Convert seconds to Duration.
+     *
+     * @param seconds
+     * @return Duration
+     */
     public static Duration convertFromSeconds(final long seconds) {
         final Duration duration = new Duration();
         duration.setHours(seconds / 3600);

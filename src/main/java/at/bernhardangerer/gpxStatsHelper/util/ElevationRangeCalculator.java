@@ -39,16 +39,22 @@ public final class ElevationRangeCalculator {
         if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
             final ElevationRange range = new ElevationRange();
             range.setHighest(trackSegmentList.stream()
-                    .map(trksegType -> fromTrackSegment(trksegType).getHighest())
+                    .map(trackSegment -> fromTrackSegment(trackSegment).getHighest())
                     .max(BigDecimal::compareTo).get());
             range.setLowest(trackSegmentList.stream()
-                    .map(trksegType -> fromTrackSegment(trksegType).getLowest())
+                    .map(trackSegment -> fromTrackSegment(trackSegment).getLowest())
                     .min(BigDecimal::compareTo).get());
             return range;
         }
         return null;
     }
 
+    /**
+     * Calculate the lowest and highest elevation.
+     *
+     * @param track
+     * @return ElevationRange in meters
+     */
     public static ElevationRange fromTrack(final Track track) {
         if (track != null) {
             return fromTrackSegmentList(track.getTrkseg());

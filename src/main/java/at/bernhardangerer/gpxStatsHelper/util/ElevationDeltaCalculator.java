@@ -80,6 +80,12 @@ public final class ElevationDeltaCalculator {
         return null;
     }
 
+    /**
+     * Calculate the ascent and descent elevation.
+     *
+     * @param track
+     * @return ElevationDelta in meters
+     */
     public static ElevationDelta fromTrack(final Track track) {
         if (track != null) {
             return fromTrackSegmentList(track.getTrkseg());

@@ -1,15 +1,21 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.FirstLastWpt;
+import at.bernhardangerer.gpxStatsHelper.model.FirstLastWaypoint;
 import com.topografix.model.Track;
 import com.topografix.model.Waypoint;
 
-public final class FirstLastWptCalculator {
+public final class FirstLastWaypointCalculator {
 
-    private FirstLastWptCalculator() {
+    private FirstLastWaypointCalculator() {
     }
 
-    public static FirstLastWpt fromTrack(final Track track) {
+    /**
+     * Return the first and last waypoint of the track.
+     *
+     * @param track
+     * @return FirstLastWpt
+     */
+    public static FirstLastWaypoint fromTrack(final Track track) {
         if (track != null) {
             if (track.getTrkseg() != null && !track.getTrkseg().isEmpty()) {
                 Waypoint first = null;
@@ -30,7 +36,7 @@ public final class FirstLastWptCalculator {
                         .getTrkpt()
                         .get(track.getTrkseg().get(track.getTrkseg().size() - 1).getTrkpt().size() - 1);
                 }
-                return new FirstLastWpt(first, last);
+                return new FirstLastWaypoint(first, last);
             }
         }
         return null;

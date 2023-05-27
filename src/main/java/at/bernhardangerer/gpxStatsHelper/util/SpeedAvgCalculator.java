@@ -69,9 +69,15 @@ public final class SpeedAvgCalculator {
         return null;
     }
 
-    public static DistanceDuration fromTrack(final Track track) {
+    /**
+     * Calculate the average speed in kilometer per hour.
+     *
+     * @param track
+     * @return average speed in kilometer per hour
+     */
+    public static Double fromTrack(final Track track) {
         if (track != null) {
-            return fromTrackSegmentList(track.getTrkseg());
+            return SpeedUtil.calculateSpeed(fromTrackSegmentList(track.getTrkseg()));
         }
         return null;
     }

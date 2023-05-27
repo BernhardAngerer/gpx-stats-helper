@@ -10,6 +10,9 @@ import java.net.URISyntaxException;
 
 public final class GeocodeService {
 
+    /**
+     * API Documentation: https://nominatim.org/release-docs/develop/api/Overview/
+     */
     private static final String BASE_URL = "https://nominatim.openstreetmap.org/reverse";
     private final ApiClient client;
 
@@ -17,11 +20,40 @@ public final class GeocodeService {
         this.client = new ApiClient();
     }
 
+    /**
+     * Simple wrapper to return the string representation of the provided position.
+     *
+     * @param lat latitude
+     * @param lon longitude
+     * @return String representation of the provided position
+     * @throws IOException
+     * @throws WebserviceCallException
+     * @throws InterruptedException
+     * @throws URISyntaxException
+     */
     public String reverseGeocode(final String lat, final String lon)
             throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
         return reverseGeocode(lat, lon, OutputFormat.JSON, 18, true, false, false, false);
     }
 
+    /**
+     * Return the string representation of the provided position
+     * using an API call to the openstreetmap nominatim servers.
+     *
+     * @param lat latitude
+     * @param lon longitude
+     * @param outputFormat data format of the output
+     * @param zoomLevel from 0 (continent/sea) to 18 (building)
+     * @param addressDetails true for address details
+     * @param extraTags true for extra tags
+     * @param nameDetails true for name details
+     * @param polygonSvg true for SVG polygon
+     * @return String representation of the provided position
+     * @throws IOException
+     * @throws WebserviceCallException
+     * @throws InterruptedException
+     * @throws URISyntaxException
+     */
     public String reverseGeocode(final String lat, final String lon, final OutputFormat outputFormat, final int zoomLevel,
                                  final boolean addressDetails, final boolean extraTags, final boolean nameDetails,
                                  final boolean polygonSvg)

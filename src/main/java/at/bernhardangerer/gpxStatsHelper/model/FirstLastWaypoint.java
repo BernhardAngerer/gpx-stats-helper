@@ -2,12 +2,12 @@ package at.bernhardangerer.gpxStatsHelper.model;
 
 import com.topografix.model.Waypoint;
 
-public final class FirstLastWpt {
+public final class FirstLastWaypoint {
 
     private Waypoint first;
     private Waypoint last;
 
-    public FirstLastWpt(final Waypoint first, final Waypoint last) {
+    public FirstLastWaypoint(final Waypoint first, final Waypoint last) {
         this.first = first;
         this.last = last;
     }

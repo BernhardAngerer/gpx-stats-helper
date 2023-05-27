@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SpeedMaxCalculatorTest {
@@ -56,7 +58,7 @@ class SpeedMaxCalculatorTest {
     private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
 
     @Test
-    void fromTrkpts() {
+    void fromWaypoints() {
         final Waypoint fromWaypoint = new Waypoint();
         fromWaypoint.setLat(BigDecimal.valueOf(47.80743));
         fromWaypoint.setLon(BigDecimal.valueOf(12.378228));
@@ -80,7 +82,7 @@ class SpeedMaxCalculatorTest {
     }
 
     @Test
-    void fromTrkptList() {
+    void fromWaypointList() {
         final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
         double speedMax = SpeedMaxCalculator.fromWaypointList(waypointList);
@@ -95,7 +97,7 @@ class SpeedMaxCalculatorTest {
     }
 
     @Test
-    void fromTrkseg() {
+    void fromTrackSegment() {
         final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
         double speedMax = SpeedMaxCalculator.fromTrackSegment(trackSegment);
@@ -110,7 +112,7 @@ class SpeedMaxCalculatorTest {
     }
 
     @Test
-    void fromTrksegList() {
+    void fromTrackSegmentList() {
         final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
         double speedMax = SpeedMaxCalculator.fromTrackSegmentList(trackSegmentList);
@@ -125,17 +127,17 @@ class SpeedMaxCalculatorTest {
     }
 
     @Test
-    void fromTrk() {
+    void fromTrack() {
         final Track track = GPX_TYPE.getTrk().get(0);
 
-        double speedMax = SpeedMaxCalculator.fromTrack(track);
-        assertTrue(speedMax > 0);
+        Double speedMax = SpeedMaxCalculator.fromTrack(track);
+        assertNotNull(speedMax);
         assertEquals(103.58302205126809, speedMax);
 
         speedMax = SpeedMaxCalculator.fromTrack(null);
-        assertEquals(0, speedMax);
+        assertNull(speedMax);
 
         speedMax = SpeedMaxCalculator.fromTrack(new Track());
-        assertEquals(0, speedMax);
+        assertEquals(0.0, speedMax);
     }
 }

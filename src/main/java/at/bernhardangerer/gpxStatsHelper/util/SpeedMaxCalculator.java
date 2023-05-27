@@ -56,10 +56,16 @@ public final class SpeedMaxCalculator {
         return 0;
     }
 
-    public static double fromTrack(final Track track) {
+    /**
+     * Calculate the maximum speed in kilometer per hour.
+     *
+     * @param track
+     * @return maximum speed in kilometer per hour
+     */
+    public static Double fromTrack(final Track track) {
         if (track != null) {
             return fromTrackSegmentList(track.getTrkseg());
         }
-        return 0;
+        return null;
     }
 }

@@ -22,9 +22,9 @@ class DateTimeUtilTest {
     }
 
     @Test
-    void utcToCet() {
+    void convertFromUtcTime() {
         final var now = LocalDateTime.now();
-        final var result = DateTimeUtil.utcToCet(now);
+        final var result = DateTimeUtil.convertFromUtcTime(now, "CET");
         assertNotNull(result);
         assertEquals(now.plusHours(2L), result);
     }

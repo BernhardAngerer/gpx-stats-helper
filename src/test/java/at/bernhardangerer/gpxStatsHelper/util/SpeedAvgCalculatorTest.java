@@ -60,7 +60,7 @@ class SpeedAvgCalculatorTest {
     private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
 
     @Test
-    void fromTrkpts() {
+    void fromWaypoints() {
         final Waypoint fromWaypoint = new Waypoint();
         fromWaypoint.setLat(BigDecimal.valueOf(47.80743));
         fromWaypoint.setLon(BigDecimal.valueOf(12.378228));
@@ -86,7 +86,7 @@ class SpeedAvgCalculatorTest {
     }
 
     @Test
-    void fromTrkptList() {
+    void fromWaypointList() {
         final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
         DistanceDuration distanceDuration = SpeedAvgCalculator.fromWaypointList(waypointList);
@@ -103,7 +103,7 @@ class SpeedAvgCalculatorTest {
     }
 
     @Test
-    void fromTrkseg() {
+    void fromTrackSegment() {
         final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
         DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrackSegment(trackSegment);
@@ -120,7 +120,7 @@ class SpeedAvgCalculatorTest {
     }
 
     @Test
-    void fromTrksegList() {
+    void fromTrackSegmentList() {
         final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
         DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrackSegmentList(trackSegmentList);
@@ -137,19 +137,18 @@ class SpeedAvgCalculatorTest {
     }
 
     @Test
-    void fromTrk() {
+    void fromTrack() {
         final Track track = GPX_TYPE.getTrk().get(0);
 
-        DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrack(track);
-        assertNotNull(distanceDuration);
-        assertTrue(distanceDuration.getDistance() > 0);
-        assertTrue(distanceDuration.getDuration() > 0);
-        assertEquals(7.444563520907939, calculateSpeed(distanceDuration));
+        Double averageSpeed = SpeedAvgCalculator.fromTrack(track);
+        assertNotNull(averageSpeed);
+        assertEquals(7.444563520907939, averageSpeed);
 
-        distanceDuration = SpeedAvgCalculator.fromTrack(null);
-        assertNull(distanceDuration);
+        averageSpeed = SpeedAvgCalculator.fromTrack(null);
+        assertNull(averageSpeed);
 
-        distanceDuration = SpeedAvgCalculator.fromTrack(new Track());
-        assertNull(distanceDuration);
+        averageSpeed = SpeedAvgCalculator.fromTrack(new Track());
+        assertNotNull(averageSpeed);
+        assertEquals(0.0, averageSpeed);
     }
 }

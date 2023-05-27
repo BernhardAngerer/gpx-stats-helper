@@ -66,6 +66,12 @@ public final class DurationInMotionCalculator {
         return null;
     }
 
+    /**
+     * Calculate the duration in motion in seconds.
+     *
+     * @param track
+     * @return the duration in motion in seconds
+     */
     public static Long fromTrack(final Track track) {
         if (track != null) {
             return fromTrackSegmentList(track.getTrkseg());

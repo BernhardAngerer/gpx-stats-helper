@@ -46,18 +46,22 @@ class GpxConverterTest {
             """;
         final Gpx gpx = GpxConverter.convertGpxFromString(gpxString);
         assertNotNull(gpx);
+
         final List<Track> trackList = gpx.getTrk();
         assertNotNull(trackList);
         assertFalse(trackList.isEmpty());
         assertEquals(1, trackList.size());
+
         final List<TrackSegment> trackSegmentList = trackList.get(0).getTrkseg();
         assertNotNull(trackSegmentList);
         assertFalse(trackSegmentList.isEmpty());
         assertEquals(1, trackSegmentList.size());
+
         final List<Waypoint> waypointList = trackSegmentList.get(0).getTrkpt();
         assertNotNull(waypointList);
         assertFalse(waypointList.isEmpty());
         assertEquals(6, waypointList.size());
+
         final Waypoint waypoint = waypointList.get(0);
         assertNotNull(waypoint);
         assertEquals(BigDecimal.valueOf(47.80743), waypoint.getLat());

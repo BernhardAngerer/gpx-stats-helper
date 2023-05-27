@@ -1,11 +1,10 @@
 package at.bernhardangerer.gpxStatsHelper;
 
 import at.bernhardangerer.gpxStatsHelper.exception.WebserviceCallException;
-import at.bernhardangerer.gpxStatsHelper.model.DistanceDuration;
 import at.bernhardangerer.gpxStatsHelper.model.Duration;
 import at.bernhardangerer.gpxStatsHelper.model.ElevationDelta;
 import at.bernhardangerer.gpxStatsHelper.model.ElevationRange;
-import at.bernhardangerer.gpxStatsHelper.model.FirstLastWpt;
+import at.bernhardangerer.gpxStatsHelper.model.FirstLastWaypoint;
 import at.bernhardangerer.gpxStatsHelper.model.api.GeocodeReverseModel;
 import at.bernhardangerer.gpxStatsHelper.service.GeocodeService;
 import at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil;
@@ -13,12 +12,11 @@ import at.bernhardangerer.gpxStatsHelper.util.DistanceTotalCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.DurationInMotionCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationDeltaCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationRangeCalculator;
-import at.bernhardangerer.gpxStatsHelper.util.FirstLastWptCalculator;
+import at.bernhardangerer.gpxStatsHelper.util.FirstLastWaypointCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.GeocodeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GpxConverter;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedAvgCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedMaxCalculator;
-import at.bernhardangerer.gpxStatsHelper.util.SpeedUtil;
 import com.topografix.model.Gpx;
 import com.topografix.model.Track;
 
@@ -38,12 +36,19 @@ public final class Example {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
     private static final GeocodeService GEOCODE_SERVICE = new GeocodeService();
+    private static final String CET = "CET";
+    private static final String SPACE = " ";
+    private static final String H = "h";
+    private static final String M = "m";
+    private static final String KM = "km";
+    private static final String KMPH = "km/h";
+    private static final String MSL = "m.s.l.";
 
     private Example() {
     }
 
     /**
-     * An example to load an example GPX file and calculate statistic parameters.
+     * Load an example GPX file and calculate statistic parameters.
      *
      * @param args
      * @throws IOException
@@ -66,40 +71,48 @@ public final class Example {
                     + (track.getName() != null ? " - \"" + track.getName() : "\"") + " ###");
 
             final Double distance = DistanceTotalCalculator.fromTrack(track);
-            System.out.println("total distance: " + DECIMAL_FORMAT.format(distance / 1000) + " km");
+            System.out.println("total distance: " + DECIMAL_FORMAT.format(distance / 1000) + SPACE + KM);
 
             final ElevationDelta delta = ElevationDeltaCalculator.fromTrack(track);
-            System.out.println("ascent: " + delta.getAscent().setScale(0, RoundingMode.HALF_UP) + " m");
-            System.out.println("descent: " + delta.getDescent().setScale(0, RoundingMode.HALF_UP) + " m");
+            System.out.println("ascent: " + delta.getAscent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
+            System.out.println("descent: " + delta.getDescent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
 
             final ElevationRange range = ElevationRangeCalculator.fromTrack(track);
-            System.out.println("highest point: " + range.getHighest().setScale(0, RoundingMode.HALF_UP) + " m.s.l.");
-            System.out.println("lowest point: " + range.getLowest().setScale(0, RoundingMode.HALF_UP) + " m.s.l.");
+            System.out.println("highest point: "
+                    + range.getHighest().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
+            System.out.println("lowest point: "
+                    + range.getLowest().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
 
-            final FirstLastWpt firstLast = FirstLastWptCalculator.fromTrack(track);
+            final FirstLastWaypoint firstLast = FirstLastWaypointCalculator.fromTrack(track);
 
-            System.out.println("start time: " + DATE_TIME_FORMATTER.format(DateTimeUtil.utcToCet(firstLast.getFirst().getTime())) + " h");
-            System.out.println("end time: " + DATE_TIME_FORMATTER.format(DateTimeUtil.utcToCet(firstLast.getLast().getTime())) + " h");
+            System.out.println("start time: " + DATE_TIME_FORMATTER.format(
+                    DateTimeUtil.convertFromUtcTime(firstLast.getFirst().getTime(), CET)) + SPACE + H);
+            System.out.println("end time: " + DATE_TIME_FORMATTER.format(
+                    DateTimeUtil.convertFromUtcTime(firstLast.getLast().getTime(), CET)) + SPACE + H);
 
-            final Duration durationTotal = calcDateTimeDifference(firstLast.getFirst().getTime(), firstLast.getLast().getTime());
-            System.out.println("total duration: " + durationTotal.format() + " h");
+            final Duration durationTotal =
+                    calcDateTimeDifference(firstLast.getFirst().getTime(), firstLast.getLast().getTime());
+            System.out.println("total duration: " + durationTotal.format() + SPACE + H);
 
             final Long durationInMotion = DurationInMotionCalculator.fromTrack(track);
-            System.out.println("duration in motion: " + convertFromSeconds(durationInMotion).format() + " h");
+            System.out.println("duration in motion: " + convertFromSeconds(durationInMotion).format() + SPACE + H);
 
             final Double speedMax = SpeedMaxCalculator.fromTrack(track);
-            System.out.println("maximum speed: " + DECIMAL_FORMAT.format(speedMax) + " km/h");
+            System.out.println("maximum speed: " + DECIMAL_FORMAT.format(speedMax) + SPACE + KMPH);
 
-            final DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrack(track);
-            System.out.println("average speed: " + DECIMAL_FORMAT.format(SpeedUtil.calculateSpeed(distanceDuration)) + " km/h");
+            final Double averageSpeed = SpeedAvgCalculator.fromTrack(track);
+            System.out.println("average speed: " + DECIMAL_FORMAT.format(averageSpeed) + SPACE + KMPH);
 
-            System.out.println("start position: Lat " + firstLast.getFirst().getLat() + " / Lon " + firstLast.getFirst().getLon());
-            System.out.println("end position: Lat " + firstLast.getLast().getLat() + " / Lon " + firstLast.getLast().getLon());
+            System.out.println("start position: Lat " + firstLast.getFirst().getLat()
+                    + " / Lon " + firstLast.getFirst().getLon());
+            System.out.println("end position: Lat " + firstLast.getLast().getLat()
+                    + " / Lon " + firstLast.getLast().getLon());
 
             final GeocodeReverseModel startPos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocode(
                 firstLast.getFirst().getLat().toString(), firstLast.getFirst().getLon().toString()));
-            if (GeocodeUtil.isBounded(firstLast.getLast().getLat().doubleValue(), firstLast.getLast().getLon().doubleValue(),
-                startPos.getBoundingbox()[0], startPos.getBoundingbox()[2], startPos.getBoundingbox()[1], startPos.getBoundingbox()[3])) {
+            if (GeocodeUtil.isBounded(firstLast.getLast().getLat().doubleValue(),
+                    firstLast.getLast().getLon().doubleValue(), startPos.getBoundingbox()[0],
+                    startPos.getBoundingbox()[2], startPos.getBoundingbox()[1], startPos.getBoundingbox()[3])) {
                 System.out.println("start = end geoposition: " + startPos.getDisplayName());
             } else {
                 System.out.println("start geoposition: " + startPos.getDisplayName());

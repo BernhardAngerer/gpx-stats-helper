@@ -88,6 +88,12 @@ public final class DistanceTotalCalculator {
         return null;
     }
 
+    /**
+     * Calculate the distance in meters.
+     *
+     * @param track
+     * @return distance in meters
+     */
     public static Double fromTrack(final Track track) {
         if (track != null) {
             return fromTrackSegmentList(track.getTrkseg());
