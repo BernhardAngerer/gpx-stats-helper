@@ -1,3 +1,5 @@
+[![Maven Package](https://github.com/BernhardAngerer/gpx-stats-helper/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/BernhardAngerer/gpx-stats-helper/actions/workflows/maven-publish.yml)
+
 # GPX stats helper library
 
 This Java library provides static helper methods to read from GPX 1.1 files and calculate the following parameters: 
