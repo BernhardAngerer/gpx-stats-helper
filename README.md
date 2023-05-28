@@ -1,4 +1,5 @@
 # GPX stats helper library
+
 This Java library provides static helper methods to read from GPX 1.1 files and calculate the following parameters: 
 + Total distance [km]
 + Ascent/descent elevation [m]
@@ -9,10 +10,8 @@ This Java library provides static helper methods to read from GPX 1.1 files and 
 + End time [h]
 + Max speed [km/h]
 + Average speed [km/h]
-+ Start position [lon, lat]
-+ End position [lon, lat]
-+ Start geo-position (using OpenStreetMap API data)
-+ End geo-position (using OpenStreetMap API data)
++ Start and end position [lon, lat]
++ Start and end geo-position string (using OpenStreetMap free API data)
 
 ## Technical requirements:
 + Java 11+
@@ -47,7 +46,7 @@ final GeocodeReverseModel endPos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.r
 ```
 
 ### Output of example.gpx executing Example.main():
-```java
+```
 total distance: 26,4 km
 ascent: 1008 m
 descent: 997 m
@@ -64,3 +63,7 @@ end position: Lat 47.807346 / Lon 12.378055
 start geoposition: 16, Ulmenstraße, Westerham, Bergham, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
 end geoposition: 16, Ulmenstraße, Westerham, Bergham, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
 ```
+
+### How to add project dependency to Maven or Gradle:
+
+https://jitpack.io/private#BernhardAngerer/gpx-stats-helper/1.0.0

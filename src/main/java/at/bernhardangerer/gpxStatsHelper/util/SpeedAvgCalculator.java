@@ -12,7 +12,7 @@ import static at.bernhardangerer.gpxStatsHelper.util.PropertyUtil.loadValue;
 
 public final class SpeedAvgCalculator {
 
-    private static final double MOTION_MIN_SPEED = Double.parseDouble(loadValue("motionMinSpeed"));
+    private static final double MOTION_MIN_SPEED = Double.parseDouble(loadValue("motionMinSpeedThreshold"));
 
     private SpeedAvgCalculator() {
     }

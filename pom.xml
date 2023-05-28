@@ -12,6 +12,7 @@
     <description>GPX statistic helper library</description>
 
     <properties>
+        <java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -177,5 +178,12 @@
         <url>https://github.com/BernhardAngerer/gpx-stats-helper</url>
         <tag>HEAD</tag>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/BernhardAngerer/gpx-stats-helper</url>
+        </repository>
+    </distributionManagement>
 
 </project>
