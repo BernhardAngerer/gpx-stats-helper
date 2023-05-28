@@ -108,7 +108,7 @@ public final class Example {
             System.out.println("end position: Lat " + firstLast.getLast().getLat()
                     + " / Lon " + firstLast.getLast().getLon());
 
-            final GeocodeReverseModel startPos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocode(
+            final GeocodeReverseModel startPos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(
                 firstLast.getFirst().getLat().toString(), firstLast.getFirst().getLon().toString()));
             if (GeocodeUtil.isBounded(firstLast.getLast().getLat().doubleValue(),
                     firstLast.getLast().getLon().doubleValue(), startPos.getBoundingbox()[0],
@@ -116,7 +116,7 @@ public final class Example {
                 System.out.println("start = end geoposition: " + startPos.getDisplayName());
             } else {
                 System.out.println("start geoposition: " + startPos.getDisplayName());
-                System.out.println("end geoposition: " + GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocode(
+                System.out.println("end geoposition: " + GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(
                     firstLast.getLast().getLat().toString(), firstLast.getLast().getLon().toString())).getDisplayName());
             }
 

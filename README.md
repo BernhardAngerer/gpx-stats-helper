@@ -15,8 +15,7 @@ This Java library provides static helper methods to read from GPX 1.1 files and 
 + End geo-position (using OpenStreetMap API data)
 
 ## Technical requirements:
-+ Java 17+
-+ Maven
++ Java 11+
 
 ## Usage:
 ```java
@@ -24,22 +23,21 @@ final File file = new File(Example.class.getClassLoader().getResource("example/e
 final GpxType gpx = GpxConverter.convertGpxFromFile(file);
 final TrkType track = gpx.getTrk().get(0);
 
-final Double distance = DistanceTotalCalculator.fromTrk(track);
+final Double totalDistance = DistanceTotalCalculator.fromTrk(track);
 
 final ElevationDelta delta = ElevationDeltaCalculator.fromTrk(track);
 
 final ElevationRange range = ElevationRangeCalculator.fromTrk(track);
 
-final FirstLastWpt firstLast = FirstLastWptCalculator.fromTrk(track);
+final FirstLastWaypoint firstLastWaypoint = FirstLastWptCalculator.fromTrk(track);
 
-final Duration durationTotal = calcDateTimeDifference(firstLast.getFirst().getTime(), firstLast.getLast().getTime());
+final Duration totalDuration = calcDateTimeDifference(firstLast.getFirst().getTime(), firstLast.getLast().getTime());
 
 final Long durationInMotion = DurationInMotionCalculator.fromTrk(track);
 
-final Double speedMax = SpeedMaxCalculator.fromTrk(track);
+final Double maxSpeed = SpeedMaxCalculator.fromTrk(track);
 
-final DistanceDuration distanceDuration = SpeedAvgCalculator.fromTrk(track);
-final double speedAvg = SpeedUtil.calculateSpeed(distanceDuration)
+final Double avgSpeed = SpeedAvgCalculator.fromTrack(track);
 
 final GeocodeReverseModel startPos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocode(
     firstLast.getFirst().getLat().toString(), firstLast.getFirst().getLon().toString()));

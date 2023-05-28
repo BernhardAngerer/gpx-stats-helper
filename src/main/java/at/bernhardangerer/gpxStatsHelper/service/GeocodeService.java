@@ -21,7 +21,7 @@ public final class GeocodeService {
     }
 
     /**
-     * Simple wrapper to return the string representation of the provided position.
+     * Simple wrapper to return the json string representation of the provided position.
      *
      * @param lat latitude
      * @param lon longitude
@@ -31,9 +31,9 @@ public final class GeocodeService {
      * @throws InterruptedException
      * @throws URISyntaxException
      */
-    public String reverseGeocode(final String lat, final String lon)
+    public String reverseGeocodeAsJson(final String lat, final String lon)
             throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
-        return reverseGeocode(lat, lon, OutputFormat.JSON, 18, true, false, false, false);
+        return reverseGeocodeAsJson(lat, lon, OutputFormat.JSON, 18, true, false, false, false);
     }
 
     /**
@@ -54,9 +54,9 @@ public final class GeocodeService {
      * @throws InterruptedException
      * @throws URISyntaxException
      */
-    public String reverseGeocode(final String lat, final String lon, final OutputFormat outputFormat, final int zoomLevel,
-                                 final boolean addressDetails, final boolean extraTags, final boolean nameDetails,
-                                 final boolean polygonSvg)
+    public String reverseGeocodeAsJson(final String lat, final String lon, final OutputFormat outputFormat, final int zoomLevel,
+                                       final boolean addressDetails, final boolean extraTags, final boolean nameDetails,
+                                       final boolean polygonSvg)
             throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
         final URIBuilder builder = new URIBuilder(BASE_URL);
         builder.setParameter("lat", lat);

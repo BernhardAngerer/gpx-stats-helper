@@ -22,7 +22,7 @@ public final class GeocodeUtil {
     }
 
     /**
-     * Lookup, if the provided position is inside a rectangle area (limited by two opposite corner positions).
+     * Lookup, if the provided position is inside a rectangle area (bounded/limited by two opposite corner positions).
      *
      * @param lat lat position
      * @param lon lon position

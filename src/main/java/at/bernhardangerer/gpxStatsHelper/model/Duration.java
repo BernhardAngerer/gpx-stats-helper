@@ -66,20 +66,20 @@ public final class Duration {
                     .append(" years");
         }
         if (months > 0) {
-            if (!stringBuilder.isEmpty()) {
+            if (stringBuilder.length() > 0) {
                 stringBuilder.append(" / ");
             }
             stringBuilder.append(months)
                     .append(" months");
         }
         if (days > 0) {
-            if (!stringBuilder.isEmpty()) {
+            if (stringBuilder.length() > 0) {
                 stringBuilder.append(" / ");
             }
             stringBuilder.append(days)
                     .append(" days");
         }
-        if (!stringBuilder.isEmpty()) {
+        if (stringBuilder.length() > 0) {
             stringBuilder.append(" / ");
         }
         stringBuilder.append(df.format(hours))
