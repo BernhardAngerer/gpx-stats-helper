@@ -8,11 +8,10 @@ This Java library provides static helper methods to read from GPX 1.1 files usin
 + Lowest/highest elevation [m]
 + Total duration [h]
 + Duration in motion [h]
-+ Start and end time [h]
-+ Max speed [km/h]
-+ Average speed [km/h]
-+ Start and end position [lon, lat]
-+ Start and end geo-position description (using the free [Nominatim API](https://nominatim.org/release-docs/develop/api/Reverse/) Reverse Geocoding (OpenStreetMap data))
++ Start/end time [h]
++ Max/average speed [km/h]
++ Start/end position [lon, lat]
++ Start/end geo-position description (using the free [Nominatim API](https://nominatim.org/release-docs/develop/api/Reverse/) Reverse Geocoding (OpenStreetMap data))
 
 ## Technical requirements:
 + Java 11+
