@@ -2,18 +2,17 @@
 
 # GPX stats helper library
 
-This Java library provides static helper methods to read from GPX 1.1 files and calculate the following parameters: 
+This Java library provides static helper methods to read from GPX 1.1 files using the official XSD schema from [TopoGrafix](https://www.topografix.com/gpx.asp). The following parameters can then be calculated: 
 + Total distance [km]
 + Ascent/descent elevation [m]
 + Lowest/highest elevation [m]
 + Total duration [h]
 + Duration in motion [h]
-+ Start time [h]
-+ End time [h]
++ Start and end time [h]
 + Max speed [km/h]
 + Average speed [km/h]
 + Start and end position [lon, lat]
-+ Start and end geo-position string (using OpenStreetMap free API data)
++ Start and end geo-position description (using the free [Nominatim API](https://nominatim.org/release-docs/develop/api/Reverse/) Reverse Geocoding (OpenStreetMap data))
 
 ## Technical requirements:
 + Java 11+
