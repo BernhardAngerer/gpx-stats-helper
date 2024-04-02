@@ -23,6 +23,12 @@ class DateTimeUtilTest {
     }
 
     @Test
+    void convertToSeconds() {
+        final long result = DateTimeUtil.convertToSeconds(new Duration(0, 0, 0, 1, 6, 40));
+        assertEquals(4000L, result);
+    }
+
+    @Test
     void convertFromUtcTime() {
         final LocalDateTime now = LocalDateTime.now();
         final LocalDateTime result = DateTimeUtil.convertFromUtcTime(now, "CET");

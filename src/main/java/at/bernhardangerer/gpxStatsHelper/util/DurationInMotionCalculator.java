@@ -59,7 +59,7 @@ public final class DurationInMotionCalculator {
     static Long fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
         if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
             return trackSegmentList.stream()
-                    .map(trksegType -> fromTrackSegment(trksegType))
+                    .map(DurationInMotionCalculator::fromTrackSegment)
                     .filter(Objects::nonNull)
                     .reduce(0L, Long::sum);
         }

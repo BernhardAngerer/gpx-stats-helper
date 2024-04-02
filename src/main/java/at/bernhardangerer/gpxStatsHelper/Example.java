@@ -31,6 +31,7 @@ import java.util.Objects;
 
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.calcDateTimeDifference;
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.convertFromSeconds;
+import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.convertToSeconds;
 
 public final class Example {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
@@ -68,7 +69,7 @@ public final class Example {
         int count = 1;
         for (final Track track : gpx.getTrk()) {
             System.out.println("\n### Track Nr. " + count
-                    + (track.getName() != null ? " - \"" + track.getName() : "\"") + " ###");
+                    + (track.getName() != null ? " - \"" + track.getName() + "\"" : "") + " ###");
 
             final Double distance = DistanceTotalCalculator.fromTrack(track);
             System.out.println("Total Distance: " + DECIMAL_FORMAT.format(distance / 1000) + SPACE + KM);
@@ -103,6 +104,9 @@ public final class Example {
 
             final Long durationInMotion = DurationInMotionCalculator.fromTrack(track);
             System.out.println("Duration In Motion: " + convertFromSeconds(durationInMotion).format() + SPACE + H);
+
+            final long durationAtRest = convertToSeconds(durationTotal) - durationInMotion;
+            System.out.println("Duration At Rest: " + convertFromSeconds(durationAtRest).format() + SPACE + H);
 
             final Double speedMax = SpeedMaxCalculator.fromTrack(track);
             System.out.println("Maximum Speed: " + DECIMAL_FORMAT.format(speedMax) + SPACE + KMPH);

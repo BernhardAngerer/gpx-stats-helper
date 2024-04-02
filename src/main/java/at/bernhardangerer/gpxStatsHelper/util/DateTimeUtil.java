@@ -90,4 +90,14 @@ public final class DateTimeUtil {
         duration.setSeconds(seconds % 60);
         return duration;
     }
+
+    /**
+     * Convert Duration to seconds.
+     *
+     * @param duration
+     * @return seconds
+     */
+    public static long convertToSeconds(final Duration duration) {
+        return duration.getHours() * 3600 + duration.getMinutes() * 60 + duration.getSeconds();
+    }
 }

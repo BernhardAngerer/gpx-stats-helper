@@ -10,6 +10,18 @@ public final class Duration {
     private long minutes;
     private long seconds;
 
+    public Duration() {
+    }
+
+    public Duration(long years, long months, long days, long hours, long minutes, long seconds) {
+        this.years = years;
+        this.months = months;
+        this.days = days;
+        this.hours = hours;
+        this.minutes = minutes;
+        this.seconds = seconds;
+    }
+
     public long getYears() {
         return years;
     }
