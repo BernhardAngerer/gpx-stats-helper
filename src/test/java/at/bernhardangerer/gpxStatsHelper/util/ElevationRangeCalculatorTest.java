@@ -61,8 +61,8 @@ class ElevationRangeCalculatorTest {
 
         ElevationRange range = ElevationRangeCalculator.fromWaypointList(waypointList);
         assertNotNull(range);
-        assertEquals(BigDecimal.valueOf(588), range.getHighest());
-        assertEquals(BigDecimal.valueOf(586), range.getLowest());
+        assertEquals(BigDecimal.valueOf(588), range.getHighest().getEle());
+        assertEquals(BigDecimal.valueOf(586), range.getLowest().getEle());
 
         range = ElevationRangeCalculator.fromWaypointList(null);
         assertNull(range);
@@ -77,8 +77,8 @@ class ElevationRangeCalculatorTest {
 
         ElevationRange range = ElevationRangeCalculator.fromTrackSegment(trackSegment);
         assertNotNull(range);
-        assertEquals(BigDecimal.valueOf(588), range.getHighest());
-        assertEquals(BigDecimal.valueOf(586), range.getLowest());
+        assertEquals(BigDecimal.valueOf(588), range.getHighest().getEle());
+        assertEquals(BigDecimal.valueOf(586), range.getLowest().getEle());
 
         range = ElevationRangeCalculator.fromTrackSegment(null);
         assertNull(range);
@@ -93,8 +93,8 @@ class ElevationRangeCalculatorTest {
 
         ElevationRange range = ElevationRangeCalculator.fromTrackSegmentList(trackSegmentList);
         assertNotNull(range);
-        assertEquals(BigDecimal.valueOf(598), range.getHighest());
-        assertEquals(BigDecimal.valueOf(586), range.getLowest());
+        assertEquals(BigDecimal.valueOf(598), range.getHighest().getEle());
+        assertEquals(BigDecimal.valueOf(586), range.getLowest().getEle());
 
         range = ElevationRangeCalculator.fromTrackSegmentList(null);
         assertNull(range);
@@ -109,8 +109,8 @@ class ElevationRangeCalculatorTest {
 
         ElevationRange range = ElevationRangeCalculator.fromTrack(track);
         assertNotNull(range);
-        assertEquals(BigDecimal.valueOf(598), range.getHighest());
-        assertEquals(BigDecimal.valueOf(586), range.getLowest());
+        assertEquals(BigDecimal.valueOf(598), range.getHighest().getEle());
+        assertEquals(BigDecimal.valueOf(586), range.getLowest().getEle());
 
         range = ElevationRangeCalculator.fromTrack(null);
         assertNull(range);

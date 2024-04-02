@@ -5,7 +5,6 @@ import com.topografix.model.Track;
 import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
 
-import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 
@@ -19,10 +18,10 @@ public final class ElevationRangeCalculator {
             final ElevationRange range = new ElevationRange();
             range.setHighest(waypointList.stream()
                     .max(Comparator.comparing(Waypoint::getEle))
-                    .map(wptType -> wptType.getEle()).get());
+                    .get());
             range.setLowest(waypointList.stream()
                     .min(Comparator.comparing(Waypoint::getEle))
-                    .map(wptType -> wptType.getEle()).get());
+                    .get());
             return range;
         }
         return null;
@@ -40,20 +39,20 @@ public final class ElevationRangeCalculator {
             final ElevationRange range = new ElevationRange();
             range.setHighest(trackSegmentList.stream()
                     .map(trackSegment -> fromTrackSegment(trackSegment).getHighest())
-                    .max(BigDecimal::compareTo).get());
+                    .max(Comparator.comparing(Waypoint::getEle)).get());
             range.setLowest(trackSegmentList.stream()
                     .map(trackSegment -> fromTrackSegment(trackSegment).getLowest())
-                    .min(BigDecimal::compareTo).get());
+                    .min(Comparator.comparing(Waypoint::getEle)).get());
             return range;
         }
         return null;
     }
 
     /**
-     * Calculate the lowest and highest elevation.
+     * Calculate the lowest and highest elevation waypoints.
      *
      * @param track
-     * @return ElevationRange in meters
+     * @return ElevationRange as Waypoints
      */
     public static ElevationRange fromTrack(final Track track) {
         if (track != null) {

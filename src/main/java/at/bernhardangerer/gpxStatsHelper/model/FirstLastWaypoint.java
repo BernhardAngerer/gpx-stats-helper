@@ -27,4 +27,12 @@ public final class FirstLastWaypoint {
     public void setLast(final Waypoint last) {
         this.last = last;
     }
+
+    @Override
+    public String toString() {
+        return "FirstLastWaypoint {" +
+                "first=" + first +
+                ", last=" + last +
+                '}';
+    }
 }

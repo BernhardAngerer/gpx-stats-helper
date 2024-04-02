@@ -3,6 +3,7 @@ package at.bernhardangerer.gpxStatsHelper.service;
 import at.bernhardangerer.gpxStatsHelper.enumeration.OutputFormat;
 import at.bernhardangerer.gpxStatsHelper.exception.WebserviceCallException;
 import at.bernhardangerer.gpxStatsHelper.webservice.ApiClient;
+import com.topografix.model.Waypoint;
 import org.apache.hc.core5.net.URIBuilder;
 
 import java.io.IOException;
@@ -34,6 +35,22 @@ public final class GeocodeService {
     public String reverseGeocodeAsJson(final String lat, final String lon)
             throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
         return reverseGeocodeAsJson(lat, lon, OutputFormat.JSON, 18, true, false, false, false);
+    }
+
+    /**
+     * Simple wrapper to return the json string representation of the provided position from waypoint
+     *
+     * @param waypoint Waypoint
+     * @return String representation of the provided position
+     * @throws IOException
+     * @throws WebserviceCallException
+     * @throws InterruptedException
+     * @throws URISyntaxException
+     */
+    public String reverseGeocodeAsJson(final Waypoint waypoint)
+            throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
+        return reverseGeocodeAsJson(waypoint.getLat().toString(), waypoint.getLon().toString(), OutputFormat.JSON,
+                18, true, false, false, false);
     }
 
     /**

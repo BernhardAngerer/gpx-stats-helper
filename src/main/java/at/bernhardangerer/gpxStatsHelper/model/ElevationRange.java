@@ -1,24 +1,24 @@
 package at.bernhardangerer.gpxStatsHelper.model;
 
-import java.math.BigDecimal;
+import com.topografix.model.Waypoint;
 
 public final class ElevationRange {
-    private BigDecimal highest;
-    private BigDecimal lowest;
+    private Waypoint highest;
+    private Waypoint lowest;
 
-    public BigDecimal getHighest() {
+    public Waypoint getHighest() {
         return highest;
     }
 
-    public void setHighest(final BigDecimal highest) {
+    public void setHighest(final Waypoint highest) {
         this.highest = highest;
     }
 
-    public BigDecimal getLowest() {
+    public Waypoint getLowest() {
         return lowest;
     }
 
-    public void setLowest(final BigDecimal lowest) {
+    public void setLowest(final Waypoint lowest) {
         this.lowest = lowest;
     }
 

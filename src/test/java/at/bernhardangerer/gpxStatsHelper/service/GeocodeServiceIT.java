@@ -28,7 +28,7 @@ class GeocodeServiceIT {
         assertNotNull(resultJson);
         final GeocodeReverseModel model = convertFromJson(resultJson);
         assertNotNull(model);
-        assertEquals("Bahnhof Scharnitz, 63, Bahnhofstraße, Gemeinde Scharnitz, Bezirk Innsbruck-Land, Tirol, 6108, Österreich",
+        assertEquals("Bahnhof Scharnitz, 63, Bahnhofstraße, Scharnitz, Bezirk Innsbruck-Land, 6108, Österreich",
                 model.getDisplayName());
         assertNotNull(model.getBoundingbox());
         assertNotNull(model.getAddress());
@@ -50,7 +50,7 @@ class GeocodeServiceIT {
         assertNotNull(resultJson);
         final GeocodeReverseModel model = convertFromJson(resultJson);
         assertNotNull(model);
-        assertEquals("Gemeinde Scharnitz, Bezirk Innsbruck-Land, Tirol, 6108, Österreich", model.getDisplayName());
+        assertEquals("Scharnitz, Bezirk Innsbruck-Land, 6108, Österreich", model.getDisplayName());
         assertNotNull(model.getBoundingbox());
         assertNotNull(model.getAddress());
         assertNotNull(model.getLat());

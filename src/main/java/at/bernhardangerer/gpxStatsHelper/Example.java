@@ -67,57 +67,64 @@ public final class Example {
         }
         int count = 1;
         for (final Track track : gpx.getTrk()) {
-            System.out.println("### track nr. " + count
+            System.out.println("\n### Track Nr. " + count
                     + (track.getName() != null ? " - \"" + track.getName() : "\"") + " ###");
 
             final Double distance = DistanceTotalCalculator.fromTrack(track);
-            System.out.println("total distance: " + DECIMAL_FORMAT.format(distance / 1000) + SPACE + KM);
+            System.out.println("Total Distance: " + DECIMAL_FORMAT.format(distance / 1000) + SPACE + KM);
 
             final ElevationDelta delta = ElevationDeltaCalculator.fromTrack(track);
-            System.out.println("ascent: " + delta.getAscent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
-            System.out.println("descent: " + delta.getDescent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
+            System.out.println("Ascent: " + delta.getAscent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
+            System.out.println("Descent: " + delta.getDescent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
 
             final ElevationRange range = ElevationRangeCalculator.fromTrack(track);
-            System.out.println("highest point: "
-                    + range.getHighest().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
-            System.out.println("lowest point: "
-                    + range.getLowest().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
+            System.out.println("Highest Point: "
+                    + range.getHighest().getEle().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
+            final GeocodeReverseModel highestGeoposition =
+                    GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(range.getHighest()));
+            System.out.println("Highest Geoposition: " + highestGeoposition.getDisplayName());
+
+            System.out.println("Lowest Point: "
+                    + range.getLowest().getEle().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
+            final GeocodeReverseModel lowestGeoposition =
+                    GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(range.getLowest()));
+            System.out.println("Lowest Geoposition: " + lowestGeoposition.getDisplayName());
 
             final FirstLastWaypoint firstLast = FirstLastWaypointCalculator.fromTrack(track);
 
-            System.out.println("start time: " + DATE_TIME_FORMATTER.format(
+            System.out.println("Start Time: " + DATE_TIME_FORMATTER.format(
                     DateTimeUtil.convertFromUtcTime(firstLast.getFirst().getTime(), CET)) + SPACE + H);
-            System.out.println("end time: " + DATE_TIME_FORMATTER.format(
+            System.out.println("End Time: " + DATE_TIME_FORMATTER.format(
                     DateTimeUtil.convertFromUtcTime(firstLast.getLast().getTime(), CET)) + SPACE + H);
 
             final Duration durationTotal =
                     calcDateTimeDifference(firstLast.getFirst().getTime(), firstLast.getLast().getTime());
-            System.out.println("total duration: " + durationTotal.format() + SPACE + H);
+            System.out.println("Total Duration: " + durationTotal.format() + SPACE + H);
 
             final Long durationInMotion = DurationInMotionCalculator.fromTrack(track);
-            System.out.println("duration in motion: " + convertFromSeconds(durationInMotion).format() + SPACE + H);
+            System.out.println("Duration In Motion: " + convertFromSeconds(durationInMotion).format() + SPACE + H);
 
             final Double speedMax = SpeedMaxCalculator.fromTrack(track);
-            System.out.println("maximum speed: " + DECIMAL_FORMAT.format(speedMax) + SPACE + KMPH);
+            System.out.println("Maximum Speed: " + DECIMAL_FORMAT.format(speedMax) + SPACE + KMPH);
 
             final Double averageSpeed = SpeedAvgCalculator.fromTrack(track);
-            System.out.println("average speed: " + DECIMAL_FORMAT.format(averageSpeed) + SPACE + KMPH);
+            System.out.println("Average Speed: " + DECIMAL_FORMAT.format(averageSpeed) + SPACE + KMPH);
 
-            System.out.println("start position: Lat " + firstLast.getFirst().getLat()
+            System.out.println("Start Position: Lat " + firstLast.getFirst().getLat()
                     + " / Lon " + firstLast.getFirst().getLon());
-            System.out.println("end position: Lat " + firstLast.getLast().getLat()
+            System.out.println("End Position: Lat " + firstLast.getLast().getLat()
                     + " / Lon " + firstLast.getLast().getLon());
 
-            final GeocodeReverseModel startPos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(
-                firstLast.getFirst().getLat().toString(), firstLast.getFirst().getLon().toString()));
+            final GeocodeReverseModel startPos =
+                    GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(firstLast.getFirst()));
             if (GeocodeUtil.isBounded(firstLast.getLast().getLat().doubleValue(),
                     firstLast.getLast().getLon().doubleValue(), startPos.getBoundingbox()[0],
                     startPos.getBoundingbox()[2], startPos.getBoundingbox()[1], startPos.getBoundingbox()[3])) {
-                System.out.println("start = end geoposition: " + startPos.getDisplayName());
+                System.out.println("Start = End Geoposition: " + startPos.getDisplayName());
             } else {
-                System.out.println("start geoposition: " + startPos.getDisplayName());
-                System.out.println("end geoposition: " + GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(
-                    firstLast.getLast().getLat().toString(), firstLast.getLast().getLon().toString())).getDisplayName());
+                System.out.println("Start Geoposition: " + startPos.getDisplayName());
+                System.out.println("End Geoposition: " + GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(
+                    firstLast.getLast())).getDisplayName());
             }
 
             count++;
