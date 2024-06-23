@@ -2,7 +2,7 @@ package at.bernhardangerer.gpxStatsHelper.util;
 
 import com.topografix.model.Gpx;
 
-import javax.xml.bind.JAXB;
+import jakarta.xml.bind.JAXB;
 import java.io.File;
 import java.io.StringReader;
 
