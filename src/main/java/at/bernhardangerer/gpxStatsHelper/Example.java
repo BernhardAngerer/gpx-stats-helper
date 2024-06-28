@@ -15,18 +15,22 @@ import at.bernhardangerer.gpxStatsHelper.util.ElevationRangeCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.FirstLastWaypointCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.GeocodeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GpxConverter;
+import at.bernhardangerer.gpxStatsHelper.util.ElevationPeakUtil;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedAvgCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedMaxCalculator;
 import com.topografix.model.Gpx;
 import com.topografix.model.Track;
+import com.topografix.model.Waypoint;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.List;
 import java.util.Objects;
 
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.calcDateTimeDifference;
@@ -130,6 +134,10 @@ public final class Example {
                 System.out.println("End Geoposition: " + GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(
                     firstLast.getLast())).getDisplayName());
             }
+
+            final List<Waypoint> peaks = ElevationPeakUtil.findPeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
+            System.out.println("Number of (positive) Peaks: " + peaks.size());
+            peaks.forEach(waypoint -> System.out.println(GeocodeUtil.createOpenStreetMapUrl(waypoint) + " / " + waypoint));
 
             count++;
         }
