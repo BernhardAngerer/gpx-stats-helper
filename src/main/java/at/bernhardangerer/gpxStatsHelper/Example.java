@@ -135,9 +135,13 @@ public final class Example {
                     firstLast.getLast())).getDisplayName());
             }
 
-            final List<Waypoint> peaks = ElevationPeakUtil.findPeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
-            System.out.println("Number of (positive) Peaks: " + peaks.size());
-            peaks.forEach(waypoint -> System.out.println(GeocodeUtil.createOpenStreetMapUrl(waypoint) + " / " + waypoint));
+            final List<Waypoint> positivePeaks = ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
+            System.out.println("Number of (positive) Peaks: " + positivePeaks.size());
+            positivePeaks.forEach(waypoint -> System.out.println(GeocodeUtil.createOpenStreetMapUrl(waypoint) + " / " + waypoint));
+
+            final List<Waypoint> negativePeaks = ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
+            System.out.println("Number of (negative) Peaks: " + negativePeaks.size());
+            negativePeaks.forEach(waypoint -> System.out.println(GeocodeUtil.createOpenStreetMapUrl(waypoint) + " / " + waypoint));
 
             count++;
         }

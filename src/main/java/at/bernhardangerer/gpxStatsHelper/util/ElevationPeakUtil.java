@@ -2,10 +2,12 @@ package at.bernhardangerer.gpxStatsHelper.util;
 
 import at.bernhardangerer.gpxStatsHelper.model.ElevationRange;
 import com.topografix.model.Waypoint;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class ElevationPeakUtil {
 
@@ -13,7 +15,7 @@ public final class ElevationPeakUtil {
     }
 
     /**
-     * Finds elevation peaks from a list of waypoints based on a given threshold.
+     * Finds elevation positive peaks from a list of waypoints based on a given threshold.
      *
      * <p>This method identifies waypoints as peaks if they meet the criteria of being at a local maximum
      * with respect to elevation difference from adjacent waypoints, considering a specified threshold.
@@ -25,7 +27,29 @@ public final class ElevationPeakUtil {
      * @return a list of waypoints that are identified as peaks based on the given threshold
      * @throws IllegalArgumentException if the thresholdInMeters is negative
      */
-    public static List<Waypoint> findPeaks(final List<Waypoint> waypoints, final BigDecimal thresholdInMeters) {
+    public static List<Waypoint> findPositivePeaks(final List<Waypoint> waypoints, final BigDecimal thresholdInMeters) {
+        return findPeaks(waypoints, thresholdInMeters, true);
+    }
+
+    /**
+     * Finds elevation negative peaks from a list of waypoints based on a given threshold.
+     *
+     * <p>This method identifies waypoints as peaks if they meet the criteria of being at a local maximum
+     * with respect to elevation difference from adjacent waypoints, considering a specified threshold.
+     * <p>The method ensures that the list of waypoints is not null and contains more than one distinct elevation value.
+     * If these conditions are not met, an empty list is returned.
+     *
+     * @param waypoints the list of waypoints to analyze for peaks
+     * @param thresholdInMeters the threshold in meters that defines when an elevation difference constitutes a peak
+     * @return a list of waypoints that are identified as peaks based on the given threshold
+     * @throws IllegalArgumentException if the thresholdInMeters is negative
+     */
+    public static List<Waypoint> findNegativePeaks(final List<Waypoint> waypoints, final BigDecimal thresholdInMeters) {
+        return findPeaks(waypoints, thresholdInMeters, false);
+    }
+
+    private static List<Waypoint> findPeaks(final List<Waypoint> waypoints, final BigDecimal thresholdInMeters,
+                                           final boolean positivePeaks) {
         if (thresholdInMeters == null || thresholdInMeters.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Parameter thresholdInMeters must be greater than or equal to zero.");
         }
@@ -39,8 +63,12 @@ public final class ElevationPeakUtil {
                 return peaks;
             }
 
+            final List<Waypoint> tempWaypoints = positivePeaks ? waypoints : new ArrayList<>(waypoints).stream()
+                    .map(SerializationUtils::clone)
+                    .peek(wp -> wp.setEle(wp.getEle().negate()))
+                    .collect(Collectors.toList());
             for (int i = 0; i < waypoints.size(); i++) {
-                if ((peaks.isEmpty() || isPeakCandidate(waypoints, i, thresholdInMeters)) && isPeak(waypoints, i, thresholdInMeters)) {
+                if ((peaks.isEmpty() || isPeakCandidate(tempWaypoints, i, thresholdInMeters)) && isPeak(tempWaypoints, i, thresholdInMeters)) {
                     peaks.add(waypoints.get(i));
                 }
             }
