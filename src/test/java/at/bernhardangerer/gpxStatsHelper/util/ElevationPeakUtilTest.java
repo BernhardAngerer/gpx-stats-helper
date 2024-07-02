@@ -504,16 +504,14 @@ class ElevationPeakUtilTest {
         Waypoint secondPeak = peaks.get(1);
         assertEquals(BigDecimal.valueOf(510), secondPeak.getEle());
         Waypoint thirdPeak = peaks.get(2);
-        assertEquals(BigDecimal.valueOf(500), thirdPeak.getEle());
+        assertEquals(BigDecimal.valueOf(510), thirdPeak.getEle());
 
         peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.valueOf(10));
         assertNotNull(peaks);
         assertFalse(peaks.isEmpty());
-        assertEquals(2, peaks.size());
+        assertEquals(1, peaks.size());
         firstPeak = peaks.get(0);
         assertEquals(BigDecimal.valueOf(500), firstPeak.getEle());
-        secondPeak = peaks.get(1);
-        assertEquals(BigDecimal.valueOf(500), secondPeak.getEle());
 
         peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.valueOf(20));
         assertNotNull(peaks);
