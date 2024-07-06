@@ -11,11 +11,11 @@ import at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.DistanceTotalCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.DurationInMotionCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationDeltaCalculator;
+import at.bernhardangerer.gpxStatsHelper.util.ElevationPeakUtil;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationRangeCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.FirstLastWaypointCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.GeocodeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GpxConverter;
-import at.bernhardangerer.gpxStatsHelper.util.ElevationPeakUtil;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedAvgCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedMaxCalculator;
 import com.topografix.model.Gpx;
@@ -32,6 +32,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.calcDateTimeDifference;
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.convertFromSeconds;
@@ -96,14 +97,16 @@ public final class Example {
             System.out.println("Lowest Geoposition: " + lowestGeoposition.getDisplayName());
 
             final FirstLastWaypoint firstLast = FirstLastWaypointCalculator.fromTrack(track);
+            final Waypoint firstWaypoint = firstLast.getFirst();
+            final Waypoint lastWaypoint = firstLast.getLast();
 
             System.out.println("Start Time: " + DATE_TIME_FORMATTER.format(
-                    DateTimeUtil.convertFromUtcTime(firstLast.getFirst().getTime(), CET)) + SPACE + H);
+                    DateTimeUtil.convertFromUtcTime(firstWaypoint.getTime(), CET)) + SPACE + H);
             System.out.println("End Time: " + DATE_TIME_FORMATTER.format(
-                    DateTimeUtil.convertFromUtcTime(firstLast.getLast().getTime(), CET)) + SPACE + H);
+                    DateTimeUtil.convertFromUtcTime(lastWaypoint.getTime(), CET)) + SPACE + H);
 
             final Duration durationTotal =
-                    calcDateTimeDifference(firstLast.getFirst().getTime(), firstLast.getLast().getTime());
+                    calcDateTimeDifference(firstWaypoint.getTime(), lastWaypoint.getTime());
             System.out.println("Total Duration: " + durationTotal.format() + SPACE + H);
 
             final Long durationInMotion = DurationInMotionCalculator.fromTrack(track);
@@ -118,32 +121,55 @@ public final class Example {
             final Double averageSpeed = SpeedAvgCalculator.fromTrack(track);
             System.out.println("Average Speed: " + DECIMAL_FORMAT.format(averageSpeed) + SPACE + KMPH);
 
-            System.out.println("Start Position: Lat " + firstLast.getFirst().getLat()
-                    + " / Lon " + firstLast.getFirst().getLon());
-            System.out.println("End Position: Lat " + firstLast.getLast().getLat()
-                    + " / Lon " + firstLast.getLast().getLon());
+            System.out.println("Start Position: Lat " + firstWaypoint.getLat()
+                    + " / Lon " + firstWaypoint.getLon());
+            System.out.println("End Position: Lat " + lastWaypoint.getLat()
+                    + " / Lon " + lastWaypoint.getLon());
 
             final GeocodeReverseModel startPos =
-                    GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(firstLast.getFirst()));
-            if (GeocodeUtil.isBounded(firstLast.getLast().getLat().doubleValue(),
-                    firstLast.getLast().getLon().doubleValue(), startPos.getBoundingbox()[0],
+                    GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(firstWaypoint));
+            if (GeocodeUtil.isBounded(lastWaypoint.getLat().doubleValue(),
+                    lastWaypoint.getLon().doubleValue(), startPos.getBoundingbox()[0],
                     startPos.getBoundingbox()[2], startPos.getBoundingbox()[1], startPos.getBoundingbox()[3])) {
-                System.out.println("Start = End Geoposition: " + startPos.getDisplayName());
+                printPosition("Start = End - Geoposition", startPos, firstWaypoint);
             } else {
-                System.out.println("Start Geoposition: " + startPos.getDisplayName());
-                System.out.println("End Geoposition: " + GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(
-                    firstLast.getLast())).getDisplayName());
+                printPosition("Start - Geoposition", startPos, firstWaypoint);
+                final GeocodeReverseModel endPos =
+                        GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(lastWaypoint));
+                printPosition("End - Geoposition", endPos, lastWaypoint);
             }
 
-            final List<Waypoint> positivePeaks = ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
-            System.out.println("Number of (positive) Peaks: " + positivePeaks.size());
-            positivePeaks.forEach(waypoint -> System.out.println(GeocodeUtil.createOpenStreetMapUrl(waypoint) + " / " + waypoint));
+            final List<Waypoint> positivePeaks =
+                    ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
+            final AtomicInteger counter = new AtomicInteger(0);
+            positivePeaks.forEach(waypoint -> {
+                final GeocodeReverseModel pos;
+                try {
+                     pos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(waypoint));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                printPosition("Positive Peak " + counter.incrementAndGet() + " - Geoposition", pos, waypoint);
+            });
 
-            final List<Waypoint> negativePeaks = ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
-            System.out.println("Number of (negative) Peaks: " + negativePeaks.size());
-            negativePeaks.forEach(waypoint -> System.out.println(GeocodeUtil.createOpenStreetMapUrl(waypoint) + " / " + waypoint));
+            final List<Waypoint> negativePeaks =
+                    ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
+            counter.set(0);
+            negativePeaks.forEach(waypoint -> {
+                final GeocodeReverseModel pos;
+                try {
+                    pos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(waypoint));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                printPosition("Negative Peak " + counter.incrementAndGet() + " - Geoposition", pos, waypoint);
+            });
 
             count++;
         }
+    }
+
+    private static void printPosition(String text, GeocodeReverseModel pos, Waypoint waypoint) {
+        System.out.println(text + ": " + pos.getDisplayName() + " / URL: " + GeocodeUtil.createOpenStreetMapUrl(waypoint));
     }
 }
