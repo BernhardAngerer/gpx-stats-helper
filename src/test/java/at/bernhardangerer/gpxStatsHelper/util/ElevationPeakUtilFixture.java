@@ -165,7 +165,7 @@ class ElevationPeakUtilFixture {
         waypoint6.setEle(BigDecimal.valueOf(515));
         waypoints.add(waypoint6);
         final Waypoint waypoint7 = new Waypoint();
-        waypoint7.setEle(BigDecimal.valueOf(500));
+        waypoint7.setEle(BigDecimal.valueOf(510));
         waypoints.add(waypoint7);
         return waypoints;
     }

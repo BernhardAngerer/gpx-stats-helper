@@ -100,7 +100,7 @@ public final class ElevationPeakUtil {
                         && currentElevation.subtract(subsequentElevation).compareTo(threshold) >= 0)
                         || (subsequentElevation.compareTo(currentElevation) == 0
                                 && waypoints.subList(s + 1, size).stream()
-                                        .allMatch(wp -> wp.getEle().compareTo(currentElevation) == 0))) {
+                                        .allMatch(wp -> wp.getEle().compareTo(currentElevation) <= 0))) {
                     return true;
                 }
             }
