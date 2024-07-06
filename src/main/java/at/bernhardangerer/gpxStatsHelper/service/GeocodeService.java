@@ -38,7 +38,7 @@ public final class GeocodeService {
     }
 
     /**
-     * Simple wrapper to return the json string representation of the provided position from waypoint
+     * Simple wrapper to return the json string representation of the provided position from waypoint.
      *
      * @param waypoint Waypoint
      * @return String representation of the provided position

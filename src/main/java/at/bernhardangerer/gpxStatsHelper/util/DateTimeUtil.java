@@ -10,6 +10,8 @@ import java.time.temporal.ChronoUnit;
 public final class DateTimeUtil {
 
     private static final String UTC = "UTC";
+    private static final int SIXTY = 60;
+    private static final int THREE_SIX_ZERO_ZERO = SIXTY * SIXTY;
 
     private DateTimeUtil() {
     }
@@ -85,9 +87,9 @@ public final class DateTimeUtil {
      */
     public static Duration convertFromSeconds(final long seconds) {
         final Duration duration = new Duration();
-        duration.setHours(seconds / 3600);
-        duration.setMinutes((seconds % 3600) / 60);
-        duration.setSeconds(seconds % 60);
+        duration.setHours(seconds / THREE_SIX_ZERO_ZERO);
+        duration.setMinutes((seconds % THREE_SIX_ZERO_ZERO) / SIXTY);
+        duration.setSeconds(seconds % SIXTY);
         return duration;
     }
 
@@ -98,6 +100,6 @@ public final class DateTimeUtil {
      * @return seconds
      */
     public static long convertToSeconds(final Duration duration) {
-        return duration.getHours() * 3600 + duration.getMinutes() * 60 + duration.getSeconds();
+        return duration.getHours() * THREE_SIX_ZERO_ZERO + duration.getMinutes() * SIXTY + duration.getSeconds();
     }
 }

@@ -65,11 +65,12 @@ public final class ElevationPeakUtil {
 
             final List<Waypoint> tempWaypoints = positivePeaks ? waypoints : new ArrayList<>(waypoints).stream()
                     .map(SerializationUtils::clone)
-                    .peek(wp -> wp.setEle(wp.getEle().negate()))
+                    .peek(waypoint -> waypoint.setEle(waypoint.getEle().negate()))
                     .collect(Collectors.toList());
-            for (int i = 0; i < waypoints.size(); i++) {
-                if ((peaks.isEmpty() || isPeakCandidate(tempWaypoints, i, thresholdInMeters)) && isPeak(tempWaypoints, i, thresholdInMeters)) {
-                    peaks.add(waypoints.get(i));
+            for (int idx = 0; idx < waypoints.size(); idx++) {
+                if ((peaks.isEmpty() || isPeakCandidate(tempWaypoints, idx, thresholdInMeters))
+                        && isPeak(tempWaypoints, idx, thresholdInMeters)) {
+                    peaks.add(waypoints.get(idx));
                 }
             }
         }
@@ -89,18 +90,18 @@ public final class ElevationPeakUtil {
         if (index == size - 1) { // last iteration
             return waypoints.get(index - 1).getEle().compareTo(currentElevation) < 0;
         } else {
-            for (int s = index + 1; s < size; s++) {
-                final BigDecimal subsequentElevation = waypoints.get(s).getEle();
+            for (int idx = index + 1; idx < size; idx++) {
+                final BigDecimal subsequentElevation = waypoints.get(idx).getEle();
 
                 if (subsequentElevation.compareTo(currentElevation) > 0) {
                     break;
                 }
 
-                if ((subsequentElevation.compareTo(currentElevation) < 0
-                        && currentElevation.subtract(subsequentElevation).compareTo(threshold) >= 0)
-                        || (subsequentElevation.compareTo(currentElevation) == 0
-                                && waypoints.subList(s + 1, size).stream()
-                                        .allMatch(wp -> wp.getEle().compareTo(currentElevation) <= 0))) {
+                if (subsequentElevation.compareTo(currentElevation) < 0
+                        && currentElevation.subtract(subsequentElevation).compareTo(threshold) >= 0
+                        || subsequentElevation.compareTo(currentElevation) == 0
+                                && waypoints.subList(idx + 1, size).stream()
+                                        .allMatch(waypoint -> waypoint.getEle().compareTo(currentElevation) <= 0)) {
                     return true;
                 }
             }
@@ -115,8 +116,8 @@ public final class ElevationPeakUtil {
         } else {
             // Check previous elevations
             final BigDecimal currentElevation = waypoints.get(index).getEle();
-            for (int p = index - 1; p >= 0; p--) {
-                final BigDecimal previousElevation = waypoints.get(p).getEle();
+            for (int idx = index - 1; idx >= 0; idx--) {
+                final BigDecimal previousElevation = waypoints.get(idx).getEle();
                 if (previousElevation.compareTo(currentElevation) >= 0) {
                     break;
                 }

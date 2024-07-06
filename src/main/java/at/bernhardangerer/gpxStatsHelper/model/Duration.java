@@ -3,6 +3,8 @@ package at.bernhardangerer.gpxStatsHelper.model;
 import java.text.DecimalFormat;
 
 public final class Duration {
+    private static final String SEPARATOR = " / ";
+    private static final String COLON = ":";
     private long years;
     private long months;
     private long days;
@@ -79,25 +81,25 @@ public final class Duration {
         }
         if (months > 0) {
             if (stringBuilder.length() > 0) {
-                stringBuilder.append(" / ");
+                stringBuilder.append(SEPARATOR);
             }
             stringBuilder.append(months)
                     .append(" months");
         }
         if (days > 0) {
             if (stringBuilder.length() > 0) {
-                stringBuilder.append(" / ");
+                stringBuilder.append(SEPARATOR);
             }
             stringBuilder.append(days)
                     .append(" days");
         }
         if (stringBuilder.length() > 0) {
-            stringBuilder.append(" / ");
+            stringBuilder.append(SEPARATOR);
         }
         stringBuilder.append(df.format(hours))
-                .append(":")
+                .append(COLON)
                 .append(df.format(minutes))
-                .append(":")
+                .append(COLON)
                 .append(df.format(seconds));
         return stringBuilder.toString();
     }

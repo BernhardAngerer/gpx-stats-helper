@@ -145,7 +145,7 @@ public final class Example {
             positivePeaks.forEach(waypoint -> {
                 final GeocodeReverseModel pos;
                 try {
-                     pos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(waypoint));
+                    pos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(waypoint));
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

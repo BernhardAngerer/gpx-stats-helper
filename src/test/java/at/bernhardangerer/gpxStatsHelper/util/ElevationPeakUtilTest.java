@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ElevationPeakUtilTest {
 
     @Test
-    void findPositivePeaks_upDown() {
+    void findPositivePeaksUpDown() {
         final List<Waypoint> waypoints = getWaypointsUpDown();
 
         List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.ZERO);
@@ -51,7 +51,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_upDown_smoothStart_smoothEnd() {
+    void findPositivePeaksUpDownSmoothStartSmoothEnd() {
         final List<Waypoint> waypoints = getWaypointsUpDownSmoothStartSmoothEnd();
 
         List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.ZERO);
@@ -74,7 +74,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_upDownUp() {
+    void findPositivePeaksUpDownUp() {
         final List<Waypoint> waypoints = getWaypointsUpDownUp();
 
         List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.ZERO);
@@ -104,7 +104,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_upDownUpDown() {
+    void findPositivePeaksUpDownUpDown() {
         final List<Waypoint> waypoints = getWaypointsUpDownUpDown();
 
         List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.ZERO);
@@ -113,7 +113,7 @@ class ElevationPeakUtilTest {
         assertEquals(2, peaks.size());
         Waypoint firstPeak = peaks.get(0);
         assertEquals(BigDecimal.valueOf(515), firstPeak.getEle());
-        Waypoint secondPeak = peaks.get(1);
+        final Waypoint secondPeak = peaks.get(1);
         assertEquals(BigDecimal.valueOf(515), secondPeak.getEle());
 
         peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.valueOf(10));
@@ -129,7 +129,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_upOnly() {
+    void findPositivePeaksUpOnly() {
         final List<Waypoint> waypoints = getWaypointsUpOnly();
 
         List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.ZERO);
@@ -152,14 +152,14 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_upOnly_smoothStart_smoothEnd() {
+    void findPositivePeaksUpOnlySmoothStartSmoothEnd() {
         final List<Waypoint> waypoints = getWaypointsUpOnlySmoothStartSmoothEnd();
 
         List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.ZERO);
         assertNotNull(peaks);
         assertFalse(peaks.isEmpty());
         assertEquals(1, peaks.size());
-        Waypoint firstPeak = peaks.get(0);
+        final Waypoint firstPeak = peaks.get(0);
         assertEquals(BigDecimal.valueOf(588), firstPeak.getEle());
 
         peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.valueOf(10));
@@ -172,7 +172,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_downUp() {
+    void findPositivePeaksDownUp() {
         final List<Waypoint> waypoints = getWaypointsDownUp();
 
         List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.ZERO);
@@ -199,7 +199,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_downUp_smoothStart_smoothEnd() {
+    void findPositivePeaksDownUpSmoothStartSmoothEnd() {
         final List<Waypoint> waypoints = getWaypointsDownUpSmoothStartSmoothEnd();
 
         List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.ZERO);
@@ -226,7 +226,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_downUpDown() {
+    void findPositivePeaksDownUpDown() {
         final List<Waypoint> waypoints = getWaypointsDownUpDown();
 
         List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.ZERO);
@@ -256,7 +256,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_downUpDownUp() {
+    void findPositivePeaksDownUpDownUp() {
         final List<Waypoint> waypoints = getWaypointsDownUpDownUp();
 
         List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.ZERO);
@@ -292,14 +292,14 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_downOnly() {
+    void findPositivePeaksDownOnly() {
         final List<Waypoint> waypoints = getWaypointsDownOnly();
 
         List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.ZERO);
         assertNotNull(peaks);
         assertFalse(peaks.isEmpty());
         assertEquals(1, peaks.size());
-        Waypoint firstPeak = peaks.get(0);
+        final Waypoint firstPeak = peaks.get(0);
         assertEquals(BigDecimal.valueOf(580), firstPeak.getEle());
 
         peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.valueOf(10));
@@ -312,14 +312,14 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_downOnly_smoothStart_smoothEnd() {
+    void findPositivePeaksDownOnlySmoothStartSmoothEnd() {
         final List<Waypoint> waypoints = getWaypointsDownOnlySmoothStartSmoothEnd();
 
         List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.ZERO);
         assertNotNull(peaks);
         assertFalse(peaks.isEmpty());
         assertEquals(1, peaks.size());
-        Waypoint firstPeak = peaks.get(0);
+        final Waypoint firstPeak = peaks.get(0);
         assertEquals(BigDecimal.valueOf(580), firstPeak.getEle());
 
         peaks = ElevationPeakUtil.findPositivePeaks(waypoints, BigDecimal.valueOf(10));
@@ -332,26 +332,27 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_illegalArgument() {
-        assertThrows(IllegalArgumentException.class, ()-> ElevationPeakUtil.findPositivePeaks(null, BigDecimal.valueOf(-1)));
+    void findPositivePeaksIllegalArgument() {
+        assertThrows(IllegalArgumentException.class,
+                () -> ElevationPeakUtil.findPositivePeaks(null, BigDecimal.valueOf(-1)));
     }
 
     @Test
-    void findPositivePeaks_null() {
+    void findPositivePeaksNull() {
         final List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(null, BigDecimal.ZERO);
         assertNotNull(peaks);
         assertTrue(peaks.isEmpty());
     }
 
     @Test
-    void findPositivePeaks_empty() {
+    void findPositivePeaksEmpty() {
         final List<Waypoint> peaks = ElevationPeakUtil.findPositivePeaks(new ArrayList<>(), BigDecimal.ZERO);
         assertNotNull(peaks);
         assertTrue(peaks.isEmpty());
     }
 
     @Test
-    void findPositivePeaks_single() {
+    void findPositivePeaksSingle() {
         final List<Waypoint> waypoints = new ArrayList<>();
         final Waypoint waypoint1 = new Waypoint();
         waypoint1.setEle(BigDecimal.valueOf(587));
@@ -367,7 +368,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_flat2() {
+    void findPositivePeaksFlat2() {
         final List<Waypoint> waypoints = new ArrayList<>();
         final Waypoint waypoint1 = new Waypoint();
         waypoint1.setEle(BigDecimal.valueOf(587));
@@ -386,7 +387,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findPositivePeaks_flat3() {
+    void findPositivePeaksFlat3() {
         final List<Waypoint> waypoints = new ArrayList<>();
         final Waypoint waypoint1 = new Waypoint();
         waypoint1.setEle(BigDecimal.valueOf(587));
@@ -408,7 +409,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findNegativePeaks_upDown() {
+    void findNegativePeaksUpDown() {
         final List<Waypoint> waypoints = getWaypointsUpDown();
 
         List<Waypoint> peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.ZERO);
@@ -435,7 +436,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findNegativePeaks_upDown_smoothStart_smoothEnd() {
+    void findNegativePeaksUpDownSmoothStartSmoothEnd() {
         final List<Waypoint> waypoints = getWaypointsUpDownSmoothStartSmoothEnd();
 
         List<Waypoint> peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.ZERO);
@@ -462,7 +463,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findNegativePeaks_upDownUp() {
+    void findNegativePeaksUpDownUp() {
         final List<Waypoint> waypoints = getWaypointsUpDownUp();
 
         List<Waypoint> peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.ZERO);
@@ -492,7 +493,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findNegativePeaks_upDownUpDown() {
+    void findNegativePeaksUpDownUpDown() {
         final List<Waypoint> waypoints = getWaypointsUpDownUpDown();
 
         List<Waypoint> peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.ZERO);
@@ -501,9 +502,9 @@ class ElevationPeakUtilTest {
         assertEquals(3, peaks.size());
         Waypoint firstPeak = peaks.get(0);
         assertEquals(BigDecimal.valueOf(500), firstPeak.getEle());
-        Waypoint secondPeak = peaks.get(1);
+        final Waypoint secondPeak = peaks.get(1);
         assertEquals(BigDecimal.valueOf(510), secondPeak.getEle());
-        Waypoint thirdPeak = peaks.get(2);
+        final Waypoint thirdPeak = peaks.get(2);
         assertEquals(BigDecimal.valueOf(510), thirdPeak.getEle());
 
         peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.valueOf(10));
@@ -519,7 +520,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findNegativePeaks_upOnly() {
+    void findNegativePeaksUpOnly() {
         final List<Waypoint> waypoints = getWaypointsUpOnly();
 
         List<Waypoint> peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.ZERO);
@@ -542,14 +543,14 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findNegativePeaks_upOnly_smoothStart_smoothEnd() {
+    void findNegativePeaksUpOnlySmoothStartSmoothEnd() {
         final List<Waypoint> waypoints = getWaypointsUpOnlySmoothStartSmoothEnd();
 
         List<Waypoint> peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.ZERO);
         assertNotNull(peaks);
         assertFalse(peaks.isEmpty());
         assertEquals(1, peaks.size());
-        Waypoint firstPeak = peaks.get(0);
+        final Waypoint firstPeak = peaks.get(0);
         assertEquals(BigDecimal.valueOf(580), firstPeak.getEle());
 
         peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.valueOf(10));
@@ -562,7 +563,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findNegativePeaks_downUp() {
+    void findNegativePeaksDownUp() {
         final List<Waypoint> waypoints = getWaypointsDownUp();
 
         List<Waypoint> peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.ZERO);
@@ -585,7 +586,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findNegativePeaks_downUp_smoothStart_smoothEnd() {
+    void findNegativePeaksDownUpSmoothStartSmoothEnd() {
         final List<Waypoint> waypoints = getWaypointsDownUpSmoothStartSmoothEnd();
 
         List<Waypoint> peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.ZERO);
@@ -608,7 +609,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findNegativePeaks_downUpDown() {
+    void findNegativePeaksDownUpDown() {
         final List<Waypoint> waypoints = getWaypointsDownUpDown();
 
         List<Waypoint> peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.ZERO);
@@ -638,7 +639,7 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findNegativePeaks_downUpDownUp() {
+    void findNegativePeaksDownUpDownUp() {
         final List<Waypoint> waypoints = getWaypointsDownUpDownUp();
 
         List<Waypoint> peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.ZERO);
@@ -668,14 +669,14 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findNegativePeaks_downOnly() {
+    void findNegativePeaksDownOnly() {
         final List<Waypoint> waypoints = getWaypointsDownOnly();
 
         List<Waypoint> peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.ZERO);
         assertNotNull(peaks);
         assertFalse(peaks.isEmpty());
         assertEquals(1, peaks.size());
-        Waypoint firstPeak = peaks.get(0);
+        final Waypoint firstPeak = peaks.get(0);
         assertEquals(BigDecimal.valueOf(572), firstPeak.getEle());
 
         peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.valueOf(10));
@@ -688,14 +689,14 @@ class ElevationPeakUtilTest {
     }
 
     @Test
-    void findNegativePeaks_downOnly_smoothStart_smoothEnd() {
+    void findNegativePeaksDownOnlySmoothStartSmoothEnd() {
         final List<Waypoint> waypoints = getWaypointsDownOnlySmoothStartSmoothEnd();
 
         List<Waypoint> peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.ZERO);
         assertNotNull(peaks);
         assertFalse(peaks.isEmpty());
         assertEquals(1, peaks.size());
-        Waypoint firstPeak = peaks.get(0);
+        final Waypoint firstPeak = peaks.get(0);
         assertEquals(BigDecimal.valueOf(572), firstPeak.getEle());
 
         peaks = ElevationPeakUtil.findNegativePeaks(waypoints, BigDecimal.valueOf(10));
