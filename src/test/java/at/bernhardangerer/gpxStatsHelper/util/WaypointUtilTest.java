@@ -49,11 +49,11 @@ class WaypointUtilTest {
             + "</trkseg>\n"
             + "</trk>\n"
             + "</gpx>";
-    private static final Track track = GpxConverter.convertGpxFromString(GPX).getTrk().get(0);
+    private static final Track TRACK = GpxConverter.convertGpxFromString(GPX).getTrk().get(0);
 
     @Test
     void findFirstWaypoint() {
-        Waypoint first = WaypointUtil.findFirstWaypoint(track);
+        Waypoint first = WaypointUtil.findFirstWaypoint(TRACK);
         assertNotNull(first);
         assertEquals(LocalDateTime.parse("2021-09-07T13:37:42Z", DATE_TIME_FORMATTER), first.getTime());
 
@@ -66,14 +66,14 @@ class WaypointUtilTest {
 
     @Test
     void findLastWaypoint() {
-        Waypoint last = WaypointUtil.findLastWaypoint(track);
+        Waypoint last = WaypointUtil.findLastWaypoint(TRACK);
         assertNotNull(last);
         assertEquals(LocalDateTime.parse("2021-09-07T16:14:16Z", DATE_TIME_FORMATTER), last.getTime());
 
-        last = WaypointUtil.findFirstWaypoint(null);
+        last = WaypointUtil.findLastWaypoint(null);
         assertNull(last);
 
-        last = WaypointUtil.findFirstWaypoint(new Track());
+        last = WaypointUtil.findLastWaypoint(new Track());
         assertNull(last);
     }
 }
