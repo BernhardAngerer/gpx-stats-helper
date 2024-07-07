@@ -90,17 +90,20 @@ public final class Example {
             System.out.println("Descent: " + delta.getDescent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
 
             final ElevationRange range = ElevationRangeCalculator.fromTrack(track);
-            System.out.println("Highest Point: "
-                    + range.getHighest().getEle().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
-            final GeocodeReverseModel highestGeoposition =
-                    GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(range.getHighest()));
-            System.out.println("Highest Geoposition: " + highestGeoposition.getDisplayName());
 
+            final Waypoint highestWaypoint = range.getHighest();
+            System.out.println("Highest Point: "
+                    + highestWaypoint.getEle().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
+            final GeocodeReverseModel highestGeoposition =
+                    GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(highestWaypoint));
+            printPosition("Highest Point" + GEOPOSITION, highestGeoposition, highestWaypoint);
+
+            final Waypoint lowestWaypoint = range.getLowest();
             System.out.println("Lowest Point: "
-                    + range.getLowest().getEle().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
+                    + lowestWaypoint.getEle().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
             final GeocodeReverseModel lowestGeoposition =
-                    GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(range.getLowest()));
-            System.out.println("Lowest Geoposition: " + lowestGeoposition.getDisplayName());
+                    GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(lowestWaypoint));
+            printPosition("Lowest Point" + GEOPOSITION, lowestGeoposition, lowestWaypoint);
 
             final FirstLastWaypoint firstLast = FirstLastWaypointCalculator.fromTrack(track);
             final Waypoint firstWaypoint = firstLast.getFirst();
