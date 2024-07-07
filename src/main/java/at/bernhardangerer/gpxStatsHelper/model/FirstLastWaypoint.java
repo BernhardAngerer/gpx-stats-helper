@@ -30,9 +30,9 @@ public final class FirstLastWaypoint {
 
     @Override
     public String toString() {
-        return "FirstLastWaypoint {" +
-                "first=" + first +
-                ", last=" + last +
-                '}';
+        return "FirstLastWaypoint {"
+                + "first=" + first
+                + ", last=" + last
+                + '}';
     }
 }

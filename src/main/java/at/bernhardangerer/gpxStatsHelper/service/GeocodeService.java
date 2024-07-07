@@ -15,6 +15,9 @@ public final class GeocodeService {
      * API Documentation: https://nominatim.org/release-docs/develop/api/Overview/
      */
     private static final String BASE_URL = "https://nominatim.openstreetmap.org/reverse";
+    private static final String ZERO = "0";
+    private static final String ONE = "1";
+    private static final int EIGHTEEN = 18;
     private final ApiClient client;
 
     public GeocodeService() {
@@ -34,7 +37,7 @@ public final class GeocodeService {
      */
     public String reverseGeocodeAsJson(final String lat, final String lon)
             throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
-        return reverseGeocodeAsJson(lat, lon, OutputFormat.JSON, 18, true, false, false, false);
+        return reverseGeocodeAsJson(lat, lon, OutputFormat.JSON, EIGHTEEN, true, false, false, false);
     }
 
     /**
@@ -50,7 +53,7 @@ public final class GeocodeService {
     public String reverseGeocodeAsJson(final Waypoint waypoint)
             throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
         return reverseGeocodeAsJson(waypoint.getLat().toString(), waypoint.getLon().toString(), OutputFormat.JSON,
-                18, true, false, false, false);
+                EIGHTEEN, true, false, false, false);
     }
 
     /**
@@ -71,6 +74,7 @@ public final class GeocodeService {
      * @throws InterruptedException
      * @throws URISyntaxException
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public String reverseGeocodeAsJson(final String lat, final String lon, final OutputFormat outputFormat, final int zoomLevel,
                                        final boolean addressDetails, final boolean extraTags, final boolean nameDetails,
                                        final boolean polygonSvg)
@@ -80,10 +84,10 @@ public final class GeocodeService {
         builder.setParameter("lon", lon);
         builder.setParameter("format", outputFormat.getFormat());
         builder.setParameter("zoom", String.valueOf(zoomLevel));
-        builder.setParameter("addressdetails", addressDetails ? "1" : "0");
-        builder.setParameter("extratags", extraTags ? "1" : "0");
-        builder.setParameter("namedetails", nameDetails ? "1" : "0");
-        builder.setParameter("polygon_svg", polygonSvg ? "1" : "0");
+        builder.setParameter("addressdetails", addressDetails ? ONE : ZERO);
+        builder.setParameter("extratags", extraTags ? ONE : ZERO);
+        builder.setParameter("namedetails", nameDetails ? ONE : ZERO);
+        builder.setParameter("polygon_svg", polygonSvg ? ONE : ZERO);
         return client.sendHttpRequest(builder.build());
     }
 }

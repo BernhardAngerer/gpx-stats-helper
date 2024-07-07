@@ -49,6 +49,11 @@ public final class Example {
     private static final String KM = "km";
     private static final String KMPH = "km/h";
     private static final String MSL = "m.s.l.";
+    private static final int ONE_THOUSAND = 1000;
+    private static final String GEOPOSITION = " - Geoposition";
+    private static final String ESCAPE_DOUBLE_QUOTES = "\"";
+    private static final String LON = " / Lon ";
+    private static final int THREE = 3;
 
     private Example() {
     }
@@ -62,6 +67,7 @@ public final class Example {
      * @throws WebserviceCallException
      * @throws InterruptedException
      */
+    @SuppressWarnings("checkstyle:UncommentedMain")
     public static void main(final String[] args)
             throws IOException, URISyntaxException, WebserviceCallException, InterruptedException {
         final File file = new File(Objects.requireNonNull(
@@ -69,15 +75,15 @@ public final class Example {
         final Gpx gpx = GpxConverter.convertGpxFromFile(file);
 
         if (gpx.getMetadata().getName() != null) {
-            System.out.println("GPX name: \"" + gpx.getMetadata().getName() + "\"");
+            System.out.println("GPX name: \"" + gpx.getMetadata().getName() + ESCAPE_DOUBLE_QUOTES);
         }
         int count = 1;
         for (final Track track : gpx.getTrk()) {
             System.out.println("\n### Track Nr. " + count
-                    + (track.getName() != null ? " - \"" + track.getName() + "\"" : "") + " ###");
+                    + (track.getName() != null ? " - \"" + track.getName() + ESCAPE_DOUBLE_QUOTES : "") + " ###");
 
             final Double distance = DistanceTotalCalculator.fromTrack(track);
-            System.out.println("Total Distance: " + DECIMAL_FORMAT.format(distance / 1000) + SPACE + KM);
+            System.out.println("Total Distance: " + DECIMAL_FORMAT.format(distance / ONE_THOUSAND) + SPACE + KM);
 
             final ElevationDelta delta = ElevationDeltaCalculator.fromTrack(track);
             System.out.println("Ascent: " + delta.getAscent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
@@ -121,22 +127,20 @@ public final class Example {
             final Double averageSpeed = SpeedAvgCalculator.fromTrack(track);
             System.out.println("Average Speed: " + DECIMAL_FORMAT.format(averageSpeed) + SPACE + KMPH);
 
-            System.out.println("Start Position: Lat " + firstWaypoint.getLat()
-                    + " / Lon " + firstWaypoint.getLon());
-            System.out.println("End Position: Lat " + lastWaypoint.getLat()
-                    + " / Lon " + lastWaypoint.getLon());
+            System.out.println("Start Position: Lat " + firstWaypoint.getLat() + LON + firstWaypoint.getLon());
+            System.out.println("End Position: Lat " + lastWaypoint.getLat() + LON + lastWaypoint.getLon());
 
             final GeocodeReverseModel startPos =
                     GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(firstWaypoint));
             if (GeocodeUtil.isBounded(lastWaypoint.getLat().doubleValue(),
                     lastWaypoint.getLon().doubleValue(), startPos.getBoundingbox()[0],
-                    startPos.getBoundingbox()[2], startPos.getBoundingbox()[1], startPos.getBoundingbox()[3])) {
-                printPosition("Start = End - Geoposition", startPos, firstWaypoint);
+                    startPos.getBoundingbox()[2], startPos.getBoundingbox()[1], startPos.getBoundingbox()[THREE])) {
+                printPosition("Start = End" + GEOPOSITION, startPos, firstWaypoint);
             } else {
-                printPosition("Start - Geoposition", startPos, firstWaypoint);
+                printPosition("Start" + GEOPOSITION, startPos, firstWaypoint);
                 final GeocodeReverseModel endPos =
                         GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(lastWaypoint));
-                printPosition("End - Geoposition", endPos, lastWaypoint);
+                printPosition("End" + GEOPOSITION, endPos, lastWaypoint);
             }
 
             final List<Waypoint> positivePeaks =
@@ -149,7 +153,7 @@ public final class Example {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                printPosition("Positive Peak " + counter.incrementAndGet() + " - Geoposition", pos, waypoint);
+                printPosition("Positive Peak " + counter.incrementAndGet() + GEOPOSITION, pos, waypoint);
             });
 
             final List<Waypoint> negativePeaks =
@@ -162,7 +166,7 @@ public final class Example {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                printPosition("Negative Peak " + counter.incrementAndGet() + " - Geoposition", pos, waypoint);
+                printPosition("Negative Peak " + counter.incrementAndGet() + GEOPOSITION, pos, waypoint);
             });
 
             count++;

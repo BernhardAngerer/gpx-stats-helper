@@ -4,6 +4,9 @@ import at.bernhardangerer.gpxStatsHelper.model.DistanceDuration;
 
 public final class SpeedUtil {
 
+    private static final int ONE_THOUSAND = 1000;
+    private static final double THREE_THOUSAND_SIX_HUNDRED = 3600.0;
+
     private SpeedUtil() {
     }
 
@@ -16,7 +19,7 @@ public final class SpeedUtil {
      */
     public static double calculateSpeed(final double distance, final long duration) {
         if (distance > 0 && duration > 0) {
-            return (distance / 1000) / (duration / 3600.0);
+            return (distance / ONE_THOUSAND) / (duration / THREE_THOUSAND_SIX_HUNDRED);
         }
         return 0;
     }
