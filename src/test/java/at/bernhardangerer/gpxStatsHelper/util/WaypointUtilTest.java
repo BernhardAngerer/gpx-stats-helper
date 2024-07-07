@@ -1,8 +1,7 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.FirstLastWaypoint;
-import com.topografix.model.Gpx;
 import com.topografix.model.Track;
+import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -12,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-class FirstLastWaypointCalculatorTest {
+class WaypointUtilTest {
 
     private static final String GPX =
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
@@ -50,22 +49,31 @@ class FirstLastWaypointCalculatorTest {
             + "</trkseg>\n"
             + "</trk>\n"
             + "</gpx>";
-
-    private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
+    private static final Track track = GpxConverter.convertGpxFromString(GPX).getTrk().get(0);
 
     @Test
-    void fromTrack() {
-        final Track track = GPX_TYPE.getTrk().get(0);
+    void findFirstWaypoint() {
+        Waypoint first = WaypointUtil.findFirstWaypoint(track);
+        assertNotNull(first);
+        assertEquals(LocalDateTime.parse("2021-09-07T13:37:42Z", DATE_TIME_FORMATTER), first.getTime());
 
-        FirstLastWaypoint range = FirstLastWaypointCalculator.fromTrack(track);
-        assertNotNull(range);
-        assertEquals(LocalDateTime.parse("2021-09-07T13:37:42Z", DATE_TIME_FORMATTER), range.getFirst().getTime());
-        assertEquals(LocalDateTime.parse("2021-09-07T16:14:16Z", DATE_TIME_FORMATTER), range.getLast().getTime());
+        first = WaypointUtil.findFirstWaypoint(null);
+        assertNull(first);
 
-        range = FirstLastWaypointCalculator.fromTrack(null);
-        assertNull(range);
+        first = WaypointUtil.findFirstWaypoint(new Track());
+        assertNull(first);
+    }
 
-        range = FirstLastWaypointCalculator.fromTrack(new Track());
-        assertNull(range);
+    @Test
+    void findLastWaypoint() {
+        Waypoint last = WaypointUtil.findLastWaypoint(track);
+        assertNotNull(last);
+        assertEquals(LocalDateTime.parse("2021-09-07T16:14:16Z", DATE_TIME_FORMATTER), last.getTime());
+
+        last = WaypointUtil.findFirstWaypoint(null);
+        assertNull(last);
+
+        last = WaypointUtil.findFirstWaypoint(new Track());
+        assertNull(last);
     }
 }

@@ -4,7 +4,6 @@ import at.bernhardangerer.gpxStatsHelper.exception.WebserviceCallException;
 import at.bernhardangerer.gpxStatsHelper.model.Duration;
 import at.bernhardangerer.gpxStatsHelper.model.ElevationDelta;
 import at.bernhardangerer.gpxStatsHelper.model.ElevationRange;
-import at.bernhardangerer.gpxStatsHelper.model.FirstLastWaypoint;
 import at.bernhardangerer.gpxStatsHelper.model.api.GeocodeReverseModel;
 import at.bernhardangerer.gpxStatsHelper.service.GeocodeService;
 import at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil;
@@ -13,7 +12,7 @@ import at.bernhardangerer.gpxStatsHelper.util.DurationInMotionCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationDeltaCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationPeakUtil;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationRangeCalculator;
-import at.bernhardangerer.gpxStatsHelper.util.FirstLastWaypointCalculator;
+import at.bernhardangerer.gpxStatsHelper.util.WaypointUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GeocodeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GpxConverter;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedAvgCalculator;
@@ -105,9 +104,8 @@ public final class Example {
                     GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(lowestWaypoint));
             printPosition("Lowest Point" + GEOPOSITION, lowestGeoposition, lowestWaypoint);
 
-            final FirstLastWaypoint firstLast = FirstLastWaypointCalculator.fromTrack(track);
-            final Waypoint firstWaypoint = firstLast.getFirst();
-            final Waypoint lastWaypoint = firstLast.getLast();
+            final Waypoint firstWaypoint = WaypointUtil.findFirstWaypoint(track);
+            final Waypoint lastWaypoint = WaypointUtil.findLastWaypoint(track);
 
             System.out.println("Start Time: " + DATE_TIME_FORMATTER.format(
                     DateTimeUtil.convertFromUtcTime(firstWaypoint.getTime(), CET)) + SPACE + H);
