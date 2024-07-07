@@ -6,6 +6,7 @@ import org.apache.commons.lang3.SerializationUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public final class ElevationPeakUtil {
      * @throws IllegalArgumentException if the thresholdInMeters is negative
      */
     public static List<Waypoint> findPositivePeaks(final List<Waypoint> waypoints, final BigDecimal thresholdInMeters) {
-        return findPeaks(waypoints, thresholdInMeters, true);
+        return find(waypoints, thresholdInMeters, true);
     }
 
     /**
@@ -45,11 +46,34 @@ public final class ElevationPeakUtil {
      * @throws IllegalArgumentException if the thresholdInMeters is negative
      */
     public static List<Waypoint> findNegativePeaks(final List<Waypoint> waypoints, final BigDecimal thresholdInMeters) {
-        return findPeaks(waypoints, thresholdInMeters, false);
+        return find(waypoints, thresholdInMeters, false);
     }
 
-    private static List<Waypoint> findPeaks(final List<Waypoint> waypoints, final BigDecimal thresholdInMeters,
-                                           final boolean positivePeaks) {
+    /**
+     * Finds elevation negative and positive peaks from a list of waypoints based on a given threshold.
+     *
+     * <p>This method identifies waypoints as peaks if they meet the criteria of being at a local maximum
+     * with respect to elevation difference from adjacent waypoints, considering a specified threshold.
+     * <p>The method ensures that the list of waypoints is not null and contains more than one distinct elevation value.
+     * If these conditions are not met, an empty list is returned.
+     *
+     * @param waypoints the list of waypoints to analyze for peaks
+     * @param thresholdInMeters the threshold in meters that defines when an elevation difference constitutes a peak
+     * @return a list of waypoints that are identified as peaks based on the given threshold
+     * @throws IllegalArgumentException if the thresholdInMeters is negative
+     */
+    public static List<Waypoint> findPeaks(final List<Waypoint> waypoints, final BigDecimal thresholdInMeters) {
+        final List<Waypoint> waypointList = new ArrayList<>();
+        waypointList.addAll(find(waypoints, thresholdInMeters, true));
+        waypointList.addAll(find(waypoints, thresholdInMeters, false));
+
+        return waypointList.stream()
+                .sorted(Comparator.comparing(Waypoint::getTime))
+                .collect(Collectors.toList());
+    }
+
+    private static List<Waypoint> find(final List<Waypoint> waypoints, final BigDecimal thresholdInMeters,
+                                       final boolean positivePeaks) {
         if (thresholdInMeters == null || thresholdInMeters.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Parameter thresholdInMeters must be greater than or equal to zero.");
         }
