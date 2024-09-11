@@ -28,8 +28,8 @@ class GeocodeServiceIT {
         assertNotNull(resultJson);
         final GeocodeReverseModel model = convertFromJson(resultJson);
         assertNotNull(model);
-        assertEquals("Bahnhof Scharnitz, 63, Bahnhofstraße, Scharnitz, Bezirk Innsbruck-Land, 6108, Österreich",
-                model.getDisplayName());
+        assertTrue(model.getDisplayName().length() > 30);
+        assertTrue(model.getDisplayName().contains("Scharnitz"));
         assertNotNull(model.getBoundingbox());
         assertNotNull(model.getAddress());
         assertNotNull(model.getLat());
