@@ -4,6 +4,8 @@ import at.bernhardangerer.gpxStatsHelper.model.Duration;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,8 +34,13 @@ class DateTimeUtilTest {
     void convertFromUtcTime() {
         final LocalDateTime now = LocalDateTime.now();
         final LocalDateTime result = DateTimeUtil.convertFromUtcTime(now, "CET");
+
+        final ZonedDateTime utcZoned = now.atZone(ZoneId.of("UTC"));
+        final ZonedDateTime cetZoned = utcZoned.withZoneSameInstant(ZoneId.of("CET"));
+        final long hoursOffset = cetZoned.getOffset().getTotalSeconds() / 3600;
+
         assertNotNull(result);
-        assertEquals(now.plusHours(2L), result);
+        assertEquals(now.plusHours(hoursOffset), result);
     }
 
     @Test

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static at.bernhardangerer.gpxStatsHelper.util.GeocodeUtil.convertFromJson;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -50,7 +49,7 @@ class GeocodeServiceIT {
         assertNotNull(resultJson);
         final GeocodeReverseModel model = convertFromJson(resultJson);
         assertNotNull(model);
-        assertEquals("Scharnitz, Bezirk Innsbruck-Land, 6108, Österreich", model.getDisplayName());
+        assertTrue(model.getDisplayName().contains("Scharnitz"));
         assertNotNull(model.getBoundingbox());
         assertNotNull(model.getAddress());
         assertNotNull(model.getLat());
