@@ -11,7 +11,8 @@ This Java library provides static helper methods to read from GPX 1.1 files usin
 + Start/end time [h]
 + Max/average speed [km/h]
 + Start/end position [lon, lat]
-+ Start/end geo-position description (using the free [Nominatim API](https://nominatim.org/release-docs/develop/api/Reverse/) Reverse Geocoding (OpenStreetMap data))
++ Positive and negative elevation peak positions [lon, lat]
++ Description of any geo-position (using the free [Nominatim API](https://nominatim.org/release-docs/develop/api/Reverse/) Reverse Geocoding (OpenStreetMap data))
 
 ## Technical requirements:
 + Java 11+
@@ -43,6 +44,12 @@ final GeocodeReverseModel startPos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE
 
 final GeocodeReverseModel endPos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocode(
     firstLast.getLast().getLat().toString(), firstLast.getLast().getLon().toString()));
+
+final List<Waypoint> positivePeaks =
+    ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
+
+final List<Waypoint> negativePeaks =
+    ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
 ```
 
 ### Output of example.gpx executing Example.main():
@@ -62,6 +69,9 @@ start position: Lat 47.80743 / Lon 12.378228
 end position: Lat 47.807346 / Lon 12.378055
 start geoposition: 16, Ulmenstraße, Westerham, Bergham, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
 end geoposition: 16, Ulmenstraße, Westerham, Bergham, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
+Positive Peak 1 - Geoposition: Roßleitenlift Bergstation, Reitweg, Goriloch, Aschau im Chiemgau, Landkreis Rosenheim, Bayern, 83229, Deutschland
+Negative Peak 1 - Geoposition: Lindenstraße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
+Negative Peak 2 - Geoposition: Lindenstraße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
 ```
 
 ### How to add project dependency to Maven or Gradle:
