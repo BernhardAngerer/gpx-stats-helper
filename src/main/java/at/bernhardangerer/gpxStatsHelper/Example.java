@@ -1,6 +1,5 @@
 package at.bernhardangerer.gpxStatsHelper;
 
-import at.bernhardangerer.gpxStatsHelper.exception.WebserviceCallException;
 import at.bernhardangerer.gpxStatsHelper.model.Duration;
 import at.bernhardangerer.gpxStatsHelper.model.ElevationDelta;
 import at.bernhardangerer.gpxStatsHelper.model.ElevationRange;
@@ -22,10 +21,8 @@ import com.topografix.model.Track;
 import com.topografix.model.Waypoint;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -61,14 +58,9 @@ public final class Example {
      * Load an example GPX file and calculate statistic parameters.
      *
      * @param args
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws WebserviceCallException
-     * @throws InterruptedException
      */
     @SuppressWarnings("checkstyle:UncommentedMain")
-    public static void main(final String[] args)
-            throws IOException, URISyntaxException, WebserviceCallException, InterruptedException {
+    public static void main(final String[] args) {
         final File file = new File(Objects.requireNonNull(
                 Example.class.getClassLoader().getResource("example/example1.gpx")).getFile());
         final Gpx gpx = GpxConverter.convertGpxFromFile(file);
@@ -93,15 +85,13 @@ public final class Example {
             final Waypoint highestWaypoint = range.getHighest();
             System.out.println("Highest Point: "
                     + highestWaypoint.getEle().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
-            final GeocodeReverseModel highestGeoposition =
-                    GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(highestWaypoint));
+            final GeocodeReverseModel highestGeoposition = getGeocodeReverseModel(highestWaypoint);
             printPosition("Highest Point" + GEOPOSITION, highestGeoposition, highestWaypoint);
 
             final Waypoint lowestWaypoint = range.getLowest();
             System.out.println("Lowest Point: "
                     + lowestWaypoint.getEle().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
-            final GeocodeReverseModel lowestGeoposition =
-                    GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(lowestWaypoint));
+            final GeocodeReverseModel lowestGeoposition = getGeocodeReverseModel(lowestWaypoint);
             printPosition("Lowest Point" + GEOPOSITION, lowestGeoposition, lowestWaypoint);
 
             final Waypoint firstWaypoint = WaypointUtil.findFirstWaypoint(track);
@@ -131,29 +121,26 @@ public final class Example {
             System.out.println("Start Position: Lat " + firstWaypoint.getLat() + LON + firstWaypoint.getLon());
             System.out.println("End Position: Lat " + lastWaypoint.getLat() + LON + lastWaypoint.getLon());
 
-            final GeocodeReverseModel startPos =
-                    GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(firstWaypoint));
+            final GeocodeReverseModel startPos = getGeocodeReverseModel(firstWaypoint);
             if (GeocodeUtil.isBounded(lastWaypoint.getLat().doubleValue(),
                     lastWaypoint.getLon().doubleValue(), startPos.getBoundingbox()[0],
                     startPos.getBoundingbox()[2], startPos.getBoundingbox()[1], startPos.getBoundingbox()[THREE])) {
                 printPosition("Start = End" + GEOPOSITION, startPos, firstWaypoint);
             } else {
                 printPosition("Start" + GEOPOSITION, startPos, firstWaypoint);
-                final GeocodeReverseModel endPos =
-                        GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(lastWaypoint));
+                final GeocodeReverseModel endPos = getGeocodeReverseModel(lastWaypoint);
                 printPosition("End" + GEOPOSITION, endPos, lastWaypoint);
             }
+
+            final Waypoint farthestWaypoint = DistanceTotalCalculator.findFarthestWaypoint(firstWaypoint, track);
+            final GeocodeReverseModel farthestPos = getGeocodeReverseModel(farthestWaypoint);
+            printPosition("Farthest Point" + GEOPOSITION, farthestPos, farthestWaypoint);
 
             final List<Waypoint> positivePeaks =
                     ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
             final AtomicInteger counter = new AtomicInteger(0);
             positivePeaks.forEach(waypoint -> {
-                final GeocodeReverseModel pos;
-                try {
-                    pos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(waypoint));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                final GeocodeReverseModel pos = getGeocodeReverseModel(waypoint);
                 printPosition("Positive Peak " + counter.incrementAndGet() + GEOPOSITION, pos, waypoint);
             });
 
@@ -161,16 +148,19 @@ public final class Example {
                     ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
             counter.set(0);
             negativePeaks.forEach(waypoint -> {
-                final GeocodeReverseModel pos;
-                try {
-                    pos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(waypoint));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                final GeocodeReverseModel pos = getGeocodeReverseModel(waypoint);
                 printPosition("Negative Peak " + counter.incrementAndGet() + GEOPOSITION, pos, waypoint);
             });
 
             count++;
+        }
+    }
+
+    private static GeocodeReverseModel getGeocodeReverseModel(Waypoint waypoint) {
+        try {
+            return GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(waypoint));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

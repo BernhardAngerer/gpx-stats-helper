@@ -4,6 +4,7 @@ import com.topografix.model.Track;
 import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
 
+import java.util.Comparator;
 import java.util.List;
 
 public final class DistanceTotalCalculator {
@@ -99,6 +100,23 @@ public final class DistanceTotalCalculator {
     public static Double fromTrack(final Track track) {
         if (track != null) {
             return fromTrackSegmentList(track.getTrkseg());
+        }
+        return null;
+    }
+
+    /**
+     * Return the waypoint of the track which is farthest from the reference geo-position.
+     *
+     * @param referencePosition
+     * @param track
+     * @return Waypoint
+     */
+    public static Waypoint findFarthestWaypoint(final Waypoint referencePosition, final Track track) {
+        if (referencePosition != null && track != null) {
+            return track.getTrkseg().stream()
+                    .flatMap(trackSegment -> trackSegment.getTrkpt().stream())
+                    .max(Comparator.comparingDouble(waypoint -> fromTrackpoints(referencePosition, waypoint)))
+                    .orElse(null);
         }
         return null;
     }

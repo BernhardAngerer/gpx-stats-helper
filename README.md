@@ -45,6 +45,8 @@ final GeocodeReverseModel startPos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE
 final GeocodeReverseModel endPos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocode(
     firstLast.getLast().getLat().toString(), firstLast.getLast().getLon().toString()));
 
+final Waypoint farthestWaypoint = DistanceTotalCalculator.findFarthestWaypoint(firstWaypoint, track);
+
 final List<Waypoint> positivePeaks =
     ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
 
@@ -54,21 +56,22 @@ final List<Waypoint> negativePeaks =
 
 ### Output of example.gpx executing Example.main():
 ```
-total distance: 26,4 km
-ascent: 1008 m
-descent: 997 m
-highest point: 1547 m.s.l.
-lowest point: 587 m.s.l.
-start time: 07.09.2021, 15:37:42 h
-end time: 07.09.2021, 18:14:16 h
-total duration: 02:36:34 h
-duration in motion: 02:15:36 h
-maximum speed: 51,9 km/h
-average speed: 11,7 km/h
-start position: Lat 47.80743 / Lon 12.378228
-end position: Lat 47.807346 / Lon 12.378055
-start geoposition: 16, Ulmenstraße, Westerham, Bergham, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
-end geoposition: 16, Ulmenstraße, Westerham, Bergham, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
+Total distance: 26,4 km
+Ascent: 1008 m
+Descent: 997 m
+Highest point: 1547 m.s.l.
+Lowest point: 587 m.s.l.
+Start time: 07.09.2021, 15:37:42 h
+End time: 07.09.2021, 18:14:16 h
+Total duration: 02:36:34 h
+Duration in motion: 02:15:36 h
+Maximum speed: 51,9 km/h
+Average speed: 11,7 km/h
+Start position: Lat 47.80743 / Lon 12.378228
+End position: Lat 47.807346 / Lon 12.378055
+Start - Geoposition: 16, Ulmenstraße, Westerham, Bergham, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
+End - Geoposition: 16, Ulmenstraße, Westerham, Bergham, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
+Farthest Point - Geoposition: Reitweg, Goriloch, Aschau im Chiemgau, Landkreis Rosenheim, Bayern, 83229, Deutschland
 Positive Peak 1 - Geoposition: Roßleitenlift Bergstation, Reitweg, Goriloch, Aschau im Chiemgau, Landkreis Rosenheim, Bayern, 83229, Deutschland
 Negative Peak 1 - Geoposition: Lindenstraße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
 Negative Peak 2 - Geoposition: Lindenstraße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
