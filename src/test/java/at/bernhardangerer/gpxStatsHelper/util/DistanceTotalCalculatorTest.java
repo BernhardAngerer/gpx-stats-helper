@@ -6,7 +6,6 @@ import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,33 +53,6 @@ class DistanceTotalCalculatorTest {
             + "</trk>\n"
             + "</gpx>";
     private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
-
-    @Test
-    void calcDistance() {
-        final double distance = DistanceTotalCalculator.calcDistance(47.80743, 47.807343, 12.378228, 12.378138, 587, 588);
-        assertTrue(distance > 0);
-        assertEquals(11.822080163097478, distance);
-    }
-
-    @Test
-    void fromTrackpoints() {
-        final Waypoint fromWaypoint = new Waypoint();
-        fromWaypoint.setLat(BigDecimal.valueOf(47.80743));
-        fromWaypoint.setLon(BigDecimal.valueOf(12.378228));
-        fromWaypoint.setEle(BigDecimal.valueOf(587));
-        final Waypoint toWaypoint = new Waypoint();
-        toWaypoint.setLat(BigDecimal.valueOf(47.807343));
-        toWaypoint.setLon(BigDecimal.valueOf(12.378138));
-        toWaypoint.setEle(BigDecimal.valueOf(588));
-
-        Double distance = DistanceTotalCalculator.fromTrackpoints(fromWaypoint, toWaypoint);
-        assertNotNull(distance);
-        assertTrue(distance > 0);
-        assertEquals(11.822080163097478, distance);
-
-        distance = DistanceTotalCalculator.fromTrackpoints(null, null);
-        assertNull(distance);
-    }
 
     @Test
     void fromWaypointList() {

@@ -4,59 +4,20 @@ import com.topografix.model.Track;
 import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
 
-import java.util.Comparator;
 import java.util.List;
+
+import static at.bernhardangerer.gpxStatsHelper.util.DistanceUtil.calcDistance;
 
 public final class DistanceTotalCalculator {
 
-    private static final int ONE_THOUSAND = 1000;
-
     private DistanceTotalCalculator() {
-    }
-
-    /**
-     * Calculate distance between two points in latitude and longitude taking
-     * into account height difference. If you are not interested in height
-     * difference pass 0.0. Uses Haversine method as its base.
-     *
-     * @param lat1 Start point Lat
-     * @param lat2 End point Lat
-     * @param lon1 Start point Lon
-     * @param lon2 End point Lon
-     * @param el1 Start point elevation
-     * @param el2 End point elevation
-     * @return Distance in Meters
-     */
-    static double calcDistance(final double lat1, final double lat2, final double lon1,
-                               final double lon2, final double el1, final double el2) {
-        final int radiusEarth = 6371; // Radius of the earth
-        final double latDistance = Math.toRadians(lat2 - lat1);
-        final double lonDistance = Math.toRadians(lon2 - lon1);
-        final double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-            + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-            * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-        final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = radiusEarth * c * ONE_THOUSAND; // convert to meters
-        final double height = el1 - el2;
-        distance = Math.pow(distance, 2) + Math.pow(height, 2);
-        return Math.sqrt(distance);
-    }
-
-    static Double fromTrackpoints(final Waypoint fromWaypoint, final Waypoint toWaypoint) {
-        if (fromWaypoint != null && fromWaypoint.getLat() != null && fromWaypoint.getLon() != null && fromWaypoint.getEle() != null
-            && toWaypoint != null && toWaypoint.getLat() != null && toWaypoint.getLon() != null && toWaypoint.getEle() != null) {
-            return calcDistance(fromWaypoint.getLat().doubleValue(), toWaypoint.getLat().doubleValue(),
-                fromWaypoint.getLon().doubleValue(), toWaypoint.getLon().doubleValue(),
-                fromWaypoint.getEle().doubleValue(), toWaypoint.getEle().doubleValue());
-        }
-        return null;
     }
 
     static Double fromWaypointList(final List<Waypoint> waypointList) {
         if (waypointList != null && waypointList.size() >= 2) {
             double distance = 0;
             for (int count = 0; (count + 1) < waypointList.size(); count++) {
-                final Double dist = fromTrackpoints(waypointList.get(count), waypointList.get(count + 1));
+                final Double dist = calcDistance(waypointList.get(count), waypointList.get(count + 1));
                 if (dist != null) {
                     distance = distance + dist;
                 } else {
@@ -104,20 +65,4 @@ public final class DistanceTotalCalculator {
         return null;
     }
 
-    /**
-     * Return the waypoint of the track which is farthest from the reference geo-position.
-     *
-     * @param referencePosition
-     * @param track
-     * @return Waypoint
-     */
-    public static Waypoint findFarthestWaypoint(final Waypoint referencePosition, final Track track) {
-        if (referencePosition != null && track != null) {
-            return track.getTrkseg().stream()
-                    .flatMap(trackSegment -> trackSegment.getTrkpt().stream())
-                    .max(Comparator.comparingDouble(waypoint -> fromTrackpoints(referencePosition, waypoint)))
-                    .orElse(null);
-        }
-        return null;
-    }
 }

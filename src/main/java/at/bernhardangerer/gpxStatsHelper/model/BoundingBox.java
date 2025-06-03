@@ -2,7 +2,7 @@ package at.bernhardangerer.gpxStatsHelper.model;
 
 import java.math.BigDecimal;
 
-public class BoundingBox {
+public final class BoundingBox {
     private final BigDecimal minLat;
     private final BigDecimal minLon;
     private final BigDecimal maxLat;

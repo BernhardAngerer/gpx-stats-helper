@@ -16,7 +16,7 @@ public final class SpeedMaxCalculator {
     static double fromWaypoints(final Waypoint fromWaypoint, final Waypoint toWaypoint) {
         if (fromWaypoint != null && fromWaypoint.getEle() != null && toWaypoint != null && toWaypoint.getEle() != null
                 && fromWaypoint.getTime() != null && toWaypoint.getTime() != null) {
-            final Double distance = DistanceTotalCalculator.fromTrackpoints(fromWaypoint, toWaypoint);
+            final Double distance = DistanceUtil.calcDistance(fromWaypoint, toWaypoint);
             final long duration = calcDateTimeDifferenceInSeconds(fromWaypoint.getTime(), toWaypoint.getTime());
             if (distance != null) {
                 return SpeedUtil.calculateSpeed(distance, duration);

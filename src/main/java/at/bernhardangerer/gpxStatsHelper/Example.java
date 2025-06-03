@@ -141,7 +141,7 @@ public final class Example {
                 printPosition("End" + GEOPOSITION, endPos, lastWaypoint);
             }
 
-            final Waypoint farthestWaypoint = DistanceTotalCalculator.findFarthestWaypoint(firstWaypoint, track);
+            final Waypoint farthestWaypoint = WaypointUtil.findFarthestWaypoint(firstWaypoint, track);
             final GeocodeReverseModel farthestPos = getGeocodeReverseModel(farthestWaypoint);
             printPosition("Farthest Point" + GEOPOSITION, farthestPos, farthestWaypoint);
 
