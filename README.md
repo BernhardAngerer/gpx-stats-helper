@@ -51,4 +51,4 @@ Negative Peak 2 - Geoposition: Rottauer Straße, Bergham, Kraimoos, Bernau am Ch
 
 ### How to add project dependency to Maven or Gradle:
 
-https://jitpack.io/private#BernhardAngerer/gpx-stats-helper/1.0.0
+https://jitpack.io/private#BernhardAngerer/gpx-stats-helper/1.1.0
