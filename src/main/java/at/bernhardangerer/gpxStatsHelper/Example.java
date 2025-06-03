@@ -1,5 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper;
 
+import at.bernhardangerer.gpxStatsHelper.model.BoundingBox;
 import at.bernhardangerer.gpxStatsHelper.model.Duration;
 import at.bernhardangerer.gpxStatsHelper.model.ElevationDelta;
 import at.bernhardangerer.gpxStatsHelper.model.ElevationRange;
@@ -11,11 +12,12 @@ import at.bernhardangerer.gpxStatsHelper.util.DurationInMotionCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationDeltaCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationPeakUtil;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationRangeCalculator;
-import at.bernhardangerer.gpxStatsHelper.util.WaypointUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GeocodeUtil;
+import at.bernhardangerer.gpxStatsHelper.util.GeographicExtentUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GpxConverter;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedAvgCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedMaxCalculator;
+import at.bernhardangerer.gpxStatsHelper.util.WaypointUtil;
 import com.topografix.model.Gpx;
 import com.topografix.model.Track;
 import com.topografix.model.Waypoint;
@@ -73,6 +75,9 @@ public final class Example {
             System.out.println("\n### Track Nr. " + count
                     + (track.getName() != null ? " - \"" + track.getName() + ESCAPE_DOUBLE_QUOTES : "") + " ###");
 
+            final long numberOfWaypoints = WaypointUtil.countWaypoints(track);
+            System.out.println("Number Of Waypoints: " + numberOfWaypoints);
+
             final Double distance = DistanceTotalCalculator.fromTrack(track);
             System.out.println("Total Distance: " + DECIMAL_FORMAT.format(distance / ONE_THOUSAND) + SPACE + KM);
 
@@ -93,6 +98,10 @@ public final class Example {
                     + lowestWaypoint.getEle().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
             final GeocodeReverseModel lowestGeoposition = getGeocodeReverseModel(lowestWaypoint);
             printPosition("Lowest Point" + GEOPOSITION, lowestGeoposition, lowestWaypoint);
+
+            final BoundingBox boundingBox = GeographicExtentUtil.findBounding(track);
+            System.out.println("Latitude Range: " + boundingBox.getMinLat() + " => " + boundingBox.getMaxLat());
+            System.out.println("Longitude Range: " + boundingBox.getMinLon() + " => " + boundingBox.getMaxLon());
 
             final Waypoint firstWaypoint = WaypointUtil.findFirstWaypoint(track);
             final Waypoint lastWaypoint = WaypointUtil.findLastWaypoint(track);
