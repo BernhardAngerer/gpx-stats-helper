@@ -44,7 +44,7 @@ class GeocodeServiceIT {
 
     @Test
     void reverseGeocodeComplex() throws IOException, URISyntaxException, WebserviceCallException, InterruptedException {
-        final String resultJson = geocodeService.reverseGeocodeAsJson(String.valueOf(47.392036), String.valueOf(11.266654),
+        final String resultJson = geocodeService.reverseGeocode(String.valueOf(47.392036), String.valueOf(11.266654),
                 OutputFormat.JSON, 10, true, true, true, true);
         assertNotNull(resultJson);
         final GeocodeReverseModel model = convertFromJson(resultJson);
