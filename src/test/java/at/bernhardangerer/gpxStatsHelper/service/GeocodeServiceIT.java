@@ -29,7 +29,7 @@ class GeocodeServiceIT {
         assertNotNull(model);
         assertTrue(model.getDisplayName().length() > 30);
         assertTrue(model.getDisplayName().contains("Scharnitz"));
-        assertNotNull(model.getBoundingbox());
+        assertNotNull(model.getBoundingBox());
         assertNotNull(model.getAddress());
         assertNotNull(model.getLat());
         assertNotNull(model.getLon());
@@ -50,7 +50,7 @@ class GeocodeServiceIT {
         final GeocodeReverseModel model = convertFromJson(resultJson);
         assertNotNull(model);
         assertTrue(model.getDisplayName().contains("Scharnitz"));
-        assertNotNull(model.getBoundingbox());
+        assertNotNull(model.getBoundingBox());
         assertNotNull(model.getAddress());
         assertNotNull(model.getLat());
         assertNotNull(model.getLon());

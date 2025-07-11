@@ -57,7 +57,7 @@ public final class Example {
     /**
      * Load an example GPX file and calculate statistic parameters.
      *
-     * @param args
+     * @param args optional commandLine arguments
      */
     @SuppressWarnings("checkstyle:UncommentedMain")
     public static void main(final String[] args) {
@@ -123,8 +123,8 @@ public final class Example {
 
             final GeocodeReverseModel startPos = getGeocodeReverseModel(firstWaypoint);
             if (GeocodeUtil.isBounded(lastWaypoint.getLat().doubleValue(),
-                    lastWaypoint.getLon().doubleValue(), startPos.getBoundingbox()[0],
-                    startPos.getBoundingbox()[2], startPos.getBoundingbox()[1], startPos.getBoundingbox()[THREE])) {
+                    lastWaypoint.getLon().doubleValue(), startPos.getBoundingBox()[0],
+                    startPos.getBoundingBox()[2], startPos.getBoundingBox()[1], startPos.getBoundingBox()[THREE])) {
                 printPosition("Start = End" + GEOPOSITION, startPos, firstWaypoint);
             } else {
                 printPosition("Start" + GEOPOSITION, startPos, firstWaypoint);

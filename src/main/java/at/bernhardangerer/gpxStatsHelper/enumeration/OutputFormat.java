@@ -1,5 +1,8 @@
 package at.bernhardangerer.gpxStatsHelper.enumeration;
 
+import lombok.Getter;
+
+@Getter
 public enum OutputFormat {
     XML("xml"),
     JSON("json"),
@@ -13,7 +16,4 @@ public enum OutputFormat {
         this.format = format;
     }
 
-    public String getFormat() {
-        return format;
-    }
 }
