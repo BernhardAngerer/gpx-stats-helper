@@ -37,7 +37,7 @@ public final class GeocodeService {
      */
     public String reverseGeocodeAsJson(final String lat, final String lon)
             throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
-        return reverseGeocodeAsJson(lat, lon, OutputFormat.JSON, EIGHTEEN, true, false, false, false);
+        return reverseGeocode(lat, lon, OutputFormat.JSON, EIGHTEEN, true, false, false, false);
     }
 
     /**
@@ -52,7 +52,7 @@ public final class GeocodeService {
      */
     public String reverseGeocodeAsJson(final Waypoint waypoint)
             throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
-        return reverseGeocodeAsJson(waypoint.getLat().toString(), waypoint.getLon().toString(), OutputFormat.JSON,
+        return reverseGeocode(waypoint.getLat().toString(), waypoint.getLon().toString(), OutputFormat.JSON,
                 EIGHTEEN, true, false, false, false);
     }
 
@@ -75,9 +75,9 @@ public final class GeocodeService {
      * @throws URISyntaxException
      */
     @SuppressWarnings("checkstyle:ParameterNumber")
-    public String reverseGeocodeAsJson(final String lat, final String lon, final OutputFormat outputFormat, final int zoomLevel,
-                                       final boolean addressDetails, final boolean extraTags, final boolean nameDetails,
-                                       final boolean polygonSvg)
+    public String reverseGeocode(final String lat, final String lon, final OutputFormat outputFormat, final int zoomLevel,
+                                 final boolean addressDetails, final boolean extraTags, final boolean nameDetails,
+                                 final boolean polygonSvg)
             throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
         final URIBuilder builder = new URIBuilder(BASE_URL);
         builder.setParameter("lat", lat);
@@ -88,6 +88,7 @@ public final class GeocodeService {
         builder.setParameter("extratags", extraTags ? ONE : ZERO);
         builder.setParameter("namedetails", nameDetails ? ONE : ZERO);
         builder.setParameter("polygon_svg", polygonSvg ? ONE : ZERO);
+
         return client.sendHttpRequest(builder.build());
     }
 }

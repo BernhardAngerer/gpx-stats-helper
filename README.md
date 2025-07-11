@@ -3,11 +3,14 @@
 # GPX stats helper library
 
 This Java library provides static helper methods to read from GPX 1.1 files using the official XSD schema from [TopoGrafix](https://www.topografix.com/gpx.asp). The following parameters can then be calculated: 
++ Number of waypoints
 + Total distance [km]
 + Ascent/descent elevation [m]
-+ Lowest/highest elevation [m]
++ Lowest/highest point [m]
++ Latitude Range [lat, lat]
++ Longitude Range [lon, lon]
 + Total duration [h]
-+ Duration in motion [h]
++ Duration in motion / at rest [h]
 + Start/end time [h]
 + Max/average speed [km/h]
 + Start/end position [lon, lat]
@@ -18,66 +21,34 @@ This Java library provides static helper methods to read from GPX 1.1 files usin
 ## Technical requirements:
 + Java 11+
 
-## Usage:
-```java
-final File file = new File(Example.class.getClassLoader().getResource("example/example1.gpx").getFile());
-final GpxType gpx = GpxConverter.convertGpxFromFile(file);
-final TrkType track = gpx.getTrk().get(0);
-
-final Double totalDistance = DistanceTotalCalculator.fromTrk(track);
-
-final ElevationDelta delta = ElevationDeltaCalculator.fromTrk(track);
-
-final ElevationRange range = ElevationRangeCalculator.fromTrk(track);
-
-final FirstLastWaypoint firstLastWaypoint = FirstLastWptCalculator.fromTrk(track);
-
-final Duration totalDuration = calcDateTimeDifference(firstLast.getFirst().getTime(), firstLast.getLast().getTime());
-
-final Long durationInMotion = DurationInMotionCalculator.fromTrk(track);
-
-final Double maxSpeed = SpeedMaxCalculator.fromTrk(track);
-
-final Double avgSpeed = SpeedAvgCalculator.fromTrack(track);
-
-final GeocodeReverseModel startPos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocode(
-    firstLast.getFirst().getLat().toString(), firstLast.getFirst().getLon().toString()));
-
-final GeocodeReverseModel endPos = GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocode(
-    firstLast.getLast().getLat().toString(), firstLast.getLast().getLon().toString()));
-
-final Waypoint farthestWaypoint = DistanceTotalCalculator.findFarthestWaypoint(firstWaypoint, track);
-
-final List<Waypoint> positivePeaks =
-    ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
-
-final List<Waypoint> negativePeaks =
-    ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
-```
-
 ### Output of example.gpx executing Example.main():
 ```
-Total distance: 26,4 km
+Number Of Waypoints: 2108
+Total Distance: 26,4 km
 Ascent: 1008 m
 Descent: 997 m
-Highest point: 1547 m.s.l.
-Lowest point: 587 m.s.l.
-Start time: 07.09.2021, 15:37:42 h
-End time: 07.09.2021, 18:14:16 h
-Total duration: 02:36:34 h
-Duration in motion: 02:15:36 h
-Maximum speed: 51,9 km/h
-Average speed: 11,7 km/h
-Start position: Lat 47.80743 / Lon 12.378228
-End position: Lat 47.807346 / Lon 12.378055
-Start - Geoposition: 16, Ulmenstraße, Westerham, Bergham, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
-End - Geoposition: 16, Ulmenstraße, Westerham, Bergham, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
-Farthest Point - Geoposition: Reitweg, Goriloch, Aschau im Chiemgau, Landkreis Rosenheim, Bayern, 83229, Deutschland
-Positive Peak 1 - Geoposition: Roßleitenlift Bergstation, Reitweg, Goriloch, Aschau im Chiemgau, Landkreis Rosenheim, Bayern, 83229, Deutschland
-Negative Peak 1 - Geoposition: Lindenstraße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
-Negative Peak 2 - Geoposition: Lindenstraße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
+Highest Point: 1547 m.s.l.
+Highest Point - Geoposition: Roßleitenlift Bergstation, Reitweg, Goriloch, Aschau im Chiemgau, Landkreis Rosenheim, Bayern, 83229, Deutschland / URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.754635&lon=12.355498&zoom=18&layer=poi
+Lowest Point: 587 m.s.l.
+Lowest Point - Geoposition: Rottauer Straße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland / URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.80743&lon=12.378228&zoom=18&layer=poi
+Latitude Range: 47.754356 => 47.80743
+Longitude Range: 12.334281 => 12.378897
+Start Time: 07.09.2021, 15:37:42 h
+End Time: 07.09.2021, 18:14:16 h
+Total Duration: 02:36:34 h
+Duration In Motion: 02:15:36 h
+Duration At Rest: 00:20:58 h
+Maximum Speed: 51,9 km/h
+Average Speed: 11,7 km/h
+Start Position: Lat 47.80743 / Lon 12.378228
+End Position: Lat 47.807346 / Lon 12.378055
+Start = End - Geoposition: Rottauer Straße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland / URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.80743&lon=12.378228&zoom=18&layer=poi
+Farthest Point - Geoposition: Reitweg, Goriloch, Aschau im Chiemgau, Landkreis Rosenheim, Bayern, 83229, Deutschland / URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.754356&lon=12.355104&zoom=18&layer=poi
+Positive Peak 1 - Geoposition: Roßleitenlift Bergstation, Reitweg, Goriloch, Aschau im Chiemgau, Landkreis Rosenheim, Bayern, 83229, Deutschland / URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.754635&lon=12.355498&zoom=18&layer=poi
+Negative Peak 1 - Geoposition: Rottauer Straße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland / URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.80743&lon=12.378228&zoom=18&layer=poi
+Negative Peak 2 - Geoposition: Rottauer Straße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland / URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.807049&lon=12.378118&zoom=18&layer=poi
 ```
 
 ### How to add project dependency to Maven or Gradle:
 
-https://jitpack.io/private#BernhardAngerer/gpx-stats-helper/1.0.0
+https://jitpack.io/private#BernhardAngerer/gpx-stats-helper/1.1.0
