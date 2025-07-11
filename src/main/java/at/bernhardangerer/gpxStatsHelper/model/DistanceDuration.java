@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public final class DistanceDuration {
     private double distance;
     private long duration;
-
 }

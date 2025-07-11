@@ -8,5 +8,4 @@ import java.math.BigDecimal;
 public final class ElevationDelta {
     private BigDecimal ascent = BigDecimal.ZERO;
     private BigDecimal descent = BigDecimal.ZERO;
-
 }

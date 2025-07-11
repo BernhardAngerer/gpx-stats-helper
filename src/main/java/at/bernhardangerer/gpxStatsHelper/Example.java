@@ -61,7 +61,7 @@ public final class Example {
      *
      * @param args optional commandLine arguments
      */
-    @SuppressWarnings("checkstyle:UncommentedMain")
+    @SuppressWarnings({"checkstyle:UncommentedMain", "checkstyle:MultipleStringLiterals"})
     public static void main(final String[] args) {
         final File file = new File(Objects.requireNonNull(
                 Example.class.getClassLoader().getResource("example/example1.gpx")).getFile());

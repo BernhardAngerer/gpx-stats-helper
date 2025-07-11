@@ -7,5 +7,4 @@ import lombok.Data;
 public final class ElevationRange {
     private Waypoint highest;
     private Waypoint lowest;
-
 }
