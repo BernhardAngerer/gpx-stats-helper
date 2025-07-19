@@ -1,20 +1,23 @@
 package at.bernhardangerer.gpxStatsHelper;
 
+import at.bernhardangerer.gpxStatsHelper.enumeration.StepRoundingMode;
 import at.bernhardangerer.gpxStatsHelper.model.BoundingBox;
+import at.bernhardangerer.gpxStatsHelper.model.Distance;
 import at.bernhardangerer.gpxStatsHelper.model.Duration;
-import at.bernhardangerer.gpxStatsHelper.model.ElevationDelta;
+import at.bernhardangerer.gpxStatsHelper.model.Elevation;
 import at.bernhardangerer.gpxStatsHelper.model.ElevationRange;
 import at.bernhardangerer.gpxStatsHelper.model.api.GeocodeReverseModel;
 import at.bernhardangerer.gpxStatsHelper.service.GeocodeService;
 import at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil;
-import at.bernhardangerer.gpxStatsHelper.util.DistanceTotalCalculator;
+import at.bernhardangerer.gpxStatsHelper.util.DistanceCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.DurationInMotionCalculator;
-import at.bernhardangerer.gpxStatsHelper.util.ElevationDeltaCalculator;
+import at.bernhardangerer.gpxStatsHelper.util.ElevationCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationPeakUtil;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationRangeCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.GeocodeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GeographicExtentUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GpxConverter;
+import at.bernhardangerer.gpxStatsHelper.util.SlopeCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedAvgCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedMaxCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.WaypointUtil;
@@ -29,6 +32,7 @@ import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,7 +42,8 @@ import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.convertToSecon
 
 public final class Example {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
+    private static final DecimalFormat ONE_DECIMAL_FORMAT = new DecimalFormat("#.#");
+    private static final DecimalFormat TWO_DECIMAL_FORMAT = new DecimalFormat("#.##");
     private static final GeocodeService GEOCODE_SERVICE = new GeocodeService();
     private static final String CET = "CET";
     private static final String SPACE = " ";
@@ -78,10 +83,15 @@ public final class Example {
             final long numberOfWaypoints = WaypointUtil.countWaypoints(track);
             System.out.println("Number Of Waypoints: " + numberOfWaypoints);
 
-            final Double distance = DistanceTotalCalculator.fromTrack(track);
-            System.out.println("Total Distance: " + DECIMAL_FORMAT.format(distance / ONE_THOUSAND) + SPACE + KM);
+            final Distance distance = DistanceCalculator.fromTrack(track);
+            final double totalDistance = distance.getAscent().doubleValue() + distance.getDescent().doubleValue();
+            System.out.println("Total Distance: " + TWO_DECIMAL_FORMAT.format(totalDistance / ONE_THOUSAND) + SPACE + KM);
+            System.out.println("Distance Ascent: "
+                    + TWO_DECIMAL_FORMAT.format(distance.getAscent().doubleValue() / ONE_THOUSAND) + SPACE + KM);
+            System.out.println("Distance Descent: "
+                    + TWO_DECIMAL_FORMAT.format(distance.getDescent().doubleValue() / ONE_THOUSAND) + SPACE + KM);
 
-            final ElevationDelta delta = ElevationDeltaCalculator.fromTrack(track);
+            final Elevation delta = ElevationCalculator.fromTrack(track);
             System.out.println("Ascent: " + delta.getAscent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
             System.out.println("Descent: " + delta.getDescent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
 
@@ -122,10 +132,10 @@ public final class Example {
             System.out.println("Duration At Rest: " + convertFromSeconds(durationAtRest).format() + SPACE + H);
 
             final Double speedMax = SpeedMaxCalculator.fromTrack(track);
-            System.out.println("Maximum Speed: " + DECIMAL_FORMAT.format(speedMax) + SPACE + KMPH);
+            System.out.println("Maximum Speed: " + ONE_DECIMAL_FORMAT.format(speedMax) + SPACE + KMPH);
 
             final Double averageSpeed = SpeedAvgCalculator.fromTrack(track);
-            System.out.println("Average Speed: " + DECIMAL_FORMAT.format(averageSpeed) + SPACE + KMPH);
+            System.out.println("Average Speed: " + ONE_DECIMAL_FORMAT.format(averageSpeed) + SPACE + KMPH);
 
             System.out.println("Start Position: Lat " + firstWaypoint.getLat() + LON + firstWaypoint.getLon());
             System.out.println("End Position: Lat " + lastWaypoint.getLat() + LON + lastWaypoint.getLon());
@@ -160,6 +170,14 @@ public final class Example {
                 final GeocodeReverseModel pos = getGeocodeReverseModel(waypoint);
                 printPosition("Negative Peak " + counter.incrementAndGet() + GEOPOSITION, pos, waypoint);
             });
+
+            final int percentageStep = 10;
+            final Map<Integer, Double> percentageStepMap =
+                    SlopeCalculator.fromWaypointList(track.getTrkseg().get(0).getTrkpt(), percentageStep, StepRoundingMode.DOWN);
+            percentageStepMap.entrySet().stream()
+                    .sorted(Map.Entry.<Integer, Double>comparingByKey().reversed())
+                    .forEach(entry -> System.out.println("Slope " + entry.getKey() + " to " + (entry.getKey() + percentageStep) + " % -> "
+                            + TWO_DECIMAL_FORMAT.format(entry.getValue() / ONE_THOUSAND) + SPACE + KM));
 
             count++;
         }

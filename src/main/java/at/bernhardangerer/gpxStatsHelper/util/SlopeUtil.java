@@ -39,8 +39,8 @@ public final class SlopeUtil {
      * @param lat2 Latitude of the second point (in decimal degrees)
      * @param lon1 Longitude of the first point (in decimal degrees)
      * @param lon2 Longitude of the second point (in decimal degrees)
-     * @param ele1  Elevation of the first point (in meters)
-     * @param ele2  Elevation of the second point (in meters)
+     * @param ele1 Elevation of the first point (in meters)
+     * @param ele2 Elevation of the second point (in meters)
      * @return Slope in Percent
      */
     public static double calcSlopePercent(final double lat1, final double lat2, final double lon1,

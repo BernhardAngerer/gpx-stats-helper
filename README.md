@@ -4,9 +4,10 @@
 
 This Java library provides static helper methods to read from GPX 1.1 files using the official XSD schema from [TopoGrafix](https://www.topografix.com/gpx.asp). The following parameters can then be calculated: 
 + Number of waypoints
-+ Total distance [km]
++ Total/ascent/descent distance [km]
 + Ascent/descent elevation [m]
 + Lowest/highest point [m]
++ Slope [% -> m]
 + Latitude Range [lat, lat]
 + Longitude Range [lon, lon]
 + Total duration [h]
@@ -24,7 +25,9 @@ This Java library provides static helper methods to read from GPX 1.1 files usin
 ### Output of example.gpx executing Example.main():
 ```
 Number Of Waypoints: 2108
-Total Distance: 26,4 km
+Total Distance: 26,42 km
+Distance Ascent: 17,35 km
+Distance Descent: 9,07 km
 Ascent: 1008 m
 Descent: 997 m
 Highest Point: 1547 m.s.l.
@@ -47,6 +50,12 @@ Farthest Point - Geoposition: Reitweg, Goriloch, Aschau im Chiemgau, Landkreis R
 Positive Peak 1 - Geoposition: Roßleitenlift Bergstation, Reitweg, Goriloch, Aschau im Chiemgau, Landkreis Rosenheim, Bayern, 83229, Deutschland / URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.754635&lon=12.355498&zoom=18&layer=poi
 Negative Peak 1 - Geoposition: Rottauer Straße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland / URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.80743&lon=12.378228&zoom=18&layer=poi
 Negative Peak 2 - Geoposition: Rottauer Straße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland / URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.807049&lon=12.378118&zoom=18&layer=poi
+Slope 20 to 30 % -> 0,02 km
+Slope 10 to 20 % -> 2,03 km
+Slope 0 to 10 % -> 15,3 km
+Slope -10 to 0 % -> 5 km
+Slope -20 to -10 % -> 3,66 km
+Slope -30 to -20 % -> 0,41 km
 ```
 
 ### How to add project dependency to Maven or Gradle:

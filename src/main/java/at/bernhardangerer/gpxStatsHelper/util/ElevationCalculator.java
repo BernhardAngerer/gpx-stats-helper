@@ -1,6 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.ElevationDelta;
+import at.bernhardangerer.gpxStatsHelper.model.Elevation;
 import com.topografix.model.Track;
 import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
@@ -8,9 +8,9 @@ import com.topografix.model.Waypoint;
 import java.math.BigDecimal;
 import java.util.List;
 
-public final class ElevationDeltaCalculator {
+public final class ElevationCalculator {
 
-    private ElevationDeltaCalculator() {
+    private ElevationCalculator() {
     }
 
     static BigDecimal fromWaypoints(final Waypoint fromWaypoint, final Waypoint toWaypoint) {
@@ -20,56 +20,56 @@ public final class ElevationDeltaCalculator {
         return null;
     }
 
-    static ElevationDelta fromWaypointList(final List<Waypoint> waypointList) {
+    static Elevation fromWaypointList(final List<Waypoint> waypointList) {
         if (waypointList != null && waypointList.size() >= 2) {
-            final ElevationDelta delta = new ElevationDelta();
+            final Elevation elevation = new Elevation();
             for (int count = 0; (count + 1) < waypointList.size(); count++) {
                 final BigDecimal elevationDelta = fromWaypoints(waypointList.get(count), waypointList.get(count + 1));
                 if (elevationDelta != null) {
-                    if (elevationDelta.doubleValue() > 0) {
-                        if (delta.getAscent() == null) {
-                            delta.setAscent(BigDecimal.ZERO);
+                    if (elevationDelta.doubleValue() >= 0) {
+                        if (elevation.getAscent() == null) {
+                            elevation.setAscent(BigDecimal.ZERO);
                         }
-                        delta.setAscent(delta.getAscent().add(elevationDelta));
+                        elevation.setAscent(elevation.getAscent().add(elevationDelta));
                     } else if (elevationDelta.doubleValue() < 0) {
-                        if (delta.getDescent() == null) {
-                            delta.setDescent(BigDecimal.ZERO);
+                        if (elevation.getDescent() == null) {
+                            elevation.setDescent(BigDecimal.ZERO);
                         }
-                        delta.setDescent(delta.getDescent().add(elevationDelta.abs()));
+                        elevation.setDescent(elevation.getDescent().add(elevationDelta.abs()));
                     }
                 } else {
                     return null;
                 }
             }
-            return delta;
+            return elevation;
         }
         return null;
     }
 
-    static ElevationDelta fromTrackSegment(final TrackSegment trackSegment) {
+    static Elevation fromTrackSegment(final TrackSegment trackSegment) {
         if (trackSegment != null) {
             return fromWaypointList(trackSegment.getTrkpt());
         }
         return null;
     }
 
-    static ElevationDelta fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
+    static Elevation fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
         if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
-            final ElevationDelta delta = new ElevationDelta();
+            final Elevation delta = new Elevation();
             for (final TrackSegment trackSegment : trackSegmentList) {
-                final ElevationDelta elevationDelta = fromTrackSegment(trackSegment);
-                if (elevationDelta != null) {
-                    if (elevationDelta.getAscent() != null) {
+                final Elevation elevation = fromTrackSegment(trackSegment);
+                if (elevation != null) {
+                    if (elevation.getAscent() != null) {
                         if (delta.getAscent() == null) {
                             delta.setAscent(BigDecimal.ZERO);
                         }
-                        delta.setAscent(delta.getAscent().add(elevationDelta.getAscent()));
+                        delta.setAscent(delta.getAscent().add(elevation.getAscent()));
                     }
-                    if (elevationDelta.getDescent() != null) {
+                    if (elevation.getDescent() != null) {
                         if (delta.getDescent() == null) {
                             delta.setDescent(BigDecimal.ZERO);
                         }
-                        delta.setDescent(delta.getDescent().add(elevationDelta.getDescent()));
+                        delta.setDescent(delta.getDescent().add(elevation.getDescent()));
                     }
                 } else {
                     return null;
@@ -86,7 +86,7 @@ public final class ElevationDeltaCalculator {
      * @param track
      * @return ElevationDelta in meters
      */
-    public static ElevationDelta fromTrack(final Track track) {
+    public static Elevation fromTrack(final Track track) {
         if (track != null) {
             return fromTrackSegmentList(track.getTrkseg());
         }

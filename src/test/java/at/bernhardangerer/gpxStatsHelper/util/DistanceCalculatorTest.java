@@ -1,13 +1,12 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.ElevationDelta;
+import at.bernhardangerer.gpxStatsHelper.model.Distance;
 import com.topografix.model.Gpx;
 import com.topografix.model.Track;
 import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-class ElevationDeltaCalculatorTest {
+class DistanceCalculatorTest {
 
     private static final String GPX =
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
@@ -39,7 +38,7 @@ class ElevationDeltaCalculatorTest {
             + "<trkpt lat=\"47.807335\" lon=\"12.378\"><ele>588</ele><time>2021-09-07T13:38:25Z</time> </trkpt>\n"
             + "<trkpt lat=\"47.807377\" lon=\"12.377702\"><ele>588</ele><time>2021-09-07T13:38:31Z</time> </trkpt>\n"
             + "<trkpt lat=\"47.807346\" lon=\"12.37751\"><ele>588</ele><time>2021-09-07T13:38:34Z</time> </trkpt>\n"
-            + "<trkpt lat=\"47.807312\" lon=\"12.377382\"><ele>586</ele><time>2021-09-07T13:38:36Z</time> </trkpt>\n"
+            + "<trkpt lat=\"47.807312\" lon=\"12.377382\"><ele>588</ele><time>2021-09-07T13:38:36Z</time> </trkpt>\n"
             + "</trkseg>\n"
             + "<trkseg>\n"
             + "<trkpt lat=\"47.806938\" lon=\"12.378183\"><ele>598</ele><time>2021-09-07T16:10:27Z</time> </trkpt>\n"
@@ -49,89 +48,73 @@ class ElevationDeltaCalculatorTest {
             + "<trkpt lat=\"47.80706\" lon=\"12.378138\"><ele>598</ele><time>2021-09-07T16:14:00Z</time> </trkpt>\n"
             + "<trkpt lat=\"47.807156\" lon=\"12.378108\"><ele>598</ele><time>2021-09-07T16:14:06Z</time> </trkpt>\n"
             + "<trkpt lat=\"47.807251\" lon=\"12.378079\"><ele>598</ele><time>2021-09-07T16:14:11Z</time> </trkpt>\n"
-            + "<trkpt lat=\"47.807346\" lon=\"12.378055\"><ele>596</ele><time>2021-09-07T16:14:16Z</time> </trkpt>\n"
+            + "<trkpt lat=\"47.807346\" lon=\"12.378055\"><ele>598</ele><time>2021-09-07T16:14:16Z</time> </trkpt>\n"
             + "</trkseg>\n"
             + "</trk>\n"
             + "</gpx>";
-
     private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
-
-    @Test
-    void fromWaypoints() {
-        final Waypoint fromWaypoint = new Waypoint();
-        fromWaypoint.setEle(BigDecimal.valueOf(587));
-        final Waypoint toWaypoint = new Waypoint();
-        toWaypoint.setEle(BigDecimal.valueOf(590));
-
-        BigDecimal elevationDelta = ElevationDeltaCalculator.fromWaypoints(fromWaypoint, toWaypoint);
-        assertNotNull(elevationDelta);
-        assertEquals(BigDecimal.valueOf(3), elevationDelta);
-
-        elevationDelta = ElevationDeltaCalculator.fromWaypoints(null, null);
-        assertNull(elevationDelta);
-    }
 
     @Test
     void fromWaypointList() {
         final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
-        ElevationDelta delta = ElevationDeltaCalculator.fromWaypointList(waypointList);
-        assertNotNull(delta);
-        assertEquals(BigDecimal.ONE, delta.getAscent());
-        assertEquals(BigDecimal.valueOf(2), delta.getDescent());
+        Distance distance = DistanceCalculator.fromWaypointList(waypointList);
+        assertNotNull(distance);
+        assertEquals(69.933215483023768, distance.getAscent().doubleValue());
+        assertNull(distance.getDescent());
 
-        delta = ElevationDeltaCalculator.fromWaypointList(null);
-        assertNull(delta);
+        distance = DistanceCalculator.fromWaypointList(null);
+        assertNull(distance);
 
-        delta = ElevationDeltaCalculator.fromWaypointList(new ArrayList<>());
-        assertNull(delta);
+        distance = DistanceCalculator.fromWaypointList(new ArrayList<>());
+        assertNull(distance);
     }
 
     @Test
     void fromTrackSegment() {
         final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
-        ElevationDelta delta = ElevationDeltaCalculator.fromTrackSegment(trackSegment);
-        assertNotNull(delta);
-        assertEquals(BigDecimal.ONE, delta.getAscent());
-        assertEquals(BigDecimal.valueOf(2), delta.getDescent());
+        Distance distance = DistanceCalculator.fromTrackSegment(trackSegment);
+        assertNotNull(distance);
+        assertEquals(69.933215483023768, distance.getAscent().doubleValue());
+        assertNull(distance.getDescent());
 
-        delta = ElevationDeltaCalculator.fromTrackSegment(null);
-        assertNull(delta);
+        distance = DistanceCalculator.fromTrackSegment(null);
+        assertNull(distance);
 
-        delta = ElevationDeltaCalculator.fromTrackSegment(new TrackSegment());
-        assertNull(delta);
+        distance = DistanceCalculator.fromTrackSegment(new TrackSegment());
+        assertNull(distance);
     }
 
     @Test
     void fromTrackSegmentList() {
         final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
-        ElevationDelta delta = ElevationDeltaCalculator.fromTrackSegmentList(trackSegmentList);
-        assertNotNull(delta);
-        assertEquals(BigDecimal.ONE, delta.getAscent());
-        assertEquals(BigDecimal.valueOf(4), delta.getDescent());
+        Distance distance = DistanceCalculator.fromTrackSegmentList(trackSegmentList);
+        assertNotNull(distance);
+        assertEquals(149.904119875972300, distance.getAscent().doubleValue());
+        assertNull(distance.getDescent());
 
-        delta = ElevationDeltaCalculator.fromTrackSegmentList(null);
-        assertNull(delta);
+        distance = DistanceCalculator.fromTrackSegmentList(null);
+        assertNull(distance);
 
-        delta = ElevationDeltaCalculator.fromTrackSegmentList(new ArrayList<>());
-        assertNull(delta);
+        distance = DistanceCalculator.fromTrackSegmentList(new ArrayList<>());
+        assertNull(distance);
     }
 
     @Test
     void fromTrack() {
         final Track track = GPX_TYPE.getTrk().get(0);
 
-        ElevationDelta delta = ElevationDeltaCalculator.fromTrack(track);
-        assertNotNull(delta);
-        assertEquals(BigDecimal.ONE, delta.getAscent());
-        assertEquals(BigDecimal.valueOf(4), delta.getDescent());
+        Distance distance = DistanceCalculator.fromTrack(track);
+        assertNotNull(distance);
+        assertEquals(149.904119875972300, distance.getAscent().doubleValue());
+        assertNull(distance.getDescent());
 
-        delta = ElevationDeltaCalculator.fromTrack(null);
-        assertNull(delta);
+        distance = DistanceCalculator.fromTrack(null);
+        assertNull(distance);
 
-        delta = ElevationDeltaCalculator.fromTrack(new Track());
-        assertNull(delta);
+        distance = DistanceCalculator.fromTrack(new Track());
+        assertNull(distance);
     }
 }
