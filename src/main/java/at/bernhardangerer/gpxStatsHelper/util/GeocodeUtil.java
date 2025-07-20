@@ -9,8 +9,11 @@ import org.apache.hc.core5.net.URIBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static at.bernhardangerer.gpxStatsHelper.util.PropertyUtil.loadValue;
+
 public final class GeocodeUtil {
 
+    private static final String REVERSE_UI_URL = loadValue("reverseUiUrl");
     private static final Gson GSON = new GsonBuilder().create();
 
     private GeocodeUtil() {
@@ -56,7 +59,7 @@ public final class GeocodeUtil {
             throw new IllegalArgumentException("Waypoint must not be null!");
         }
         try {
-            final URI uri = new URIBuilder("https://nominatim.openstreetmap.org/ui/reverse.html")
+            final URI uri = new URIBuilder(REVERSE_UI_URL)
                     .addParameter("lat", String.valueOf(waypoint.getLat()))
                     .addParameter("lon", String.valueOf(waypoint.getLon()))
                     .addParameter("zoom", "18")

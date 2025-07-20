@@ -1,6 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.DistanceDuration;
+import at.bernhardangerer.gpxStatsHelper.model.SpeedMetrics;
 import com.topografix.model.Track;
 import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
@@ -17,7 +17,7 @@ public final class SpeedAvgCalculator {
     private SpeedAvgCalculator() {
     }
 
-    static DistanceDuration fromWaypoints(final Waypoint fromWaypoint, final Waypoint toWaypoint) {
+    static SpeedMetrics fromWaypoints(final Waypoint fromWaypoint, final Waypoint toWaypoint) {
         if (fromWaypoint != null && fromWaypoint.getEle() != null && toWaypoint != null && toWaypoint.getEle() != null
                 && fromWaypoint.getTime() != null && toWaypoint.getTime() != null) {
             final Double distance = DistanceUtil.calcDistance(fromWaypoint, toWaypoint);
@@ -25,46 +25,46 @@ public final class SpeedAvgCalculator {
             if (distance != null) {
                 final double speed = SpeedUtil.calculateSpeed(distance, duration);
                 if (speed > MOTION_MIN_SPEED) {
-                    return new DistanceDuration(distance, duration);
+                    return new SpeedMetrics(distance, duration);
                 }
             }
         }
         return null;
     }
 
-    static DistanceDuration fromWaypointList(final List<Waypoint> waypointList) {
+    static SpeedMetrics fromWaypointList(final List<Waypoint> waypointList) {
         if (waypointList != null && waypointList.size() >= 2) {
-            final DistanceDuration distanceDuration = new DistanceDuration();
+            final SpeedMetrics speedMetrics = new SpeedMetrics();
             for (int count = 0; (count + 1) < waypointList.size(); count++) {
-                final DistanceDuration tempDistanceDuration = fromWaypoints(waypointList.get(count), waypointList.get(count + 1));
-                if (tempDistanceDuration != null) {
-                    distanceDuration.setDistance(distanceDuration.getDistance() + tempDistanceDuration.getDistance());
-                    distanceDuration.setDuration(distanceDuration.getDuration() + tempDistanceDuration.getDuration());
+                final SpeedMetrics tempSpeedMetrics = fromWaypoints(waypointList.get(count), waypointList.get(count + 1));
+                if (tempSpeedMetrics != null) {
+                    speedMetrics.setDistance(speedMetrics.getDistance() + tempSpeedMetrics.getDistance());
+                    speedMetrics.setDuration(speedMetrics.getDuration() + tempSpeedMetrics.getDuration());
                 }
             }
-            return distanceDuration;
+            return speedMetrics;
         }
         return null;
     }
 
-    static DistanceDuration fromTrackSegment(final TrackSegment trackSegment) {
+    static SpeedMetrics fromTrackSegment(final TrackSegment trackSegment) {
         if (trackSegment != null) {
             return fromWaypointList(trackSegment.getTrkpt());
         }
         return null;
     }
 
-    static DistanceDuration fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
+    static SpeedMetrics fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
         if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
-            final DistanceDuration distanceDuration = new DistanceDuration();
+            final SpeedMetrics speedMetrics = new SpeedMetrics();
             for (final TrackSegment trackSegment : trackSegmentList) {
-                final DistanceDuration tempDistanceDuration = fromTrackSegment(trackSegment);
-                if (tempDistanceDuration != null) {
-                    distanceDuration.setDistance(distanceDuration.getDistance() + tempDistanceDuration.getDistance());
-                    distanceDuration.setDuration(distanceDuration.getDuration() + tempDistanceDuration.getDuration());
+                final SpeedMetrics tempSpeedMetrics = fromTrackSegment(trackSegment);
+                if (tempSpeedMetrics != null) {
+                    speedMetrics.setDistance(speedMetrics.getDistance() + tempSpeedMetrics.getDistance());
+                    speedMetrics.setDuration(speedMetrics.getDuration() + tempSpeedMetrics.getDuration());
                 }
             }
-            return distanceDuration;
+            return speedMetrics;
         }
         return null;
     }

@@ -1,6 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.Elevation;
+import at.bernhardangerer.gpxStatsHelper.model.AscentDescentPair;
 import com.topografix.model.Track;
 import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
@@ -20,9 +20,9 @@ public final class ElevationCalculator {
         return null;
     }
 
-    static Elevation fromWaypointList(final List<Waypoint> waypointList) {
+    static AscentDescentPair fromWaypointList(final List<Waypoint> waypointList) {
         if (waypointList != null && waypointList.size() >= 2) {
-            final Elevation elevation = new Elevation();
+            final AscentDescentPair elevation = new AscentDescentPair();
             for (int count = 0; (count + 1) < waypointList.size(); count++) {
                 final BigDecimal elevationDelta = fromWaypoints(waypointList.get(count), waypointList.get(count + 1));
                 if (elevationDelta != null) {
@@ -46,18 +46,18 @@ public final class ElevationCalculator {
         return null;
     }
 
-    static Elevation fromTrackSegment(final TrackSegment trackSegment) {
+    static AscentDescentPair fromTrackSegment(final TrackSegment trackSegment) {
         if (trackSegment != null) {
             return fromWaypointList(trackSegment.getTrkpt());
         }
         return null;
     }
 
-    static Elevation fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
+    static AscentDescentPair fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
         if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
-            final Elevation delta = new Elevation();
+            final AscentDescentPair delta = new AscentDescentPair();
             for (final TrackSegment trackSegment : trackSegmentList) {
-                final Elevation elevation = fromTrackSegment(trackSegment);
+                final AscentDescentPair elevation = fromTrackSegment(trackSegment);
                 if (elevation != null) {
                     if (elevation.getAscent() != null) {
                         if (delta.getAscent() == null) {
@@ -86,7 +86,7 @@ public final class ElevationCalculator {
      * @param track
      * @return ElevationDelta in meters
      */
-    public static Elevation fromTrack(final Track track) {
+    public static AscentDescentPair fromTrack(final Track track) {
         if (track != null) {
             return fromTrackSegmentList(track.getTrkseg());
         }

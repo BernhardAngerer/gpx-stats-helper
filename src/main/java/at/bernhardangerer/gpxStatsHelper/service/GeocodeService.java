@@ -9,12 +9,14 @@ import org.apache.hc.core5.net.URIBuilder;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import static at.bernhardangerer.gpxStatsHelper.util.PropertyUtil.loadValue;
+
 public final class GeocodeService {
 
     /**
      * API Documentation: https://nominatim.org/release-docs/develop/api/Overview/
      */
-    private static final String BASE_URL = "https://nominatim.openstreetmap.org/reverse";
+    private static final String REVERSE_BASE_URL = loadValue("reverseBaseUrl");
     private static final String ZERO = "0";
     private static final String ONE = "1";
     private static final int EIGHTEEN = 18;
@@ -79,7 +81,7 @@ public final class GeocodeService {
                                  final boolean addressDetails, final boolean extraTags, final boolean nameDetails,
                                  final boolean polygonSvg)
             throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
-        final URIBuilder builder = new URIBuilder(BASE_URL);
+        final URIBuilder builder = new URIBuilder(REVERSE_BASE_URL);
         builder.setParameter("lat", lat);
         builder.setParameter("lon", lon);
         builder.setParameter("format", outputFormat.getFormat());

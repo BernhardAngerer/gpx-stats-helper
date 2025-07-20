@@ -1,6 +1,7 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.Duration;
+import at.bernhardangerer.gpxStatsHelper.model.DateTimeSegments;
+import at.bernhardangerer.gpxStatsHelper.model.TimeSegments;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -14,11 +15,8 @@ class DateTimeUtilTest {
 
     @Test
     void convertFromSeconds() {
-        final Duration result = DateTimeUtil.convertFromSeconds(4000L);
+        final TimeSegments result = DateTimeUtil.convertFromSeconds(4000L);
         assertNotNull(result);
-        assertEquals(0, result.getYears());
-        assertEquals(0, result.getMonths());
-        assertEquals(0, result.getDays());
         assertEquals(1, result.getHours());
         assertEquals(6, result.getMinutes());
         assertEquals(40, result.getSeconds());
@@ -26,7 +24,7 @@ class DateTimeUtilTest {
 
     @Test
     void convertToSeconds() {
-        final long result = DateTimeUtil.convertToSeconds(new Duration(0, 0, 0, 1, 6, 40));
+        final long result = DateTimeUtil.convertToSeconds(new DateTimeSegments(0, 0, 0, 1, 6, 40));
         assertEquals(4000L, result);
     }
 
@@ -46,7 +44,7 @@ class DateTimeUtilTest {
     @Test
     void calcDateTimeDifference() {
         final LocalDateTime now = LocalDateTime.now();
-        final Duration result = DateTimeUtil.calcDateTimeDifference(now, now.plusSeconds(62L));
+        final DateTimeSegments result = DateTimeUtil.calcDateTimeDifference(now, now.plusSeconds(62L));
         assertNotNull(result);
         assertEquals(0, result.getYears());
         assertEquals(0, result.getMonths());

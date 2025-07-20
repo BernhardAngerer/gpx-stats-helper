@@ -1,6 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.Distance;
+import at.bernhardangerer.gpxStatsHelper.model.AscentDescentPair;
 import com.topografix.model.Gpx;
 import com.topografix.model.Track;
 import com.topografix.model.TrackSegment;
@@ -58,7 +58,7 @@ class DistanceCalculatorTest {
     void fromWaypointList() {
         final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
-        Distance distance = DistanceCalculator.fromWaypointList(waypointList);
+        AscentDescentPair distance = DistanceCalculator.fromWaypointList(waypointList);
         assertNotNull(distance);
         assertEquals(69.933215483023768, distance.getAscent().doubleValue());
         assertNull(distance.getDescent());
@@ -74,7 +74,7 @@ class DistanceCalculatorTest {
     void fromTrackSegment() {
         final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
-        Distance distance = DistanceCalculator.fromTrackSegment(trackSegment);
+        AscentDescentPair distance = DistanceCalculator.fromTrackSegment(trackSegment);
         assertNotNull(distance);
         assertEquals(69.933215483023768, distance.getAscent().doubleValue());
         assertNull(distance.getDescent());
@@ -90,7 +90,7 @@ class DistanceCalculatorTest {
     void fromTrackSegmentList() {
         final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
-        Distance distance = DistanceCalculator.fromTrackSegmentList(trackSegmentList);
+        AscentDescentPair distance = DistanceCalculator.fromTrackSegmentList(trackSegmentList);
         assertNotNull(distance);
         assertEquals(149.904119875972300, distance.getAscent().doubleValue());
         assertNull(distance.getDescent());
@@ -106,7 +106,7 @@ class DistanceCalculatorTest {
     void fromTrack() {
         final Track track = GPX_TYPE.getTrk().get(0);
 
-        Distance distance = DistanceCalculator.fromTrack(track);
+        AscentDescentPair distance = DistanceCalculator.fromTrack(track);
         assertNotNull(distance);
         assertEquals(149.904119875972300, distance.getAscent().doubleValue());
         assertNull(distance.getDescent());

@@ -1,6 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.Elevation;
+import at.bernhardangerer.gpxStatsHelper.model.AscentDescentPair;
 import com.topografix.model.Gpx;
 import com.topografix.model.Track;
 import com.topografix.model.TrackSegment;
@@ -75,7 +75,7 @@ class ElevationCalculatorTest {
     void fromWaypointList() {
         final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
-        Elevation delta = ElevationCalculator.fromWaypointList(waypointList);
+        AscentDescentPair delta = ElevationCalculator.fromWaypointList(waypointList);
         assertNotNull(delta);
         assertEquals(BigDecimal.ONE, delta.getAscent());
         assertEquals(BigDecimal.valueOf(2), delta.getDescent());
@@ -91,7 +91,7 @@ class ElevationCalculatorTest {
     void fromTrackSegment() {
         final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
-        Elevation delta = ElevationCalculator.fromTrackSegment(trackSegment);
+        AscentDescentPair delta = ElevationCalculator.fromTrackSegment(trackSegment);
         assertNotNull(delta);
         assertEquals(BigDecimal.ONE, delta.getAscent());
         assertEquals(BigDecimal.valueOf(2), delta.getDescent());
@@ -107,7 +107,7 @@ class ElevationCalculatorTest {
     void fromTrackSegmentList() {
         final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
-        Elevation delta = ElevationCalculator.fromTrackSegmentList(trackSegmentList);
+        AscentDescentPair delta = ElevationCalculator.fromTrackSegmentList(trackSegmentList);
         assertNotNull(delta);
         assertEquals(BigDecimal.ONE, delta.getAscent());
         assertEquals(BigDecimal.valueOf(4), delta.getDescent());
@@ -123,7 +123,7 @@ class ElevationCalculatorTest {
     void fromTrack() {
         final Track track = GPX_TYPE.getTrk().get(0);
 
-        Elevation delta = ElevationCalculator.fromTrack(track);
+        AscentDescentPair delta = ElevationCalculator.fromTrack(track);
         assertNotNull(delta);
         assertEquals(BigDecimal.ONE, delta.getAscent());
         assertEquals(BigDecimal.valueOf(4), delta.getDescent());

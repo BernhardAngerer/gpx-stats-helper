@@ -1,6 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.DistanceDuration;
+import at.bernhardangerer.gpxStatsHelper.model.SpeedMetrics;
 
 public final class SpeedUtil {
 
@@ -25,14 +25,14 @@ public final class SpeedUtil {
     }
 
     /**
-     * Calculate speed from DistanceDuration.
+     * Calculate speed from SpeedMetrics.
      *
-     * @param distanceDuration
+     * @param speedMetrics
      * @return speed in kilometer per hour
      */
-    public static double calculateSpeed(final DistanceDuration distanceDuration) {
-        if (distanceDuration != null) {
-            return calculateSpeed(distanceDuration.getDistance(), distanceDuration.getDuration());
+    public static double calculateSpeed(final SpeedMetrics speedMetrics) {
+        if (speedMetrics != null) {
+            return calculateSpeed(speedMetrics.getDistance(), speedMetrics.getDuration());
         }
         return 0;
     }

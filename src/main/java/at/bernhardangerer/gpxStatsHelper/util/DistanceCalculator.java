@@ -1,6 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.Distance;
+import at.bernhardangerer.gpxStatsHelper.model.AscentDescentPair;
 import com.topografix.model.Track;
 import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
@@ -16,9 +16,9 @@ public final class DistanceCalculator {
     private DistanceCalculator() {
     }
 
-    static Distance fromWaypointList(final List<Waypoint> waypointList) {
+    static AscentDescentPair fromWaypointList(final List<Waypoint> waypointList) {
         if (waypointList != null && waypointList.size() >= 2) {
-            final Distance distance = new Distance();
+            final AscentDescentPair distance = new AscentDescentPair();
             for (int count = 0; (count + 1) < waypointList.size(); count++) {
                 final Double deltaDistance = calcDistance(waypointList.get(count), waypointList.get(count + 1));
                 final BigDecimal elevationDelta = fromWaypoints(waypointList.get(count), waypointList.get(count + 1));
@@ -43,18 +43,18 @@ public final class DistanceCalculator {
         return null;
     }
 
-    static Distance fromTrackSegment(final TrackSegment trackSegment) {
+    static AscentDescentPair fromTrackSegment(final TrackSegment trackSegment) {
         if (trackSegment != null) {
             return fromWaypointList(trackSegment.getTrkpt());
         }
         return null;
     }
 
-    static Distance fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
+    static AscentDescentPair fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
         if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
-            final Distance result = new Distance();
+            final AscentDescentPair result = new AscentDescentPair();
             for (final TrackSegment trackSegment : trackSegmentList) {
-                final Distance distance = fromTrackSegment(trackSegment);
+                final AscentDescentPair distance = fromTrackSegment(trackSegment);
                 if (distance != null) {
                     if (distance.getAscent() != null) {
                         if (result.getAscent() == null) {
@@ -83,7 +83,7 @@ public final class DistanceCalculator {
      * @param track
      * @return distance in meters
      */
-    public static Distance fromTrack(final Track track) {
+    public static AscentDescentPair fromTrack(final Track track) {
         if (track != null) {
             return fromTrackSegmentList(track.getTrkseg());
         }

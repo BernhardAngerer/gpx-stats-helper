@@ -2,25 +2,27 @@ package at.bernhardangerer.gpxStatsHelper.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.text.DecimalFormat;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Data
-public final class Duration {
+public final class DateTimeSegments extends TimeSegments {
     private static final String SEPARATOR = " / ";
-    private static final String COLON = ":";
     private long years;
     private long months;
     private long days;
-    private long hours;
-    private long minutes;
-    private long seconds;
+
+    public DateTimeSegments(long years, long months, long days, long hours, long minutes, long seconds) {
+        super(hours, minutes, seconds);
+        this.years = years;
+        this.months = months;
+        this.days = days;
+    }
 
     public String format() {
-        final DecimalFormat df = new DecimalFormat("00");
         final StringBuilder stringBuilder = new StringBuilder();
         if (years > 0) {
             stringBuilder.append(years)
@@ -43,12 +45,8 @@ public final class Duration {
         if (stringBuilder.length() > 0) {
             stringBuilder.append(SEPARATOR);
         }
-        stringBuilder.append(df.format(hours))
-                .append(COLON)
-                .append(df.format(minutes))
-                .append(COLON)
-                .append(df.format(seconds));
-        return stringBuilder.toString();
+
+        return stringBuilder + super.format();
     }
 
 }

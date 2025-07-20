@@ -1,10 +1,9 @@
 package at.bernhardangerer.gpxStatsHelper;
 
 import at.bernhardangerer.gpxStatsHelper.enumeration.StepRoundingMode;
+import at.bernhardangerer.gpxStatsHelper.model.AscentDescentPair;
 import at.bernhardangerer.gpxStatsHelper.model.BoundingBox;
-import at.bernhardangerer.gpxStatsHelper.model.Distance;
-import at.bernhardangerer.gpxStatsHelper.model.Duration;
-import at.bernhardangerer.gpxStatsHelper.model.Elevation;
+import at.bernhardangerer.gpxStatsHelper.model.DateTimeSegments;
 import at.bernhardangerer.gpxStatsHelper.model.ElevationRange;
 import at.bernhardangerer.gpxStatsHelper.model.api.GeocodeReverseModel;
 import at.bernhardangerer.gpxStatsHelper.service.GeocodeService;
@@ -83,7 +82,7 @@ public final class Example {
             final long numberOfWaypoints = WaypointUtil.countWaypoints(track);
             System.out.println("Number Of Waypoints: " + numberOfWaypoints);
 
-            final Distance distance = DistanceCalculator.fromTrack(track);
+            final AscentDescentPair distance = DistanceCalculator.fromTrack(track);
             final double totalDistance = distance.getAscent().doubleValue() + distance.getDescent().doubleValue();
             System.out.println("Total Distance: " + TWO_DECIMAL_FORMAT.format(totalDistance / ONE_THOUSAND) + SPACE + KM);
             System.out.println("Distance Ascent: "
@@ -91,9 +90,9 @@ public final class Example {
             System.out.println("Distance Descent: "
                     + TWO_DECIMAL_FORMAT.format(distance.getDescent().doubleValue() / ONE_THOUSAND) + SPACE + KM);
 
-            final Elevation delta = ElevationCalculator.fromTrack(track);
-            System.out.println("Ascent: " + delta.getAscent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
-            System.out.println("Descent: " + delta.getDescent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
+            final AscentDescentPair elevation = ElevationCalculator.fromTrack(track);
+            System.out.println("Ascent: " + elevation.getAscent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
+            System.out.println("Descent: " + elevation.getDescent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
 
             final ElevationRange range = ElevationRangeCalculator.fromTrack(track);
 
@@ -121,7 +120,7 @@ public final class Example {
             System.out.println("End Time: " + DATE_TIME_FORMATTER.format(
                     DateTimeUtil.convertFromUtcTime(lastWaypoint.getTime(), CET)) + SPACE + H);
 
-            final Duration durationTotal =
+            final DateTimeSegments durationTotal =
                     calcDateTimeDifference(firstWaypoint.getTime(), lastWaypoint.getTime());
             System.out.println("Total Duration: " + durationTotal.format() + SPACE + H);
 

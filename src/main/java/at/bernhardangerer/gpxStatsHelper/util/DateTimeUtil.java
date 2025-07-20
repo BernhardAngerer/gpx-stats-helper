@@ -1,6 +1,7 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.Duration;
+import at.bernhardangerer.gpxStatsHelper.model.DateTimeSegments;
+import at.bernhardangerer.gpxStatsHelper.model.TimeSegments;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -36,36 +37,29 @@ public final class DateTimeUtil {
      *
      * @param startTime
      * @param endTime
-     * @return Duration
+     * @return DateTimeSegments
      */
-    public static Duration calcDateTimeDifference(final LocalDateTime startTime, final LocalDateTime endTime) {
-        final Duration duration = new Duration();
-        LocalDateTime tempDateTime = LocalDateTime.from(startTime);
+    public static DateTimeSegments calcDateTimeDifference(final LocalDateTime startTime, final LocalDateTime endTime) {
+        LocalDateTime tempDateTime = startTime;
 
         final long years = tempDateTime.until(endTime, ChronoUnit.YEARS);
         tempDateTime = tempDateTime.plusYears(years);
-        duration.setYears(years);
 
         final long months = tempDateTime.until(endTime, ChronoUnit.MONTHS);
         tempDateTime = tempDateTime.plusMonths(months);
-        duration.setMonths(months);
 
         final long days = tempDateTime.until(endTime, ChronoUnit.DAYS);
         tempDateTime = tempDateTime.plusDays(days);
-        duration.setDays(days);
 
         final long hours = tempDateTime.until(endTime, ChronoUnit.HOURS);
         tempDateTime = tempDateTime.plusHours(hours);
-        duration.setHours(hours);
 
         final long minutes = tempDateTime.until(endTime, ChronoUnit.MINUTES);
         tempDateTime = tempDateTime.plusMinutes(minutes);
-        duration.setMinutes(minutes);
 
         final long seconds = tempDateTime.until(endTime, ChronoUnit.SECONDS);
-        duration.setSeconds(seconds);
 
-        return duration;
+        return new DateTimeSegments(years, months, days, hours, minutes, seconds);
     }
 
     /**
@@ -80,26 +74,26 @@ public final class DateTimeUtil {
     }
 
     /**
-     * Convert seconds to Duration.
+     * Convert seconds to TimeSegments.
      *
      * @param seconds
-     * @return Duration
+     * @return TimeSegments
      */
-    public static Duration convertFromSeconds(final long seconds) {
-        final Duration duration = new Duration();
-        duration.setHours(seconds / THREE_SIX_ZERO_ZERO);
-        duration.setMinutes((seconds % THREE_SIX_ZERO_ZERO) / SIXTY);
-        duration.setSeconds(seconds % SIXTY);
-        return duration;
+    public static TimeSegments convertFromSeconds(final long seconds) {
+        final TimeSegments segments = new TimeSegments();
+        segments.setHours(seconds / THREE_SIX_ZERO_ZERO);
+        segments.setMinutes((seconds % THREE_SIX_ZERO_ZERO) / SIXTY);
+        segments.setSeconds(seconds % SIXTY);
+        return segments;
     }
 
     /**
-     * Convert Duration to seconds.
+     * Convert DateTimeSegments to seconds.
      *
-     * @param duration
+     * @param dateTimeSegments
      * @return seconds
      */
-    public static long convertToSeconds(final Duration duration) {
-        return duration.getHours() * THREE_SIX_ZERO_ZERO + duration.getMinutes() * SIXTY + duration.getSeconds();
+    public static long convertToSeconds(final DateTimeSegments dateTimeSegments) {
+        return dateTimeSegments.getHours() * THREE_SIX_ZERO_ZERO + dateTimeSegments.getMinutes() * SIXTY + dateTimeSegments.getSeconds();
     }
 }
