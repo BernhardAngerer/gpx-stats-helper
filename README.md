@@ -60,4 +60,4 @@ Slope -30 to -20 % -> 0,41 km
 
 ### How to add project dependency to Maven or Gradle:
 
-https://jitpack.io/private#BernhardAngerer/gpx-stats-helper/1.1.0
+https://jitpack.io/private#BernhardAngerer/gpx-stats-helper/1.2.0
