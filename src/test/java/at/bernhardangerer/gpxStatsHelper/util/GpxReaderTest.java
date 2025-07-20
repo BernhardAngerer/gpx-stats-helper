@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class GpxConverterTest {
+class GpxReaderTest {
 
     @Test
     void convertGpx() {
@@ -43,7 +43,7 @@ class GpxConverterTest {
                 + "</trkseg>\n"
                 + "</trk>\n"
                 + "</gpx>";
-        final Gpx gpx = GpxConverter.convertGpxFromString(gpxString);
+        final Gpx gpx = GpxReader.fromString(gpxString);
         assertNotNull(gpx);
 
         final List<Track> trackList = gpx.getTrk();

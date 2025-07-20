@@ -1,0 +1,147 @@
+package at.bernhardangerer.gpxStatsHelper.util;
+
+import com.topografix.model.CopyrightType;
+import com.topografix.model.Gpx;
+import com.topografix.model.MetadataType;
+import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
+import org.apache.xml.security.Init;
+import org.apache.xml.security.c14n.Canonicalizer;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+class GpxWriterTest {
+
+    static {
+        Init.init(); // required to initialize Apache XML Security
+    }
+
+    private Gpx gpx;
+
+    private final String canonicalizedGpxString =
+            "<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
+                    + "creator=\"gpx-stats-helper\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 "
+                    + "http://www.topografix.com/GPX/1/1/gpx.xsd\">\n"
+                    + "    <metadata>\n"
+                    + "        <name>My gpx file</name>\n"
+                    + "        <copyright author=\"gpx-stats-helper\">\n"
+                    + "            <year>2025</year>\n"
+                    + "            <license>free</license>\n"
+                    + "        </copyright>\n"
+                    + "    </metadata>\n"
+                    + "    <trk>\n"
+                    + "        <name>My short mountainbike tour</name>\n"
+                    + "        <trkseg>\n"
+                    + "            <trkpt lat=\"47.80743\" lon=\"12.378228\">\n"
+                    + "                <ele>587</ele>\n"
+                    + "                <time>2025-04-07T16:14:16Z</time>\n"
+                    + "            </trkpt>\n"
+                    + "            <trkpt lat=\"47.807343\" lon=\"12.378138\">\n"
+                    + "                <ele>588</ele>\n"
+                    + "                <time>2025-04-07T16:14:17Z</time>\n"
+                    + "            </trkpt>\n"
+                    + "            <trkpt lat=\"47.807343\" lon=\"12.378\">\n"
+                    + "                <ele>589</ele>\n"
+                    + "                <time>2025-04-07T16:14:18Z</time>\n"
+                    + "            </trkpt>\n"
+                    + "        </trkseg>\n"
+                    + "    </trk>\n"
+                    + "</gpx>";
+
+    @BeforeEach
+    void init() throws DatatypeConfigurationException {
+        gpx = new Gpx();
+        gpx.setCreator("gpx-stats-helper");
+
+        final MetadataType metadataType = new MetadataType();
+        metadataType.setName("My gpx file");
+        final CopyrightType copyrightType = new CopyrightType();
+        copyrightType.setAuthor("gpx-stats-helper");
+        copyrightType.setLicense("free");
+        final DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+        final XMLGregorianCalendar xmlYear = datatypeFactory.newXMLGregorianCalendarDate(
+                2025, DatatypeConstants.FIELD_UNDEFINED, DatatypeConstants.FIELD_UNDEFINED, DatatypeConstants.FIELD_UNDEFINED);
+        copyrightType.setYear(xmlYear);
+        metadataType.setCopyright(copyrightType);
+        gpx.setMetadata(metadataType);
+
+        final List<Track> tracks = gpx.getTrk();
+        final Track track = new Track();
+        track.setName("My short mountainbike tour");
+        final List<TrackSegment> trackSegments = track.getTrkseg();
+        final TrackSegment trackSegment = new TrackSegment();
+        final List<Waypoint> waypoints = trackSegment.getTrkpt();
+
+        final Waypoint waypoint1 = new Waypoint();
+        waypoint1.setLat(BigDecimal.valueOf(47.80743));
+        waypoint1.setLon(BigDecimal.valueOf(12.378228));
+        waypoint1.setEle(BigDecimal.valueOf(587));
+        waypoint1.setTime(LocalDateTime.of(2025, 4, 7, 16, 14, 16));
+        waypoints.add(waypoint1);
+
+        final Waypoint waypoint2 = new Waypoint();
+        waypoint2.setLat(BigDecimal.valueOf(47.807343));
+        waypoint2.setLon(BigDecimal.valueOf(12.378138));
+        waypoint2.setEle(BigDecimal.valueOf(588));
+        waypoint2.setTime(LocalDateTime.of(2025, 4, 7, 16, 14, 17));
+        waypoints.add(waypoint2);
+
+        final Waypoint waypoint3 = new Waypoint();
+        waypoint3.setLat(BigDecimal.valueOf(47.807343));
+        waypoint3.setLon(BigDecimal.valueOf(12.378000));
+        waypoint3.setEle(BigDecimal.valueOf(589));
+        waypoint3.setTime(LocalDateTime.of(2025, 4, 7, 16, 14, 18));
+        waypoints.add(waypoint3);
+
+        trackSegments.add(trackSegment);
+        tracks.add(track);
+    }
+
+    @Test
+    void testToString() throws Exception {
+        final String xml = GpxWriter.toString(gpx);
+        assertNotNull(xml);
+        assertEquals(canonicalizedGpxString, canonicalize(xml));
+    }
+
+    @Test
+    void testToFile() throws Exception {
+        final String fileName = "test.gpx";
+        File file = null;
+        try {
+            file = GpxWriter.toFile(gpx, fileName);
+            assertNotNull(file);
+            assertEquals(fileName, file.getName());
+            final String xml = Files.readString(Path.of(fileName));
+            assertEquals(canonicalizedGpxString, canonicalize(xml));
+        } finally {
+            if (file != null && file.exists()) {
+                file.delete();
+            }
+        }
+    }
+
+    private static String canonicalize(String xmlInput) throws Exception {
+        final Canonicalizer canonicalizer = Canonicalizer.getInstance(Canonicalizer.ALGO_ID_C14N_WITH_COMMENTS);
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        canonicalizer.canonicalize(xmlInput.getBytes(StandardCharsets.UTF_8), outputStream, false);
+        return outputStream.toString(StandardCharsets.UTF_8);
+    }
+}

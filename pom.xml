@@ -54,6 +54,12 @@
             <version>1.18.38</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.santuario</groupId>
+            <artifactId>xmlsec</artifactId>
+            <version>4.0.4</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

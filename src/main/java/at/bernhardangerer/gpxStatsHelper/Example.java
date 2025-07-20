@@ -15,7 +15,7 @@ import at.bernhardangerer.gpxStatsHelper.util.ElevationPeakUtil;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationRangeCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.GeocodeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GeographicExtentUtil;
-import at.bernhardangerer.gpxStatsHelper.util.GpxConverter;
+import at.bernhardangerer.gpxStatsHelper.util.GpxReader;
 import at.bernhardangerer.gpxStatsHelper.util.SlopeCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedAvgCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedMaxCalculator;
@@ -69,7 +69,7 @@ public final class Example {
     public static void main(final String[] args) {
         final File file = new File(Objects.requireNonNull(
                 Example.class.getClassLoader().getResource("example/example1.gpx")).getFile());
-        final Gpx gpx = GpxConverter.convertGpxFromFile(file);
+        final Gpx gpx = GpxReader.fromFile(file);
 
         if (gpx.getMetadata().getName() != null) {
             System.out.println("GPX name: \"" + gpx.getMetadata().getName() + ESCAPE_DOUBLE_QUOTES);

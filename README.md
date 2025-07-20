@@ -1,6 +1,8 @@
 # GPX stats helper library
 
-This Java library provides static helper methods to read from GPX 1.1 files using the official XSD schema from [TopoGrafix](https://www.topografix.com/gpx.asp). The following parameters can then be calculated: 
+This Java library provides static helper functions to read and write GPX 1.1 files (using the official XSD schema from [TopoGrafix](https://www.topografix.com/gpx.asp)). 
+
+The following parameters can be calculated: 
 + Number of waypoints
 + Total/ascent/descent distance [km]
 + Ascent/descent elevation [m]

@@ -49,7 +49,7 @@ class WaypointUtilTest {
             + "</trkseg>\n"
             + "</trk>\n"
             + "</gpx>";
-    private static final Track TRACK = GpxConverter.convertGpxFromString(GPX).getTrk().get(0);
+    private static final Track TRACK = GpxReader.fromString(GPX).getTrk().get(0);
 
     @Test
     void findFirstWaypoint() {
