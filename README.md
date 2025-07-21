@@ -1,6 +1,6 @@
 # GPX Stats Helper Library
 
-A Java library for reading, writing, and analyzing statistics from GPX 1.1 files using the official [TopoGrafix XSD schema](https://www.topografix.com/gpx.asp).
+A Java library for reading, writing, manipulating, and analyzing statistics from GPX 1.1 files using the official [TopoGrafix XSD schema](https://www.topografix.com/gpx.asp).
 
 This library calculates:
 
@@ -14,10 +14,6 @@ This library calculates:
 - Slope between two waypoints as percentage `%`
 - Slope distribution summary: percentage range → distance `[%, m]`
 
-### 🗺️ Geographic Extents
-- Latitude range `[lat, lat]`
-- Longitude range `[lon, lon]`
-
 ### ⏱️ Time & Duration
 - Total duration `[h]`
 - Duration in motion / at rest `[h]`
@@ -25,6 +21,10 @@ This library calculates:
 
 ### 🚴 Speed & Movement
 - Max / average speed `[km/h]`
+
+### 🗺️ Geographic Extents
+- Latitude range `[lat, lat]`
+- Longitude range `[lon, lon]`
 
 ### 📍 Geopositions
 - Start / end / farthest position `[lon, lat]`
@@ -36,6 +36,7 @@ This library calculates:
 
 ## ✅ Requirements
 + Java 11+
++ Maven
 
 ## 📊 Example Output (`example.gpx`)
 

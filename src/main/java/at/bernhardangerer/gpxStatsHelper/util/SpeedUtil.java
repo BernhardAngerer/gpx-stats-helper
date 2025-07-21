@@ -2,9 +2,10 @@ package at.bernhardangerer.gpxStatsHelper.util;
 
 import at.bernhardangerer.gpxStatsHelper.model.SpeedMetrics;
 
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.ONE_THOUSAND;
+
 public final class SpeedUtil {
 
-    private static final int ONE_THOUSAND = 1000;
     private static final double THREE_THOUSAND_SIX_HUNDRED = 3600.0;
 
     private SpeedUtil() {

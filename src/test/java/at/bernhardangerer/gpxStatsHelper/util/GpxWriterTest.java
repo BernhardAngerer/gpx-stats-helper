@@ -47,7 +47,7 @@ class GpxWriterTest {
                     + "        </copyright>\n"
                     + "    </metadata>\n"
                     + "    <trk>\n"
-                    + "        <name>My short mountainbike tour</name>\n"
+                    + "        <name>My short tour</name>\n"
                     + "        <trkseg>\n"
                     + "            <trkpt lat=\"47.80743\" lon=\"12.378228\">\n"
                     + "                <ele>587</ele>\n"
@@ -84,7 +84,7 @@ class GpxWriterTest {
 
         final List<Track> tracks = gpx.getTrk();
         final Track track = new Track();
-        track.setName("My short mountainbike tour");
+        track.setName("My short tour");
         final List<TrackSegment> trackSegments = track.getTrkseg();
         final TrackSegment trackSegment = new TrackSegment();
         final List<Waypoint> waypoints = trackSegment.getTrkpt();
@@ -115,25 +115,31 @@ class GpxWriterTest {
     }
 
     @Test
-    void testToString() throws Exception {
+    void toStringSuccess() throws Exception {
         final String xml = GpxWriter.toString(gpx);
         assertNotNull(xml);
         assertEquals(canonicalizedGpxString, canonicalize(xml));
     }
 
     @Test
-    void testToFile() throws Exception {
-        final String fileName = "test.gpx";
+    void toFileSuccess() throws Exception {
+        final String fileName = "writerOutputFile.gpx";
+        final String pathName = "output/" + fileName;
         File file = null;
         try {
-            file = GpxWriter.toFile(gpx, fileName);
+            file = GpxWriter.toFile(gpx, pathName);
             assertNotNull(file);
             assertEquals(fileName, file.getName());
-            final String xml = Files.readString(Path.of(fileName));
+            final String xml = Files.readString(Path.of(pathName));
             assertEquals(canonicalizedGpxString, canonicalize(xml));
         } finally {
             if (file != null && file.exists()) {
                 file.delete();
+
+                final File parentDir = file.getParentFile();
+                if (parentDir != null && parentDir.exists() && parentDir.isDirectory()) {
+                    parentDir.delete();
+                }
             }
         }
     }

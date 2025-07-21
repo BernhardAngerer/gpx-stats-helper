@@ -27,7 +27,6 @@ import com.topografix.model.Waypoint;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
@@ -35,27 +34,28 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.CET;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.ESCAPE_DOUBLE_QUOTES;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.H;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.KM;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.KMPH;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.M;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.MSL;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.ONE_DECIMAL_FORMAT;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.ONE_HUNDRED;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.ONE_THOUSAND;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.SPACE;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.THREE;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.TWO_DECIMAL_FORMAT;
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.calcDateTimeDifference;
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.convertFromSeconds;
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.convertToSeconds;
 
 public final class Example {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
-    private static final DecimalFormat ONE_DECIMAL_FORMAT = new DecimalFormat("#.#");
-    private static final DecimalFormat TWO_DECIMAL_FORMAT = new DecimalFormat("#.##");
     private static final GeocodeService GEOCODE_SERVICE = new GeocodeService();
-    private static final String CET = "CET";
-    private static final String SPACE = " ";
-    private static final String H = "h";
-    private static final String M = "m";
-    private static final String KM = "km";
-    private static final String KMPH = "km/h";
-    private static final String MSL = "m.s.l.";
-    private static final int ONE_THOUSAND = 1000;
     private static final String GEOPOSITION = " - Geoposition";
-    private static final String ESCAPE_DOUBLE_QUOTES = "\"";
     private static final String LON = " / Lon ";
-    private static final int THREE = 3;
 
     private Example() {
     }
@@ -155,7 +155,7 @@ public final class Example {
             printPosition("Farthest Point" + GEOPOSITION, farthestPos, farthestWaypoint);
 
             final List<Waypoint> positivePeaks =
-                    ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
+                    ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
             final AtomicInteger counter = new AtomicInteger(0);
             positivePeaks.forEach(waypoint -> {
                 final GeocodeReverseModel pos = getGeocodeReverseModel(waypoint);
@@ -163,7 +163,7 @@ public final class Example {
             });
 
             final List<Waypoint> negativePeaks =
-                    ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(100));
+                    ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
             counter.set(0);
             negativePeaks.forEach(waypoint -> {
                 final GeocodeReverseModel pos = getGeocodeReverseModel(waypoint);

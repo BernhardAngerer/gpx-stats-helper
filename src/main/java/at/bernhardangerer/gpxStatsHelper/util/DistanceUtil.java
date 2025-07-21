@@ -2,9 +2,9 @@ package at.bernhardangerer.gpxStatsHelper.util;
 
 import com.topografix.model.Waypoint;
 
-public final class DistanceUtil {
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.ONE_THOUSAND;
 
-    private static final int ONE_THOUSAND = 1000;
+public final class DistanceUtil {
 
     private DistanceUtil() {
     }

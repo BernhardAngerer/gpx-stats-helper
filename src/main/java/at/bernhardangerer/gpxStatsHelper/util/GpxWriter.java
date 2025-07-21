@@ -23,45 +23,56 @@ public final class GpxWriter {
      * @throws RuntimeException iif writing to string was not possible
      */
     public static String toString(final Gpx gpx) {
-        if (gpx != null) {
-            try {
-                final JAXBElement<Gpx> rootElement = createGpxJaxbElement(gpx);
-                final Marshaller marshaller = createMarshaller();
-
-                final StringWriter writer = new StringWriter();
-                marshaller.marshal(rootElement, writer);
-
-                return writer.toString();
-            } catch (JAXBException e) {
-                throw new RuntimeException("Unable to write string from gpx object", e);
-            }
+        if (gpx == null) {
+            return null;
         }
-        return null;
+        ensureCreator(gpx);
+
+        try {
+            final JAXBElement<Gpx> rootElement = createGpxJaxbElement(gpx);
+            final Marshaller marshaller = createMarshaller();
+
+            final StringWriter writer = new StringWriter();
+            marshaller.marshal(rootElement, writer);
+
+            return writer.toString();
+        } catch (JAXBException e) {
+            throw new RuntimeException("Unable to write string from gpx object", e);
+        }
     }
 
     /**
      * Writes Gpx object into a File.
      *
      * @param gpx
-     * @param fileName
+     * @param pathName
      * @return Gpx File
      * @throws RuntimeException if writing to file was not possible
      */
-    public static File toFile(final Gpx gpx, final String fileName) {
-        if (gpx != null && fileName != null) {
-            try {
-                final JAXBElement<Gpx> rootElement = createGpxJaxbElement(gpx);
-                final Marshaller marshaller = createMarshaller();
-
-                final File gpxFile = new File(fileName);
-                marshaller.marshal(rootElement, gpxFile);
-
-                return gpxFile;
-            } catch (JAXBException e) {
-                throw new RuntimeException("Unable to write to file from gpx object", e);
-            }
+    public static File toFile(final Gpx gpx, final String pathName) {
+        if (gpx == null || pathName == null) {
+            return null;
         }
-        return null;
+        ensureCreator(gpx);
+
+        try {
+            // Ensure parent directories exist
+            final File tempFile = new File(pathName);
+            final File parentDir = tempFile.getParentFile();
+            if (parentDir != null && !parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+
+            final JAXBElement<Gpx> rootElement = createGpxJaxbElement(gpx);
+            final Marshaller marshaller = createMarshaller();
+
+            final File gpxFile = new File(pathName);
+            marshaller.marshal(rootElement, gpxFile);
+
+            return gpxFile;
+        } catch (JAXBException e) {
+            throw new RuntimeException("Unable to write to file from gpx object", e);
+        }
     }
 
     private static Marshaller createMarshaller() throws JAXBException {
@@ -73,6 +84,12 @@ public final class GpxWriter {
                 "http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
         );
         return marshaller;
+    }
+
+    private static void ensureCreator(Gpx gpx) {
+        if (gpx.getCreator() == null || gpx.getCreator().isEmpty()) {
+            gpx.setCreator("gpx-stats-helper");
+        }
     }
 
     private static JAXBElement<Gpx> createGpxJaxbElement(Gpx gpx) {

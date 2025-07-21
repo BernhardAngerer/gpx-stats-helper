@@ -2,9 +2,9 @@ package at.bernhardangerer.gpxStatsHelper.util;
 
 import com.topografix.model.Waypoint;
 
-public final class SlopeUtil {
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.ONE_HUNDRED;
 
-    private static final int ONE_HUNDRED = 100;
+public final class SlopeUtil {
 
     private SlopeUtil() {
     }
