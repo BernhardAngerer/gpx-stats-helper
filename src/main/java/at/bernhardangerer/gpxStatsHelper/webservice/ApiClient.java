@@ -17,6 +17,10 @@ public final class ApiClient {
         this.client = HttpClient.newHttpClient();
     }
 
+    ApiClient(HttpClient client) {
+        this.client = client;
+    }
+
     /**
      * Do an HTTP request to the provided endpoint URI.
      *
@@ -30,7 +34,7 @@ public final class ApiClient {
         return send(HttpRequest.newBuilder().uri(uri).build());
     }
 
-    private String send(final HttpRequest request) throws IOException, InterruptedException, WebserviceCallException {
+    public String send(final HttpRequest request) throws IOException, InterruptedException, WebserviceCallException {
         final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == HttpURLConnection.HTTP_OK) {
             return response.body();
