@@ -1,0 +1,28 @@
+{
+  "place_id" : 63210908,
+  "licence" : "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+  "osm_type" : "way",
+  "osm_id" : 78535426,
+  "lat" : "47.3918156",
+  "lon" : "11.2664935",
+  "class" : "building",
+  "type" : "train_station",
+  "place_rank" : 30,
+  "importance" : 5.377965972376619E-5,
+  "addresstype" : "building",
+  "name" : "Bahnhof Scharnitz",
+  "display_name" : "Bahnhof Scharnitz, 63, Bahnhofstraße, Scharnitz, Bezirk Innsbruck-Land, Tirol, 6108, Österreich",
+  "address" : {
+    "building" : "Bahnhof Scharnitz",
+    "house_number" : "63",
+    "road" : "Bahnhofstraße",
+    "village" : "Scharnitz",
+    "county" : "Bezirk Innsbruck-Land",
+    "state" : "Tirol",
+    "ISO3166-2-lvl4" : "AT-7",
+    "postcode" : "6108",
+    "country" : "Österreich",
+    "country_code" : "at"
+  },
+  "boundingbox" : [ "47.3915449", "47.3920891", "11.2663950", "11.2666557" ]
+}

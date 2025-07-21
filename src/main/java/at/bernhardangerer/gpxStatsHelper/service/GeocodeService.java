@@ -26,6 +26,10 @@ public final class GeocodeService {
         this.client = new ApiClient();
     }
 
+    GeocodeService(ApiClient client) {
+        this.client = client;
+    }
+
     /**
      * Simple wrapper to return the json string representation of the provided position.
      *
