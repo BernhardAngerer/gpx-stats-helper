@@ -122,6 +122,16 @@ class GpxWriterTest {
     }
 
     @Test
+    void toStringWithSimplestGpxSuccess() throws Exception {
+        final String canonicalizedGpxString = "<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" "
+                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" creator=\"gpx-stats-helper\" "
+                + "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\"></gpx>";
+        final String xml = GpxWriter.toString(new Gpx());
+        assertNotNull(xml);
+        assertEquals(canonicalizedGpxString, canonicalize(xml));
+    }
+
+    @Test
     void toFileSuccess() throws Exception {
         final String fileName = "writerOutputFile.gpx";
         final String pathName = "output/" + fileName;
