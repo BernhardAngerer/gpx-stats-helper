@@ -18,7 +18,6 @@ This library enables developers to:
 - Lowest / highest point `[m]`
 - Slope between two waypoints as percentage `%`
 - Slope distribution summary: percentage range → distance `[%, m]`
-- Positive and negative elevation peaks `[Waypoint]`
 
 ### ⏱️ Time & Duration
 - Total duration `[h]`
