@@ -128,4 +128,34 @@ public final class WaypointUtil {
         return wp;
     }
 
+    /**
+     * Creates a {@link Waypoint} with the specified latitude, longitude and elevation.
+     *
+     * @param lat  the latitude in decimal degrees
+     * @param lon  the longitude in decimal degrees
+     * @param ele  the elevation in meters
+     * @return a {@code Waypoint} initialized with the given values
+     */
+    public static Waypoint createWaypoint(double lat, double lon, double ele) {
+        return createWaypoint(lat, lon, ele, null);
+    }
+
+    /**
+     * Creates a {@link Waypoint} with the specified latitude, longitude, elevation, and timestamp.
+     *
+     * @param lat  the latitude in decimal degrees
+     * @param lon  the longitude in decimal degrees
+     * @param ele  the elevation in meters
+     * @param time the timestamp of the waypoint
+     * @return a {@code Waypoint} initialized with the given values
+     */
+    public static Waypoint createWaypoint(double lat, double lon, double ele, LocalDateTime time) {
+        final Waypoint wp = new Waypoint();
+        wp.setLat(BigDecimal.valueOf(lat));
+        wp.setLon(BigDecimal.valueOf(lon));
+        wp.setEle(BigDecimal.valueOf(ele));
+        wp.setTime(time);
+        return wp;
+    }
+
 }
