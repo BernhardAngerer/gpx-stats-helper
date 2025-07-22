@@ -18,13 +18,14 @@ public final class GpxWriter {
     /**
      * Writes Gpx object into a String.
      *
-     * @param gpx
+     * @param gpx a {@code Gpx} object
      * @return Gpx string
-     * @throws RuntimeException iif writing to string was not possible
+     * @throws RuntimeException if writing to string was not possible
+     * @throws IllegalArgumentException if the gpx object is null
      */
     public static String toString(final Gpx gpx) {
         if (gpx == null) {
-            return null;
+            throw new IllegalArgumentException("gpx object must not be null");
         }
         ensureCreator(gpx);
 
@@ -44,14 +45,15 @@ public final class GpxWriter {
     /**
      * Writes Gpx object into a File.
      *
-     * @param gpx
-     * @param pathName
+     * @param gpx a {@code Gpx} object
+     * @param pathName String
      * @return Gpx File
      * @throws RuntimeException if writing to file was not possible
+     * @throws IllegalArgumentException if the gpx object is null, or pathName is null or empty
      */
     public static File toFile(final Gpx gpx, final String pathName) {
-        if (gpx == null || pathName == null) {
-            return null;
+        if (gpx == null || pathName == null || pathName.isEmpty()) {
+            throw new IllegalArgumentException("gpx object must not be null, or pathName must not be null or empty");
         }
         ensureCreator(gpx);
 

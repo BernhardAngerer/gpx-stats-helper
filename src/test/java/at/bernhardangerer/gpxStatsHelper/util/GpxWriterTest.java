@@ -26,6 +26,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class GpxWriterTest {
 
@@ -119,6 +120,11 @@ class GpxWriterTest {
         final String xml = GpxWriter.toString(gpx);
         assertNotNull(xml);
         assertEquals(canonicalizedGpxString, canonicalize(xml));
+    }
+
+    @Test
+    void toStringFails() {
+        assertThrows(IllegalArgumentException.class, () -> GpxWriter.toString(null));
     }
 
     @Test

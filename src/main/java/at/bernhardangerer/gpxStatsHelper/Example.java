@@ -26,14 +26,12 @@ import com.topografix.model.Gpx;
 import com.topografix.model.Track;
 import com.topografix.model.Waypoint;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static at.bernhardangerer.gpxStatsHelper.util.Constants.CET;
@@ -69,10 +67,10 @@ public final class Example {
      */
     @SuppressWarnings({"checkstyle:UncommentedMain", "checkstyle:MultipleStringLiterals", "checkstyle:AvoidEscapedUnicodeCharacters"})
     public static void main(final String[] args) {
-        final File file = new File(Objects.requireNonNull(
-                Example.class.getClassLoader().getResource("example/example1.gpx")).getFile());
-        final Gpx gpx = GpxReader.fromFile(file);
+        final String pathName = "example/example1.gpx";
+        final Gpx gpx = GpxReader.fromFile(pathName);
 
+        System.out.println("File: \"" + pathName + ESCAPE_DOUBLE_QUOTES);
         if (gpx.getMetadata().getName() != null) {
             System.out.println("GPX name: \"" + gpx.getMetadata().getName() + ESCAPE_DOUBLE_QUOTES);
         }
