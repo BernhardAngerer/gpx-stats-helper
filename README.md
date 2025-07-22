@@ -47,7 +47,7 @@ This library enables developers to:
 
 ### 📥 Read GPX object from file
 ```java
-Gpx gpx = GpxReader.fromFile("example/example1.gpx").getTrk().stream()
+GpxReader.fromFile("example/example1.gpx").getTrk().stream()
         .flatMap(track -> track.getTrkseg().stream())
         .flatMap(trackSegment -> trackSegment.getTrkpt().stream())
         .forEach(waypoint -> System.out.println(formatWaypoint(waypoint)));
