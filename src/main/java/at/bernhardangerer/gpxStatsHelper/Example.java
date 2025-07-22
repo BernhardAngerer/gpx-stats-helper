@@ -17,6 +17,7 @@ import at.bernhardangerer.gpxStatsHelper.util.GeocodeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GeographicExtentUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GpxReader;
 import at.bernhardangerer.gpxStatsHelper.util.SlopeCalculator;
+import at.bernhardangerer.gpxStatsHelper.util.SlopeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedAvgCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedMaxCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.WaypointUtil;
@@ -65,7 +66,7 @@ public final class Example {
      *
      * @param args optional commandLine arguments
      */
-    @SuppressWarnings({"checkstyle:UncommentedMain", "checkstyle:MultipleStringLiterals"})
+    @SuppressWarnings({"checkstyle:UncommentedMain", "checkstyle:MultipleStringLiterals", "checkstyle:AvoidEscapedUnicodeCharacters"})
     public static void main(final String[] args) {
         final File file = new File(Objects.requireNonNull(
                 Example.class.getClassLoader().getResource("example/example1.gpx")).getFile());
@@ -79,9 +80,11 @@ public final class Example {
             System.out.println("\n### Track Nr. " + count
                     + (track.getName() != null ? " - \"" + track.getName() + ESCAPE_DOUBLE_QUOTES : "") + " ###");
 
+            System.out.println("\n\uD83E\uDDED General Track Info");
             final long numberOfWaypoints = WaypointUtil.countWaypoints(track);
             System.out.println("Number Of Waypoints: " + numberOfWaypoints);
 
+            System.out.println("\n\uD83D\uDCCF Distance & Elevation");
             final AscentDescentPair distance = DistanceCalculator.fromTrack(track);
             final double totalDistance = distance.getAscent().doubleValue() + distance.getDescent().doubleValue();
             System.out.println("Total Distance: " + TWO_DECIMAL_FORMAT.format(totalDistance / ONE_THOUSAND) + SPACE + KM);
@@ -91,35 +94,51 @@ public final class Example {
                     + TWO_DECIMAL_FORMAT.format(distance.getDescent().doubleValue() / ONE_THOUSAND) + SPACE + KM);
 
             final AscentDescentPair elevation = ElevationCalculator.fromTrack(track);
-            System.out.println("Ascent: " + elevation.getAscent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
-            System.out.println("Descent: " + elevation.getDescent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
+            System.out.println("Ascent Elevation: " + elevation.getAscent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
+            System.out.println("Descent Elevation: " + elevation.getDescent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
 
             final ElevationRange range = ElevationRangeCalculator.fromTrack(track);
 
             final Waypoint highestWaypoint = range.getHighest();
             System.out.println("Highest Point: "
                     + highestWaypoint.getEle().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
-            final GeocodeReverseModel highestGeoposition = getGeocodeReverseModel(highestWaypoint);
-            printPosition("Highest Point" + GEOPOSITION, highestGeoposition, highestWaypoint);
-
             final Waypoint lowestWaypoint = range.getLowest();
             System.out.println("Lowest Point: "
                     + lowestWaypoint.getEle().setScale(0, RoundingMode.HALF_UP) + SPACE + MSL);
-            final GeocodeReverseModel lowestGeoposition = getGeocodeReverseModel(lowestWaypoint);
-            printPosition("Lowest Point" + GEOPOSITION, lowestGeoposition, lowestWaypoint);
 
+            final Waypoint firstWaypoint = WaypointUtil.findFirstWaypoint(track);
+            final Waypoint lastWaypoint = WaypointUtil.findLastWaypoint(track);
+            final Double slope = SlopeUtil.calcSlopePercent(firstWaypoint, lastWaypoint);
+            System.out.println("Slope between start and end point: " + ONE_DECIMAL_FORMAT.format(slope) + " %");
+
+            final int percentageStep = 10;
+            final Map<Integer, Double> percentageStepMap =
+                    SlopeCalculator.fromWaypointList(track.getTrkseg().get(0).getTrkpt(), percentageStep, StepRoundingMode.DOWN);
+            percentageStepMap.entrySet().stream()
+                    .sorted(Map.Entry.<Integer, Double>comparingByKey().reversed())
+                    .forEach(entry -> System.out.println("Slope " + entry.getKey() + " to " + (entry.getKey() + percentageStep) + " % -> "
+                            + TWO_DECIMAL_FORMAT.format(entry.getValue() / ONE_THOUSAND) + SPACE + KM));
+
+            final List<Waypoint> positivePeaks =
+                    ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
+            final AtomicInteger counter = new AtomicInteger(0);
+            positivePeaks.forEach(waypoint -> {
+                System.out.println("Positive Peak " + counter.incrementAndGet() + ": Lat " + waypoint.getLat() + LON + waypoint.getLon());
+            });
+
+            final List<Waypoint> negativePeaks =
+                    ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
+            counter.set(0);
+            negativePeaks.forEach(waypoint -> {
+                System.out.println("Negative Peak " + counter.incrementAndGet() + ": Lat " + waypoint.getLat() + LON + waypoint.getLon());
+            });
+
+            System.out.println("\n\uD83D\uDDFA\uFE0F Geographic Extents");
             final BoundingBox boundingBox = GeographicExtentUtil.findBounding(track);
             System.out.println("Latitude Range: " + boundingBox.getMinLat() + " => " + boundingBox.getMaxLat());
             System.out.println("Longitude Range: " + boundingBox.getMinLon() + " => " + boundingBox.getMaxLon());
 
-            final Waypoint firstWaypoint = WaypointUtil.findFirstWaypoint(track);
-            final Waypoint lastWaypoint = WaypointUtil.findLastWaypoint(track);
-
-            System.out.println("Start Time: " + DATE_TIME_FORMATTER.format(
-                    DateTimeUtil.convertFromUtcTime(firstWaypoint.getTime(), CET)) + SPACE + H);
-            System.out.println("End Time: " + DATE_TIME_FORMATTER.format(
-                    DateTimeUtil.convertFromUtcTime(lastWaypoint.getTime(), CET)) + SPACE + H);
-
+            System.out.println("\n⏱\uFE0F Time & Duration");
             final DateTimeSegments durationTotal =
                     calcDateTimeDifference(firstWaypoint.getTime(), lastWaypoint.getTime());
             System.out.println("Total Duration: " + durationTotal.format() + SPACE + H);
@@ -130,15 +149,26 @@ public final class Example {
             final long durationAtRest = convertToSeconds(durationTotal) - durationInMotion;
             System.out.println("Duration At Rest: " + convertFromSeconds(durationAtRest).format() + SPACE + H);
 
+            System.out.println("Start Time: " + DATE_TIME_FORMATTER.format(
+                    DateTimeUtil.convertFromUtcTime(firstWaypoint.getTime(), CET)) + SPACE + H);
+            System.out.println("End Time: " + DATE_TIME_FORMATTER.format(
+                    DateTimeUtil.convertFromUtcTime(lastWaypoint.getTime(), CET)) + SPACE + H);
+
+            System.out.println("\n\uD83D\uDEB4 Speed & Movement");
             final Double speedMax = SpeedMaxCalculator.fromTrack(track);
             System.out.println("Maximum Speed: " + ONE_DECIMAL_FORMAT.format(speedMax) + SPACE + KMPH);
 
             final Double averageSpeed = SpeedAvgCalculator.fromTrack(track);
             System.out.println("Average Speed: " + ONE_DECIMAL_FORMAT.format(averageSpeed) + SPACE + KMPH);
 
+            System.out.println("\n\uD83D\uDCCD Geopositions");
             System.out.println("Start Position: Lat " + firstWaypoint.getLat() + LON + firstWaypoint.getLon());
             System.out.println("End Position: Lat " + lastWaypoint.getLat() + LON + lastWaypoint.getLon());
 
+            final Waypoint farthestWaypoint = WaypointUtil.findFarthestWaypoint(firstWaypoint, track);
+            System.out.println("Farthest Point: Lat " + farthestWaypoint.getLat() + LON + farthestWaypoint.getLon());
+
+            System.out.println("\n\uD83D\uDDE3\uFE0F Geolocation Metadata");
             final GeocodeReverseModel startPos = getGeocodeReverseModel(firstWaypoint);
             if (GeocodeUtil.isBounded(lastWaypoint.getLat().doubleValue(),
                     lastWaypoint.getLon().doubleValue(), startPos.getBoundingBox()[0],
@@ -149,34 +179,6 @@ public final class Example {
                 final GeocodeReverseModel endPos = getGeocodeReverseModel(lastWaypoint);
                 printPosition("End" + GEOPOSITION, endPos, lastWaypoint);
             }
-
-            final Waypoint farthestWaypoint = WaypointUtil.findFarthestWaypoint(firstWaypoint, track);
-            final GeocodeReverseModel farthestPos = getGeocodeReverseModel(farthestWaypoint);
-            printPosition("Farthest Point" + GEOPOSITION, farthestPos, farthestWaypoint);
-
-            final List<Waypoint> positivePeaks =
-                    ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
-            final AtomicInteger counter = new AtomicInteger(0);
-            positivePeaks.forEach(waypoint -> {
-                final GeocodeReverseModel pos = getGeocodeReverseModel(waypoint);
-                printPosition("Positive Peak " + counter.incrementAndGet() + GEOPOSITION, pos, waypoint);
-            });
-
-            final List<Waypoint> negativePeaks =
-                    ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
-            counter.set(0);
-            negativePeaks.forEach(waypoint -> {
-                final GeocodeReverseModel pos = getGeocodeReverseModel(waypoint);
-                printPosition("Negative Peak " + counter.incrementAndGet() + GEOPOSITION, pos, waypoint);
-            });
-
-            final int percentageStep = 10;
-            final Map<Integer, Double> percentageStepMap =
-                    SlopeCalculator.fromWaypointList(track.getTrkseg().get(0).getTrkpt(), percentageStep, StepRoundingMode.DOWN);
-            percentageStepMap.entrySet().stream()
-                    .sorted(Map.Entry.<Integer, Double>comparingByKey().reversed())
-                    .forEach(entry -> System.out.println("Slope " + entry.getKey() + " to " + (entry.getKey() + percentageStep) + " % -> "
-                            + TWO_DECIMAL_FORMAT.format(entry.getValue() / ONE_THOUSAND) + SPACE + KM));
 
             count++;
         }
