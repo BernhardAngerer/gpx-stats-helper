@@ -32,8 +32,8 @@ This library enables developers to:
 - Longitude range `[lon, lon]`
 
 ### 📍 Geopositions
-- Start / end / farthest position `[lon, lat]`
-- Positive and negative elevation peak positions `[lon, lat]`
+- Start / end / farthest position `[lon, lat, m]`
+- Positive and negative elevation peak positions `[lon, lat, m]`
 
 ### 🗣️ Geolocation Metadata
 - Description of any geo-position  
