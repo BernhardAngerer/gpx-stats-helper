@@ -6,8 +6,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-final class ElevationPeakUtilFixture {
-    private ElevationPeakUtilFixture() {
+final class ElevationWaypointFixture {
+
+    private ElevationWaypointFixture() {
     }
 
     public static List<Waypoint> getWaypointsDownOnlySmoothStartSmoothEnd() {

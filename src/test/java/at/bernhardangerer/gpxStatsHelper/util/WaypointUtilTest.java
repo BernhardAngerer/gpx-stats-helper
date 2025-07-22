@@ -1,10 +1,13 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
 import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static at.bernhardangerer.gpxStatsHelper.util.LocalDateTimeAdapter.DATE_TIME_FORMATTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -75,5 +78,95 @@ class WaypointUtilTest {
 
         last = WaypointUtil.findLastWaypoint(new Track());
         assertNull(last);
+    }
+
+    @Test
+    void testFindFarthestWaypointReturnsCorrectWaypoint() {
+        final Waypoint reference = new Waypoint();
+        reference.setLat(BigDecimal.valueOf(47.80743));
+        reference.setLon(BigDecimal.valueOf(12.378228));
+        reference.setEle(BigDecimal.valueOf(587));
+
+        final Waypoint near = new Waypoint();
+        near.setLat(BigDecimal.valueOf(47.807343));
+        near.setLon(BigDecimal.valueOf(12.378138));
+        near.setEle(BigDecimal.valueOf(588));
+
+        final Waypoint far = new Waypoint();
+        far.setLat(BigDecimal.valueOf(47.807343));
+        far.setLon(BigDecimal.valueOf(12.378000));
+        far.setEle(BigDecimal.valueOf(589));
+
+        final TrackSegment segment = new TrackSegment();
+        segment.getTrkpt().addAll(List.of(near, far));
+
+        final Track track = new Track();
+        track.getTrkseg().add(segment);
+
+        final Waypoint result = WaypointUtil.findFarthestWaypoint(reference, track);
+
+        assertNotNull(result);
+        assertEquals(far.getLat(), result.getLat());
+        assertEquals(far.getLon(), result.getLon());
+    }
+
+    @Test
+    void testFindFarthestWaypointNullReferenceReturnsNull() {
+        final Track track = new Track();
+        track.getTrkseg().add(new TrackSegment());
+        assertNull(WaypointUtil.findFarthestWaypoint(null, track));
+    }
+
+    @Test
+    void testFindFarthestWaypointNullTrackReturnsNull() {
+        final Waypoint reference = new Waypoint();
+        reference.setLat(BigDecimal.valueOf(47.80743));
+        reference.setLon(BigDecimal.valueOf(12.378228));
+        reference.setEle(BigDecimal.valueOf(587));
+
+        assertNull(WaypointUtil.findFarthestWaypoint(reference, null));
+    }
+
+    @Test
+    void testCountWaypointsReturnsCorrectCount() {
+        final Waypoint waypoint1 = new Waypoint();
+        waypoint1.setLat(BigDecimal.valueOf(47.80743));
+        waypoint1.setLon(BigDecimal.valueOf(12.378228));
+        waypoint1.setEle(BigDecimal.valueOf(587));
+
+        final Waypoint waypoint2 = new Waypoint();
+        waypoint2.setLat(BigDecimal.valueOf(47.807343));
+        waypoint2.setLon(BigDecimal.valueOf(12.378138));
+        waypoint2.setEle(BigDecimal.valueOf(588));
+
+        final Waypoint waypoint3 = new Waypoint();
+        waypoint3.setLat(BigDecimal.valueOf(47.807343));
+        waypoint3.setLon(BigDecimal.valueOf(12.378000));
+        waypoint3.setEle(BigDecimal.valueOf(589));
+
+        final TrackSegment seg1 = new TrackSegment();
+        seg1.getTrkpt().addAll(List.of(waypoint1, waypoint2));
+
+        final TrackSegment seg2 = new TrackSegment();
+        seg2.getTrkpt().add(waypoint3);
+
+        final Track track = new Track();
+        track.getTrkseg().addAll(List.of(seg1, seg2));
+
+        final long count = WaypointUtil.countWaypoints(track);
+
+        assertEquals(3, count);
+    }
+
+    @Test
+    void testCountWaypointsNullTrackReturnsZero() {
+        assertEquals(0, WaypointUtil.countWaypoints(null));
+    }
+
+    @Test
+    void testCountWaypointsEmptyTrackReturnsZero() {
+        final Track track = new Track();
+        track.getTrkseg().addAll(List.of());
+        assertEquals(0, WaypointUtil.countWaypoints(track));
     }
 }
