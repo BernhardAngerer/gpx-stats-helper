@@ -69,9 +69,6 @@ Slope 0 to 10 % -> 15,3 km
 Slope -10 to 0 % -> 5 km
 Slope -20 to -10 % -> 3,66 km
 Slope -30 to -20 % -> 0,41 km
-Positive Peak 1: Lat 47.754635 / Lon 12.355498
-Negative Peak 1: Lat 47.80743 / Lon 12.378228
-Negative Peak 2: Lat 47.807049 / Lon 12.378118
 
 🗺️ Geographic Extents
 Latitude Range: 47.754356 => 47.80743
@@ -92,6 +89,9 @@ Average Speed: 11,7 km/h
 Start Position: Lat 47.80743 / Lon 12.378228
 End Position: Lat 47.807346 / Lon 12.378055
 Farthest Point: Lat 47.754356 / Lon 12.355104
+Positive Peak 1: Lat 47.754635 / Lon 12.355498
+Negative Peak 1: Lat 47.80743 / Lon 12.378228
+Negative Peak 2: Lat 47.807049 / Lon 12.378118
 
 🗣️ Geolocation Metadata
 Start = End - Geoposition: Rottauer Straße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland / URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.80743&lon=12.378228&zoom=18&layer=poi

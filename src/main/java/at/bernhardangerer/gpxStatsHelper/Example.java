@@ -119,20 +119,6 @@ public final class Example {
                     .forEach(entry -> System.out.println("Slope " + entry.getKey() + " to " + (entry.getKey() + percentageStep) + " % -> "
                             + TWO_DECIMAL_FORMAT.format(entry.getValue() / ONE_THOUSAND) + SPACE + KM));
 
-            final List<Waypoint> positivePeaks =
-                    ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
-            final AtomicInteger counter = new AtomicInteger(0);
-            positivePeaks.forEach(waypoint -> {
-                System.out.println("Positive Peak " + counter.incrementAndGet() + ": Lat " + waypoint.getLat() + LON + waypoint.getLon());
-            });
-
-            final List<Waypoint> negativePeaks =
-                    ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
-            counter.set(0);
-            negativePeaks.forEach(waypoint -> {
-                System.out.println("Negative Peak " + counter.incrementAndGet() + ": Lat " + waypoint.getLat() + LON + waypoint.getLon());
-            });
-
             System.out.println("\n\uD83D\uDDFA\uFE0F Geographic Extents");
             final BoundingBox boundingBox = GeographicExtentUtil.findBounding(track);
             System.out.println("Latitude Range: " + boundingBox.getMinLat() + " => " + boundingBox.getMaxLat());
@@ -164,9 +150,22 @@ public final class Example {
             System.out.println("\n\uD83D\uDCCD Geopositions");
             System.out.println("Start Position: Lat " + firstWaypoint.getLat() + LON + firstWaypoint.getLon());
             System.out.println("End Position: Lat " + lastWaypoint.getLat() + LON + lastWaypoint.getLon());
-
             final Waypoint farthestWaypoint = WaypointUtil.findFarthestWaypoint(firstWaypoint, track);
             System.out.println("Farthest Point: Lat " + farthestWaypoint.getLat() + LON + farthestWaypoint.getLon());
+
+            final List<Waypoint> positivePeaks =
+                    ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
+            final AtomicInteger counter = new AtomicInteger(0);
+            positivePeaks.forEach(waypoint -> {
+                System.out.println("Positive Peak " + counter.incrementAndGet() + ": Lat " + waypoint.getLat() + LON + waypoint.getLon());
+            });
+
+            final List<Waypoint> negativePeaks =
+                    ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
+            counter.set(0);
+            negativePeaks.forEach(waypoint -> {
+                System.out.println("Negative Peak " + counter.incrementAndGet() + ": Lat " + waypoint.getLat() + LON + waypoint.getLon());
+            });
 
             System.out.println("\n\uD83D\uDDE3\uFE0F Geolocation Metadata");
             final GeocodeReverseModel startPos = getGeocodeReverseModel(firstWaypoint);
