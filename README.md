@@ -86,12 +86,12 @@ Maximum Speed: 51,9 km/h
 Average Speed: 11,7 km/h
 
 📍 Geopositions
-Start Position: Lat 47.80743 / Lon 12.378228
-End Position: Lat 47.807346 / Lon 12.378055
-Farthest Point: Lat 47.754356 / Lon 12.355104
-Positive Peak 1: Lat 47.754635 / Lon 12.355498
-Negative Peak 1: Lat 47.80743 / Lon 12.378228
-Negative Peak 2: Lat 47.807049 / Lon 12.378118
+Start Position: Lat 47.80743, Lon 12.378228, Ele 587
+End Position: Lat 47.807346, Lon 12.378055, Ele 598
+Farthest Point: Lat 47.754356, Lon 12.355104, Ele 1546
+Positive Peak 1: Lat 47.754635, Lon 12.355498, Ele 1547
+Negative Peak 1: Lat 47.80743, Lon 12.378228, Ele 587
+Negative Peak 2: Lat 47.807049, Lon 12.378118, Ele 598
 
 🗣️ Geolocation Metadata
 Start = End - Geoposition: Lindenstraße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland

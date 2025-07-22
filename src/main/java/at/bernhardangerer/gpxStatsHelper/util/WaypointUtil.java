@@ -67,19 +67,34 @@ public final class WaypointUtil {
     }
 
     /**
-     * Count the number of waypoints of the track.
+     * Return coordinates and elevation formatted into a more readable string.
      *
-     * @param track
-     * @return number of waypoints
+     * @param waypoint
+     * @return formated as string
      */
-    public static long countWaypoints(final Track track) {
-        if (track != null && track.getTrkseg() != null && !track.getTrkseg().isEmpty()) {
-            return track.getTrkseg().stream()
-                    .mapToLong(trackSegment -> trackSegment.getTrkpt().size())
-                    .sum();
+    public static String formatWaypoint(final Waypoint waypoint) {
+        return formatWaypoint(waypoint, true);
+    }
+
+    /**
+     * Return coordinates formatted into a more readable string.
+     * Optional: Elevation
+     *
+     * @param waypoint
+     * @param withElevation
+     * @return formated as string
+     */
+    public static String formatWaypoint(final Waypoint waypoint, final boolean withElevation) {
+        if (waypoint != null) {
+            String coordinates = "Lat " + waypoint.getLat() + ", Lon " + waypoint.getLon();
+            if (withElevation && waypoint.getEle() != null) {
+                coordinates += ", Ele " + waypoint.getEle();
+            }
+
+            return coordinates;
         }
 
-        return 0;
+        return null;
     }
 
 }

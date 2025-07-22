@@ -20,6 +20,7 @@ import at.bernhardangerer.gpxStatsHelper.util.SlopeCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SlopeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedAvgCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedMaxCalculator;
+import at.bernhardangerer.gpxStatsHelper.util.TrackUtil;
 import at.bernhardangerer.gpxStatsHelper.util.WaypointUtil;
 import com.topografix.model.Gpx;
 import com.topografix.model.Track;
@@ -51,12 +52,12 @@ import static at.bernhardangerer.gpxStatsHelper.util.Constants.TWO_DECIMAL_FORMA
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.calcDateTimeDifference;
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.convertFromSeconds;
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.convertToSeconds;
+import static at.bernhardangerer.gpxStatsHelper.util.WaypointUtil.formatWaypoint;
 
 public final class Example {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
     private static final GeocodeService GEOCODE_SERVICE = new GeocodeService();
     private static final String GEOPOSITION = " - Geoposition";
-    private static final String LON = " / Lon ";
 
     private Example() {
     }
@@ -81,7 +82,7 @@ public final class Example {
                     + (track.getName() != null ? " - \"" + track.getName() + ESCAPE_DOUBLE_QUOTES : "") + " ###");
 
             System.out.println("\n\uD83E\uDDED General Track Info");
-            final long numberOfWaypoints = WaypointUtil.countWaypoints(track);
+            final long numberOfWaypoints = TrackUtil.countWaypoints(track);
             System.out.println("Number Of Waypoints: " + numberOfWaypoints);
 
             System.out.println("\n\uD83D\uDCCF Distance & Elevation");
@@ -148,23 +149,23 @@ public final class Example {
             System.out.println("Average Speed: " + ONE_DECIMAL_FORMAT.format(averageSpeed) + SPACE + KMPH);
 
             System.out.println("\n\uD83D\uDCCD Geopositions");
-            System.out.println("Start Position: Lat " + firstWaypoint.getLat() + LON + firstWaypoint.getLon());
-            System.out.println("End Position: Lat " + lastWaypoint.getLat() + LON + lastWaypoint.getLon());
+            System.out.println("Start Position: " + formatWaypoint(firstWaypoint));
+            System.out.println("End Position: " + formatWaypoint(lastWaypoint));
             final Waypoint farthestWaypoint = WaypointUtil.findFarthestWaypoint(firstWaypoint, track);
-            System.out.println("Farthest Point: Lat " + farthestWaypoint.getLat() + LON + farthestWaypoint.getLon());
+            System.out.println("Farthest Point: " + formatWaypoint(farthestWaypoint));
 
             final List<Waypoint> positivePeaks =
                     ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
             final AtomicInteger counter = new AtomicInteger(0);
             positivePeaks.forEach(waypoint -> {
-                System.out.println("Positive Peak " + counter.incrementAndGet() + ": Lat " + waypoint.getLat() + LON + waypoint.getLon());
+                System.out.println("Positive Peak " + counter.incrementAndGet() + ": " + formatWaypoint(waypoint));
             });
 
             final List<Waypoint> negativePeaks =
                     ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
             counter.set(0);
             negativePeaks.forEach(waypoint -> {
-                System.out.println("Negative Peak " + counter.incrementAndGet() + ": Lat " + waypoint.getLat() + LON + waypoint.getLon());
+                System.out.println("Negative Peak " + counter.incrementAndGet() + ": " + formatWaypoint(waypoint));
             });
 
             System.out.println("\n\uD83D\uDDE3\uFE0F Geolocation Metadata");
