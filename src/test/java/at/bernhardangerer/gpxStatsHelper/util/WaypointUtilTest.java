@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static at.bernhardangerer.gpxStatsHelper.util.LocalDateTimeAdapter.DATE_TIME_FORMATTER;
+import static at.bernhardangerer.gpxStatsHelper.util.WaypointUtil.createWaypoint;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -82,20 +83,9 @@ class WaypointUtilTest {
 
     @Test
     void testFindFarthestWaypointReturnsCorrectWaypoint() {
-        final Waypoint reference = new Waypoint();
-        reference.setLat(BigDecimal.valueOf(47.80743));
-        reference.setLon(BigDecimal.valueOf(12.378228));
-        reference.setEle(BigDecimal.valueOf(587));
-
-        final Waypoint near = new Waypoint();
-        near.setLat(BigDecimal.valueOf(47.807343));
-        near.setLon(BigDecimal.valueOf(12.378138));
-        near.setEle(BigDecimal.valueOf(588));
-
-        final Waypoint far = new Waypoint();
-        far.setLat(BigDecimal.valueOf(47.807343));
-        far.setLon(BigDecimal.valueOf(12.378000));
-        far.setEle(BigDecimal.valueOf(589));
+        final Waypoint reference = createWaypoint(47.80743, 12.378228, 587);
+        final Waypoint near = createWaypoint(47.807343, 12.378138, 588);
+        final Waypoint far = createWaypoint(47.807343, 12.378000, 589);
 
         final TrackSegment segment = new TrackSegment();
         segment.getTrkpt().addAll(List.of(near, far));
@@ -119,20 +109,14 @@ class WaypointUtilTest {
 
     @Test
     void testFindFarthestWaypointNullTrackReturnsNull() {
-        final Waypoint reference = new Waypoint();
-        reference.setLat(BigDecimal.valueOf(47.80743));
-        reference.setLon(BigDecimal.valueOf(12.378228));
-        reference.setEle(BigDecimal.valueOf(587));
+        final Waypoint reference = createWaypoint(47.80743, 12.378228, 587);
 
         assertNull(WaypointUtil.findFarthestWaypoint(reference, null));
     }
 
     @Test
     void formatWaypointWithElevation() {
-        final Waypoint waypoint = new Waypoint();
-        waypoint.setLat(BigDecimal.valueOf(47.123456));
-        waypoint.setLon(BigDecimal.valueOf(12.654321));
-        waypoint.setEle(BigDecimal.valueOf(512));
+        final Waypoint waypoint = createWaypoint(47.123456, 12.654321, 512);
 
         final String result = WaypointUtil.formatWaypoint(waypoint, true);
 
@@ -152,10 +136,7 @@ class WaypointUtilTest {
 
     @Test
     void formatWaypointWithoutElevation() {
-        final Waypoint waypoint = new Waypoint();
-        waypoint.setLat(BigDecimal.valueOf(47.123456));
-        waypoint.setLon(BigDecimal.valueOf(12.654321));
-        waypoint.setEle(BigDecimal.valueOf(512));
+        final Waypoint waypoint = createWaypoint(47.123456, 12.654321, 512);
 
         final String result = WaypointUtil.formatWaypoint(waypoint, false);
 

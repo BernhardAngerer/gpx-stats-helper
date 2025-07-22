@@ -17,13 +17,13 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static at.bernhardangerer.gpxStatsHelper.util.WaypointUtil.createWaypoint;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -92,25 +92,13 @@ class GpxWriterTest {
         trackSegments.add(trackSegment);
         final List<Waypoint> waypoints = trackSegment.getTrkpt();
 
-        final Waypoint waypoint1 = new Waypoint();
-        waypoint1.setLat(BigDecimal.valueOf(47.80743));
-        waypoint1.setLon(BigDecimal.valueOf(12.378228));
-        waypoint1.setEle(BigDecimal.valueOf(587));
-        waypoint1.setTime(LocalDateTime.of(2025, 4, 7, 16, 14, 16));
+        final Waypoint waypoint1 = createWaypoint(47.80743, 12.378228, 587, LocalDateTime.of(2025, 4, 7, 16, 14, 16));
         waypoints.add(waypoint1);
 
-        final Waypoint waypoint2 = new Waypoint();
-        waypoint2.setLat(BigDecimal.valueOf(47.807343));
-        waypoint2.setLon(BigDecimal.valueOf(12.378138));
-        waypoint2.setEle(BigDecimal.valueOf(588));
-        waypoint2.setTime(LocalDateTime.of(2025, 4, 7, 16, 14, 17));
+        final Waypoint waypoint2 = createWaypoint(47.807343, 12.378138, 588, LocalDateTime.of(2025, 4, 7, 16, 14, 17));
         waypoints.add(waypoint2);
 
-        final Waypoint waypoint3 = new Waypoint();
-        waypoint3.setLat(BigDecimal.valueOf(47.807343));
-        waypoint3.setLon(BigDecimal.valueOf(12.378000));
-        waypoint3.setEle(BigDecimal.valueOf(589));
-        waypoint3.setTime(LocalDateTime.of(2025, 4, 7, 16, 14, 18));
+        final Waypoint waypoint3 = createWaypoint(47.807343, 12.378000, 589, LocalDateTime.of(2025, 4, 7, 16, 14, 18));
         waypoints.add(waypoint3);
     }
 

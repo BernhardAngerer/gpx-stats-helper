@@ -4,10 +4,10 @@ import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
+import static at.bernhardangerer.gpxStatsHelper.util.WaypointUtil.createWaypoint;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -19,20 +19,9 @@ class SlopeUtilTest {
 
     @BeforeEach
     void init() {
-        final Waypoint waypoint1 = new Waypoint();
-        waypoint1.setLat(BigDecimal.valueOf(47.80743));
-        waypoint1.setLon(BigDecimal.valueOf(12.378228));
-        waypoint1.setEle(BigDecimal.valueOf(587));
-
-        final Waypoint waypoint2 = new Waypoint();
-        waypoint2.setLat(BigDecimal.valueOf(47.807343));
-        waypoint2.setLon(BigDecimal.valueOf(12.378138));
-        waypoint2.setEle(BigDecimal.valueOf(588));
-
-        final Waypoint waypoint3 = new Waypoint();
-        waypoint3.setLat(BigDecimal.valueOf(47.807343));
-        waypoint3.setLon(BigDecimal.valueOf(12.378000));
-        waypoint3.setEle(BigDecimal.valueOf(589));
+        final Waypoint waypoint1 = createWaypoint(47.80743, 12.378228, 587);
+        final Waypoint waypoint2 = createWaypoint(47.807343, 12.378138, 588);
+        final Waypoint waypoint3 = createWaypoint(47.807343, 12.378000, 589);
 
         waypoints = Arrays.asList(waypoint1, waypoint2, waypoint3);
     }

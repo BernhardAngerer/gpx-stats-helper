@@ -3,8 +3,7 @@ package at.bernhardangerer.gpxStatsHelper.util;
 import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-
+import static at.bernhardangerer.gpxStatsHelper.util.WaypointUtil.createWaypoint;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,10 +13,7 @@ class GeocodeUtilTest {
 
     @Test
     void testCreateOpenStreetMapUrlValidWaypointReturnsExpectedUrl() {
-        final Waypoint waypoint = new Waypoint();
-        waypoint.setLat(BigDecimal.valueOf(47.80743));
-        waypoint.setLon(BigDecimal.valueOf(12.378228));
-        waypoint.setEle(BigDecimal.valueOf(587));
+        final Waypoint waypoint = createWaypoint(47.80743, 12.378228, 587);
 
         final String url = GeocodeUtil.createOpenStreetMapUrl(waypoint);
 

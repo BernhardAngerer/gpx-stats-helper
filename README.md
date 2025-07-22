@@ -56,27 +56,16 @@ GpxReader.fromFile("example/example1.gpx").getTrk().stream()
 ### 💾 Write GPX object to file
 ```java
 Gpx gpx = new Gpx();
-List<Track> tracks = gpx.getTrk();
 Track track = new Track();
-tracks.add(track);
-List<TrackSegment> trackSegments = track.getTrkseg();
-TrackSegment trackSegment = new TrackSegment();
-trackSegments.add(trackSegment);
-List<Waypoint> waypoints = trackSegment.getTrkpt();
+TrackSegment segment = new TrackSegment();
 
-Waypoint waypoint1 = new Waypoint();
-waypoint1.setLat(BigDecimal.valueOf(47.80743));
-waypoint1.setLon(BigDecimal.valueOf(12.378228));
-waypoint1.setEle(BigDecimal.valueOf(587));
-waypoint1.setTime(LocalDateTime.of(2025, 4, 7, 16, 14, 16));
-waypoints.add(waypoint1);
+segment.getTrkpt().addAll(List.of(
+        createWaypoint(47.80743, 12.378228, 587, LocalDateTime.of(2025, 4, 7, 16, 14, 16)),
+        createWaypoint(47.807343, 12.378138, 588, LocalDateTime.of(2025, 4, 7, 16, 14, 17))
+));
 
-Waypoint waypoint2 = new Waypoint();
-waypoint2.setLat(BigDecimal.valueOf(47.807343));
-waypoint2.setLon(BigDecimal.valueOf(12.378138));
-waypoint2.setEle(BigDecimal.valueOf(588));
-waypoint2.setTime(LocalDateTime.of(2025, 4, 7, 16, 14, 17));
-waypoints.add(waypoint2);
+track.getTrkseg().add(segment);
+gpx.getTrk().add(track);
 
 File file = GpxWriter.toFile(gpx, "output/generatedFile.gpx");
 ```
