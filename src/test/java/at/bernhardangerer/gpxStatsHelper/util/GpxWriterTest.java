@@ -86,8 +86,10 @@ class GpxWriterTest {
         final List<Track> tracks = gpx.getTrk();
         final Track track = new Track();
         track.setName("My short tour");
+        tracks.add(track);
         final List<TrackSegment> trackSegments = track.getTrkseg();
         final TrackSegment trackSegment = new TrackSegment();
+        trackSegments.add(trackSegment);
         final List<Waypoint> waypoints = trackSegment.getTrkpt();
 
         final Waypoint waypoint1 = new Waypoint();
@@ -110,9 +112,6 @@ class GpxWriterTest {
         waypoint3.setEle(BigDecimal.valueOf(589));
         waypoint3.setTime(LocalDateTime.of(2025, 4, 7, 16, 14, 18));
         waypoints.add(waypoint3);
-
-        trackSegments.add(trackSegment);
-        tracks.add(track);
     }
 
     @Test
