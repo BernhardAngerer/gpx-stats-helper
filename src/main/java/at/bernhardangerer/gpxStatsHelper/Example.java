@@ -172,11 +172,14 @@ public final class Example {
             if (GeocodeUtil.isBounded(lastWaypoint.getLat().doubleValue(),
                     lastWaypoint.getLon().doubleValue(), startPos.getBoundingBox()[0],
                     startPos.getBoundingBox()[2], startPos.getBoundingBox()[1], startPos.getBoundingBox()[THREE])) {
-                printPosition("Start = End" + GEOPOSITION, startPos, firstWaypoint);
+                printPositionDescription("Start = End" + GEOPOSITION, startPos);
+                printPositionUrl("Start = End" + GEOPOSITION, firstWaypoint);
             } else {
-                printPosition("Start" + GEOPOSITION, startPos, firstWaypoint);
+                printPositionDescription("Start" + GEOPOSITION, startPos);
+                printPositionUrl("Start" + GEOPOSITION, firstWaypoint);
                 final GeocodeReverseModel endPos = getGeocodeReverseModel(lastWaypoint);
-                printPosition("End" + GEOPOSITION, endPos, lastWaypoint);
+                printPositionDescription("End" + GEOPOSITION, endPos);
+                printPositionUrl("End" + GEOPOSITION, lastWaypoint);
             }
 
             count++;
@@ -191,7 +194,11 @@ public final class Example {
         }
     }
 
-    private static void printPosition(String text, GeocodeReverseModel pos, Waypoint waypoint) {
-        System.out.println(text + ": " + pos.getDisplayName() + " / URL: " + GeocodeUtil.createOpenStreetMapUrl(waypoint));
+    private static void printPositionDescription(String text, GeocodeReverseModel pos) {
+        System.out.println(text + ": " + pos.getDisplayName());
+    }
+
+    private static void printPositionUrl(String text, Waypoint waypoint) {
+        System.out.println(text + " URL: " + GeocodeUtil.createOpenStreetMapUrl(waypoint));
     }
 }

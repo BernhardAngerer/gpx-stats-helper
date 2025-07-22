@@ -94,7 +94,8 @@ Negative Peak 1: Lat 47.80743 / Lon 12.378228
 Negative Peak 2: Lat 47.807049 / Lon 12.378118
 
 🗣️ Geolocation Metadata
-Start = End - Geoposition: Rottauer Straße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland / URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.80743&lon=12.378228&zoom=18&layer=poi
+Start = End - Geoposition: Lindenstraße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
+Start = End - Geoposition URL: https://nominatim.openstreetmap.org/ui/reverse.html?lat=47.80743&lon=12.378228&zoom=18&layer=poi
 ```
 
 ## 📦 Dependency (Maven / Gradle)
