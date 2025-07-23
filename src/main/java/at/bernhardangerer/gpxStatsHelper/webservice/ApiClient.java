@@ -22,24 +22,43 @@ public final class ApiClient {
     }
 
     /**
-     * Do an HTTP request to the provided endpoint URI.
+     * Sends an HTTP GET request to the given URI and returns the response body as a string.
      *
-     * @param uri
-     * @return String representation of the webservice call.
-     * @throws IOException
-     * @throws InterruptedException
-     * @throws WebserviceCallException
+     * @param uri the target URI for the HTTP request (must not be {@code null})
+     * @return the response body as a string if the request is successful (HTTP 200 OK)
+     * @throws IOException if an I/O error occurs when sending or receiving
+     * @throws InterruptedException if the operation is interrupted
+     * @throws WebserviceCallException if the response status code is not 200 (OK)
+     * @throws IllegalArgumentException if the URI is {@code null}
      */
     public String sendHttpRequest(final URI uri) throws IOException, InterruptedException, WebserviceCallException {
+        if (uri == null) {
+            throw new IllegalArgumentException("URI must not be null");
+        }
         return send(HttpRequest.newBuilder().uri(uri).build());
     }
 
+    /**
+     * Sends the given {@link HttpRequest} and returns the response body as a string.
+     *
+     * @param request the HTTP request to send (must not be {@code null})
+     * @return the response body as a string if the response code is 200 (OK)
+     * @throws IOException if an I/O error occurs
+     * @throws InterruptedException if the operation is interrupted
+     * @throws WebserviceCallException if the server responds with a non-200 status code
+     * @throws IllegalArgumentException if the request is {@code null}
+     */
     public String send(final HttpRequest request) throws IOException, InterruptedException, WebserviceCallException {
+        if (request == null) {
+            throw new IllegalArgumentException("HttpRequest must not be null");
+        }
+
         final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
         if (response.statusCode() == HttpURLConnection.HTTP_OK) {
             return response.body();
         } else {
-            throw new WebserviceCallException("Endpoint answered with status code " + response.statusCode());
+            throw new WebserviceCallException("Endpoint responded with status code " + response.statusCode());
         }
     }
 }

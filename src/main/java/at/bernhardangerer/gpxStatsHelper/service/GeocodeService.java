@@ -2,6 +2,7 @@ package at.bernhardangerer.gpxStatsHelper.service;
 
 import at.bernhardangerer.gpxStatsHelper.enumeration.OutputFormat;
 import at.bernhardangerer.gpxStatsHelper.exception.WebserviceCallException;
+import at.bernhardangerer.gpxStatsHelper.util.PropertyUtil;
 import at.bernhardangerer.gpxStatsHelper.webservice.ApiClient;
 import com.topografix.model.Waypoint;
 import org.apache.hc.core5.net.URIBuilder;
@@ -9,14 +10,12 @@ import org.apache.hc.core5.net.URIBuilder;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static at.bernhardangerer.gpxStatsHelper.util.PropertyUtil.loadValue;
-
 public final class GeocodeService {
 
     /**
      * API Documentation: https://nominatim.org/release-docs/develop/api/Overview/
      */
-    private static final String REVERSE_BASE_URL = loadValue("reverseBaseUrl");
+    private static final String REVERSE_BASE_URL = PropertyUtil.loadConfigValue("reverseBaseUrl");
     private static final String ZERO = "0";
     private static final String ONE = "1";
     private static final int EIGHTEEN = 18;
@@ -31,15 +30,16 @@ public final class GeocodeService {
     }
 
     /**
-     * Simple wrapper to return the json string representation of the provided position.
+     * Performs reverse geocoding for the specified latitude and longitude using the OpenStreetMap Nominatim API,
+     * and returns the result in JSON format.
      *
-     * @param lat latitude
-     * @param lon longitude
-     * @return String representation of the provided position
-     * @throws IOException
-     * @throws WebserviceCallException
-     * @throws InterruptedException
-     * @throws URISyntaxException
+     * @param lat the latitude value as a string
+     * @param lon the longitude value as a string
+     * @return a JSON string representing the reverse-geocoded location
+     * @throws IOException if an I/O error occurs
+     * @throws WebserviceCallException if the web service call fails or returns a non-successful status
+     * @throws InterruptedException if the operation is interrupted
+     * @throws URISyntaxException if the generated URI is invalid
      */
     public String reverseGeocodeAsJson(final String lat, final String lon)
             throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
@@ -47,14 +47,15 @@ public final class GeocodeService {
     }
 
     /**
-     * Simple wrapper to return the json string representation of the provided position from waypoint.
+     * Performs reverse geocoding using coordinates from the given {@link Waypoint},
+     * and returns the result in JSON format.
      *
-     * @param waypoint Waypoint
-     * @return String representation of the provided position
-     * @throws IOException
-     * @throws WebserviceCallException
-     * @throws InterruptedException
-     * @throws URISyntaxException
+     * @param waypoint the {@code Waypoint} object containing latitude and longitude (must not be {@code null})
+     * @return a JSON string representing the reverse-geocoded location
+     * @throws IOException if an I/O error occurs
+     * @throws WebserviceCallException if the web service call fails or returns a non-successful status
+     * @throws InterruptedException if the operation is interrupted
+     * @throws URISyntaxException if the generated URI is invalid
      */
     public String reverseGeocodeAsJson(final Waypoint waypoint)
             throws IOException, WebserviceCallException, InterruptedException, URISyntaxException {
@@ -63,22 +64,21 @@ public final class GeocodeService {
     }
 
     /**
-     * Return the string representation of the provided position
-     * using an API call to the openstreetmap nominatim servers.
+     * Executes a reverse geocoding request to the OpenStreetMap Nominatim API with advanced options.
      *
-     * @param lat latitude
-     * @param lon longitude
-     * @param outputFormat data format of the output
-     * @param zoomLevel from 0 (continent/sea) to 18 (building)
-     * @param addressDetails true for address details
-     * @param extraTags true for extra tags
-     * @param nameDetails true for name details
-     * @param polygonSvg true for SVG polygon
-     * @return String representation of the provided position
-     * @throws IOException
-     * @throws WebserviceCallException
-     * @throws InterruptedException
-     * @throws URISyntaxException
+     * @param lat the latitude as a string
+     * @param lon the longitude as a string
+     * @param outputFormat desired output format (e.g., {@code JSON}, {@code XML})
+     * @param zoomLevel level of detail (0 = continent, 18 = building)
+     * @param addressDetails if {@code true}, include address breakdown (e.g., street, city)
+     * @param extraTags if {@code true}, include additional tags such as website, opening hours
+     * @param nameDetails if {@code true}, include multilingual name details
+     * @param polygonSvg if {@code true}, return the location's shape as an SVG polygon
+     * @return a string representing the geocoded result, formatted according to the selected output format
+     * @throws IOException if an I/O error occurs
+     * @throws WebserviceCallException if the web service call fails or returns a non-successful status
+     * @throws InterruptedException if the operation is interrupted
+     * @throws URISyntaxException if the generated URI is invalid
      */
     @SuppressWarnings("checkstyle:ParameterNumber")
     public String reverseGeocode(final String lat, final String lon, final OutputFormat outputFormat, final int zoomLevel,

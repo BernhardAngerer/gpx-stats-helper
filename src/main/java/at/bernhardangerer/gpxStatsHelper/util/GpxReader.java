@@ -13,11 +13,11 @@ public final class GpxReader {
     }
 
     /**
-     * Reads a GPX string and converts it into a {@code Gpx} object.
+     * Parses a GPX-formatted XML string and converts it into a {@code Gpx} object.
      *
-     * @param gpx String
-     * @return a {@code Gpx} object parsed from the string
-     * @throws IllegalArgumentException if the gpx string is null or empty
+     * @param gpx the GPX XML content as a string (must not be {@code null} or empty)
+     * @return a {@code Gpx} object representing the parsed data
+     * @throws IllegalArgumentException if the input string is {@code null} or empty
      */
     public static Gpx fromString(final String gpx) {
         if (gpx == null || gpx.isEmpty()) {
@@ -27,11 +27,11 @@ public final class GpxReader {
     }
 
     /**
-     * Loads a GPX file and converts it into a {@code Gpx} object.
+     * Reads a GPX file from disk and converts it into a {@code Gpx} object.
      *
-     * @param gpxFile File
-     * @return a {@code Gpx} object parsed from the file
-     * @throws IllegalArgumentException if the file is null
+     * @param gpxFile the file containing GPX XML data (must not be {@code null})
+     * @return a {@code Gpx} object representing the parsed data
+     * @throws IllegalArgumentException if the file is {@code null}
      */
     public static Gpx fromFile(final File gpxFile) {
         if (gpxFile == null) {
@@ -41,11 +41,14 @@ public final class GpxReader {
     }
 
     /**
-     * Loads a GPX file from the given classpath-relative path and converts it into a {@code Gpx} object.
+     * Loads a GPX file from the classpath using the given relative path and parses it into a {@code Gpx} object.
+     * <p>
+     * This method expects the file to be available as a resource on the classpath
+     * (e.g. {@code src/main/resources/example/example.gpx}).
      *
-     * @param pathName the classpath-relative path to the GPX file (e.g. "example/example.gpx")
-     * @return a {@code Gpx} object parsed from the file
-     * @throws IllegalArgumentException if the pathName is null or empty or the resource is not found
+     * @param pathName the classpath-relative path to the GPX file (e.g. {@code "example/example.gpx"})
+     * @return a {@code Gpx} object parsed from the specified file
+     * @throws IllegalArgumentException if {@code pathName} is {@code null}, empty, or the resource cannot be found
      */
     public static Gpx fromFile(final String pathName) {
         if (pathName == null || pathName.isEmpty()) {
