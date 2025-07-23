@@ -1,3 +1,5 @@
+[![Maven Package](https://github.com/BernhardAngerer/gpx-stats-helper/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/BernhardAngerer/gpx-stats-helper/actions/workflows/maven-publish.yml)
+
 # GPX Stats Helper Library
 
 A lightweight Java library for **reading, writing, manipulating, and analyzing statistics** from GPX 1.1 files using the official [TopoGrafix XSD schema](https://www.topografix.com/gpx.asp).
@@ -127,4 +129,4 @@ Start = End - Geoposition URL: https://nominatim.openstreetmap.org/ui/reverse.ht
 
 ## 📦 Dependency (Maven / Gradle)
 
-Add the dependency via https://jitpack.io/private#BernhardAngerer/gpx-stats-helper/1.2.0
+Add the dependency via https://jitpack.io/private#BernhardAngerer/gpx-stats-helper/2.0.0
