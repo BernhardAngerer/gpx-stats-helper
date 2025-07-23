@@ -3,6 +3,8 @@ package at.bernhardangerer.gpxStatsHelper.util;
 import com.topografix.model.Track;
 import com.topografix.model.Waypoint;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 
 import static at.bernhardangerer.gpxStatsHelper.util.DistanceUtil.calcDistance;
@@ -67,19 +69,93 @@ public final class WaypointUtil {
     }
 
     /**
-     * Count the number of waypoints of the track.
+     * Return coordinates and elevation formatted into a more readable string.
      *
-     * @param track
-     * @return number of waypoints
+     * @param waypoint
+     * @return formated as string
      */
-    public static long countWaypoints(final Track track) {
-        if (track != null && track.getTrkseg() != null && !track.getTrkseg().isEmpty()) {
-            return track.getTrkseg().stream()
-                    .mapToLong(trackSegment -> trackSegment.getTrkpt().size())
-                    .sum();
-        }
+    public static String formatWaypoint(final Waypoint waypoint) {
+        return formatWaypoint(waypoint, true);
+    }
 
-        return 0;
+    /**
+     * Return coordinates formatted into a more readable string.
+     * Optional: Elevation
+     *
+     * @param waypoint
+     * @param withElevation
+     * @return formated as string
+     */
+    public static String formatWaypoint(final Waypoint waypoint, final boolean withElevation) {
+        if (waypoint != null) {
+            String coordinates = "Lat " + waypoint.getLat() + ", Lon " + waypoint.getLon();
+            if (withElevation && waypoint.getEle() != null) {
+                coordinates += ", Ele " + waypoint.getEle();
+            }
+
+            return coordinates;
+        }
+        return null;
+    }
+
+    /**
+     * Creates a {@link Waypoint} with the specified latitude, longitude and elevation.
+     *
+     * @param lat  the latitude in decimal degrees
+     * @param lon  the longitude in decimal degrees
+     * @param ele  the elevation in meters
+     * @return a {@code Waypoint} initialized with the given values
+     */
+    public static Waypoint createWaypoint(double lat, double lon, int ele) {
+        return createWaypoint(lat, lon, ele, null);
+    }
+
+    /**
+     * Creates a {@link Waypoint} with the specified latitude, longitude, elevation, and timestamp.
+     *
+     * @param lat  the latitude in decimal degrees
+     * @param lon  the longitude in decimal degrees
+     * @param ele  the elevation in meters
+     * @param time the timestamp of the waypoint
+     * @return a {@code Waypoint} initialized with the given values
+     */
+    public static Waypoint createWaypoint(double lat, double lon, int ele, LocalDateTime time) {
+        final Waypoint wp = new Waypoint();
+        wp.setLat(BigDecimal.valueOf(lat));
+        wp.setLon(BigDecimal.valueOf(lon));
+        wp.setEle(BigDecimal.valueOf(ele));
+        wp.setTime(time);
+        return wp;
+    }
+
+    /**
+     * Creates a {@link Waypoint} with the specified latitude, longitude and elevation.
+     *
+     * @param lat  the latitude in decimal degrees
+     * @param lon  the longitude in decimal degrees
+     * @param ele  the elevation in meters
+     * @return a {@code Waypoint} initialized with the given values
+     */
+    public static Waypoint createWaypoint(double lat, double lon, double ele) {
+        return createWaypoint(lat, lon, ele, null);
+    }
+
+    /**
+     * Creates a {@link Waypoint} with the specified latitude, longitude, elevation, and timestamp.
+     *
+     * @param lat  the latitude in decimal degrees
+     * @param lon  the longitude in decimal degrees
+     * @param ele  the elevation in meters
+     * @param time the timestamp of the waypoint
+     * @return a {@code Waypoint} initialized with the given values
+     */
+    public static Waypoint createWaypoint(double lat, double lon, double ele, LocalDateTime time) {
+        final Waypoint wp = new Waypoint();
+        wp.setLat(BigDecimal.valueOf(lat));
+        wp.setLon(BigDecimal.valueOf(lon));
+        wp.setEle(BigDecimal.valueOf(ele));
+        wp.setTime(time);
+        return wp;
     }
 
 }

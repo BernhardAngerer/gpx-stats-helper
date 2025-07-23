@@ -6,17 +6,19 @@ import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class GpxConverterTest {
+class GpxReaderTest {
 
     @Test
-    void convertGpx() {
+    void fromStringSuccess() {
         final String gpxString =
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
                 + "<gpx version=\"1.1\" creator=\"me\"\n"
@@ -43,7 +45,7 @@ class GpxConverterTest {
                 + "</trkseg>\n"
                 + "</trk>\n"
                 + "</gpx>";
-        final Gpx gpx = GpxConverter.convertGpxFromString(gpxString);
+        final Gpx gpx = GpxReader.fromString(gpxString);
         assertNotNull(gpx);
 
         final List<Track> trackList = gpx.getTrk();
@@ -66,5 +68,35 @@ class GpxConverterTest {
         assertEquals(BigDecimal.valueOf(47.80743), waypoint.getLat());
         assertEquals(BigDecimal.valueOf(12.378228), waypoint.getLon());
         assertEquals(BigDecimal.valueOf(587), waypoint.getEle());
+    }
+
+    @Test
+    void fromStringShouldThrowOnNullInput() {
+        assertThrows(IllegalArgumentException.class, () -> GpxReader.fromString(null));
+    }
+
+    @Test
+    void fromStringShouldThrowOnEmptyInput() {
+        assertThrows(IllegalArgumentException.class, () -> GpxReader.fromString(""));
+    }
+
+    @Test
+    void fromFileShouldThrowOnNullFile() {
+        assertThrows(IllegalArgumentException.class, () -> GpxReader.fromFile((File) null));
+    }
+
+    @Test
+    void fromClasspathShouldThrowOnInvalidPath() {
+        assertThrows(IllegalArgumentException.class, () -> GpxReader.fromFile("nonexistent/file.gpx"));
+    }
+
+    @Test
+    void fromClasspathShouldThrowOnNullPath() {
+        assertThrows(IllegalArgumentException.class, () -> GpxReader.fromFile((String) null));
+    }
+
+    @Test
+    void fromClasspathShouldThrowOnEmptyPath() {
+        assertThrows(IllegalArgumentException.class, () -> GpxReader.fromFile(""));
     }
 }

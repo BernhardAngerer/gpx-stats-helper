@@ -58,6 +58,6 @@ class ApiClientTest {
         final WebserviceCallException ex = assertThrows(WebserviceCallException.class, () -> {
             apiClient.sendHttpRequest(testUri);
         });
-        assertTrue(ex.getMessage().contains("Endpoint answered with status code"));
+        assertTrue(ex.getMessage().contains("Endpoint responded with status code 500"));
     }
 }

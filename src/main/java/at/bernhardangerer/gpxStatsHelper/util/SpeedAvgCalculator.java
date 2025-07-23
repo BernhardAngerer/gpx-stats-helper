@@ -8,11 +8,10 @@ import com.topografix.model.Waypoint;
 import java.util.List;
 
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.calcDateTimeDifferenceInSeconds;
-import static at.bernhardangerer.gpxStatsHelper.util.PropertyUtil.loadValue;
 
 public final class SpeedAvgCalculator {
 
-    private static final double MOTION_MIN_SPEED = Double.parseDouble(loadValue("motionMinSpeedThreshold"));
+    private static final double MOTION_MIN_SPEED = Double.parseDouble(PropertyUtil.loadConfigValue("motionMinSpeedThreshold"));
 
     private SpeedAvgCalculator() {
     }

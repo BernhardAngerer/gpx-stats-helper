@@ -4,8 +4,8 @@ import at.bernhardangerer.gpxStatsHelper.enumeration.StepRoundingMode;
 
 public final class RoundingUtil {
 
-    public static final String INVALID_STEP_ROUNDING_MODE = "StepRoundingMode must not be null";
-    public static final String UNSUPPORTED_STEP_ROUNDING_MODE = "Unsupported StepRoundingMode";
+    private static final String INVALID_STEP_ROUNDING_MODE = "StepRoundingMode must not be null";
+    private static final String UNSUPPORTED_STEP_ROUNDING_MODE = "Unsupported StepRoundingMode";
 
     private RoundingUtil() {
     }

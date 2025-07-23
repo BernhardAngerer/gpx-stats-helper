@@ -8,11 +8,10 @@ import java.util.List;
 import java.util.Objects;
 
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.calcDateTimeDifferenceInSeconds;
-import static at.bernhardangerer.gpxStatsHelper.util.PropertyUtil.loadValue;
 
 public final class DurationInMotionCalculator {
 
-    private static final double MOTION_MIN_SPEED = Double.parseDouble(loadValue("motionMinSpeedThreshold"));
+    private static final double MOTION_MIN_SPEED = Double.parseDouble(PropertyUtil.loadConfigValue("motionMinSpeedThreshold"));
 
     private DurationInMotionCalculator() {
     }

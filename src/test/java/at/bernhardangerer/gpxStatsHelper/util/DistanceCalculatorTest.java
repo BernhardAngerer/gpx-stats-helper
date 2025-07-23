@@ -52,7 +52,7 @@ class DistanceCalculatorTest {
             + "</trkseg>\n"
             + "</trk>\n"
             + "</gpx>";
-    private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
+    private static final Gpx GPX_TYPE = GpxReader.fromString(GPX);
 
     @Test
     void fromWaypointList() {

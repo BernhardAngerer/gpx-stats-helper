@@ -7,12 +7,12 @@ import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static at.bernhardangerer.gpxStatsHelper.util.SpeedUtil.calculateSpeed;
+import static at.bernhardangerer.gpxStatsHelper.util.WaypointUtil.createWaypoint;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -56,20 +56,12 @@ class SpeedAvgCalculatorTest {
             + "</trkseg>\n"
             + "</trk>\n"
             + "</gpx>";
-    private static final Gpx GPX_TYPE = GpxConverter.convertGpxFromString(GPX);
+    private static final Gpx GPX_TYPE = GpxReader.fromString(GPX);
 
     @Test
     void fromWaypoints() {
-        final Waypoint fromWaypoint = new Waypoint();
-        fromWaypoint.setLat(BigDecimal.valueOf(47.80743));
-        fromWaypoint.setLon(BigDecimal.valueOf(12.378228));
-        fromWaypoint.setEle(BigDecimal.valueOf(587));
-        fromWaypoint.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 16));
-        final Waypoint toWaypoint = new Waypoint();
-        toWaypoint.setLat(BigDecimal.valueOf(47.807343));
-        toWaypoint.setLon(BigDecimal.valueOf(12.378138));
-        toWaypoint.setEle(BigDecimal.valueOf(588));
-        toWaypoint.setTime(LocalDateTime.of(2021, 9, 7, 16, 14, 20));
+        final Waypoint fromWaypoint = createWaypoint(47.80743, 12.378228, 587, LocalDateTime.of(2021, 9, 7, 16, 14, 16));
+        final Waypoint toWaypoint = createWaypoint(47.807343, 12.378138, 588, LocalDateTime.of(2021, 9, 7, 16, 14, 20));
 
         SpeedMetrics speedMetrics = SpeedAvgCalculator.fromWaypoints(fromWaypoint, toWaypoint);
         assertNotNull(speedMetrics);

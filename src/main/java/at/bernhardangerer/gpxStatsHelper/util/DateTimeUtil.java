@@ -8,11 +8,11 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
-public final class DateTimeUtil {
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.SIXTY;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.THREE_SIX_ZERO_ZERO;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.UTC;
 
-    private static final String UTC = "UTC";
-    private static final int SIXTY = 60;
-    private static final int THREE_SIX_ZERO_ZERO = SIXTY * SIXTY;
+public final class DateTimeUtil {
 
     private DateTimeUtil() {
     }
