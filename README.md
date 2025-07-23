@@ -3,7 +3,7 @@
 
 # GPX Stats Helper Library
 
-A lightweight Java library for **reading, writing, manipulating, and analyzing statistics** from GPX 1.1 files using the official [TopoGrafix XSD schema](https://www.topografix.com/gpx.asp).
+A lightweight Java library for **reading, manipulating, writing, and analyzing statistics** from GPX 1.1 files using the official [TopoGrafix XSD schema](https://www.topografix.com/gpx.asp).
 
 This library enables developers to:
 - Parse and generate GPX 1.1-compliant files
