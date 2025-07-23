@@ -13,6 +13,7 @@ import at.bernhardangerer.gpxStatsHelper.util.DurationInMotionCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationPeakUtil;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationRangeCalculator;
+import at.bernhardangerer.gpxStatsHelper.util.GeoCoordinateConverter;
 import at.bernhardangerer.gpxStatsHelper.util.GeocodeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GeographicExtentUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GpxReader;
@@ -165,6 +166,9 @@ public final class Example {
             negativePeaks.forEach(waypoint -> {
                 System.out.println("Negative Peak " + counter.incrementAndGet() + ": " + formatWaypoint(waypoint));
             });
+
+            System.out.println("\n\uD83D\uDD04 Coordinate Format Conversion");
+            System.out.println(formatWaypoint(firstWaypoint, false) + " -> " + GeoCoordinateConverter.waypointToDms(firstWaypoint));
 
             System.out.println("\n\uD83D\uDDE3\uFE0F Geolocation Metadata");
             final GeocodeReverseModel startPos = getGeocodeReverseModel(firstWaypoint);

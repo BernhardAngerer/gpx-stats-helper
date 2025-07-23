@@ -38,6 +38,9 @@ This library enables developers to:
 - Start / end / farthest position `[lon, lat, m]`
 - Positive and negative elevation peak positions `[lon, lat, m]`
 
+### 🔄 Coordinate Format Conversion
+- Convert decimal degrees to Degrees Minutes Seconds (DMS) format
+
 ### 🗣️ Geolocation Metadata
 - Description of any geo-position  
   *(using the free [Nominatim API](https://nominatim.org/release-docs/develop/api/Reverse/) for reverse geocoding based on OpenStreetMap data)*
@@ -122,6 +125,9 @@ Farthest Point: Lat 47.754356, Lon 12.355104, Ele 1546
 Positive Peak 1: Lat 47.754635, Lon 12.355498, Ele 1547
 Negative Peak 1: Lat 47.80743, Lon 12.378228, Ele 587
 Negative Peak 2: Lat 47.807049, Lon 12.378118, Ele 598
+
+🔄 Coordinate Format Conversion
+Lat 47.392036, Lon 11.266654 -> 47°23'31.330"N, 11°15'59.954"E
 
 🗣️ Geolocation Metadata
 Start = End - Geoposition: Lindenstraße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
