@@ -1,4 +1,5 @@
 [![Maven Package](https://github.com/BernhardAngerer/gpx-stats-helper/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/BernhardAngerer/gpx-stats-helper/actions/workflows/maven-publish.yml)
+[![Maven Package](https://github.com/BernhardAngerer/gpx-stats-helper/actions/workflows/maven-verify.yml/badge.svg)](https://github.com/BernhardAngerer/gpx-stats-helper/actions/workflows/maven-verify.yml)
 
 # GPX Stats Helper Library
 
