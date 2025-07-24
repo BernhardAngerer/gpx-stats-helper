@@ -1,6 +1,7 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
 import java.text.DecimalFormat;
+import java.time.format.DateTimeFormatter;
 
 public final class Constants {
 
@@ -22,6 +23,11 @@ public final class Constants {
 
     public static final DecimalFormat ONE_DECIMAL_FORMAT = new DecimalFormat("#.#");
     public static final DecimalFormat TWO_DECIMAL_FORMAT = new DecimalFormat("#.##");
+
+    public static final DateTimeFormatter FORMATTER_WITH_MILLIS =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+    public static final DateTimeFormatter FORMATTER_WITHOUT_MILLIS =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX");
 
     private Constants() {
     }

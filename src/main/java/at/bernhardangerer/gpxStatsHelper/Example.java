@@ -72,19 +72,21 @@ public final class Example {
         final Gpx gpx = GpxReader.fromFile(pathName);
         System.out.println("File: \"" + pathName + ESCAPE_DOUBLE_QUOTES);
 
-        System.out.println("\n\uD83D\uDDC2\uFE0F Metadata");
-        if (gpx.getMetadata().getName() != null) {
-            System.out.println("Name: \"" + gpx.getMetadata().getName() + ESCAPE_DOUBLE_QUOTES);
-        }
-        if (gpx.getMetadata().getAuthor() != null) {
-            System.out.println("Author Name: \"" + gpx.getMetadata().getAuthor().getName() + ESCAPE_DOUBLE_QUOTES);
-        }
-        if (gpx.getMetadata().getCopyright() != null) {
-            if (gpx.getMetadata().getCopyright().getYear() != null) {
-                System.out.println("Copyright Year: \"" + gpx.getMetadata().getCopyright().getYear().getYear() + ESCAPE_DOUBLE_QUOTES);
+        if (gpx.getMetadata() != null) {
+            System.out.println("\n\uD83D\uDDC2\uFE0F Metadata");
+            if (gpx.getMetadata().getName() != null) {
+                System.out.println("Name: \"" + gpx.getMetadata().getName() + ESCAPE_DOUBLE_QUOTES);
             }
-            if (gpx.getMetadata().getCopyright().getAuthor() != null) {
-                System.out.println("Copyright Author: \"" + gpx.getMetadata().getCopyright().getAuthor() + ESCAPE_DOUBLE_QUOTES);
+            if (gpx.getMetadata().getAuthor() != null) {
+                System.out.println("Author Name: \"" + gpx.getMetadata().getAuthor().getName() + ESCAPE_DOUBLE_QUOTES);
+            }
+            if (gpx.getMetadata().getCopyright() != null) {
+                if (gpx.getMetadata().getCopyright().getYear() != null) {
+                    System.out.println("Copyright Year: \"" + gpx.getMetadata().getCopyright().getYear().getYear() + ESCAPE_DOUBLE_QUOTES);
+                }
+                if (gpx.getMetadata().getCopyright().getAuthor() != null) {
+                    System.out.println("Copyright Author: \"" + gpx.getMetadata().getCopyright().getAuthor() + ESCAPE_DOUBLE_QUOTES);
+                }
             }
             if (gpx.getMetadata().getLink() != null && !gpx.getMetadata().getLink().isEmpty()) {
                 gpx.getMetadata().getLink()

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static at.bernhardangerer.gpxStatsHelper.util.LocalDateTimeAdapter.DATE_TIME_FORMATTER;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.FORMATTER_WITHOUT_MILLIS;
 import static at.bernhardangerer.gpxStatsHelper.util.WaypointUtil.createWaypoint;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -59,7 +59,7 @@ class WaypointUtilTest {
     void findFirstWaypoint() {
         Waypoint first = WaypointUtil.findFirstWaypoint(TRACK);
         assertNotNull(first);
-        assertEquals(LocalDateTime.parse("2021-09-07T13:37:42Z", DATE_TIME_FORMATTER), first.getTime());
+        assertEquals(LocalDateTime.parse("2021-09-07T13:37:42Z", FORMATTER_WITHOUT_MILLIS), first.getTime());
 
         first = WaypointUtil.findFirstWaypoint(null);
         assertNull(first);
@@ -72,7 +72,7 @@ class WaypointUtilTest {
     void findLastWaypoint() {
         Waypoint last = WaypointUtil.findLastWaypoint(TRACK);
         assertNotNull(last);
-        assertEquals(LocalDateTime.parse("2021-09-07T16:14:16Z", DATE_TIME_FORMATTER), last.getTime());
+        assertEquals(LocalDateTime.parse("2021-09-07T16:14:16Z", FORMATTER_WITHOUT_MILLIS), last.getTime());
 
         last = WaypointUtil.findLastWaypoint(null);
         assertNull(last);
