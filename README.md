@@ -16,7 +16,7 @@ This library enables developers to:
 - Number of waypoints
 
 ### 📏 Distance & Elevation
-- Total / ascent / descent distance `[km]`
+- Total / ascent / descent distance `[m]`
 - Ascent / descent elevation `[m]`
 - Lowest / highest point `[m]`
 - Slope between two waypoints as percentage `%`
