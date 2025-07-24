@@ -3,6 +3,7 @@ package at.bernhardangerer.gpxStatsHelper.util;
 import com.topografix.model.CopyrightType;
 import com.topografix.model.Gpx;
 import com.topografix.model.MetadataType;
+import com.topografix.model.PersonType;
 import com.topografix.model.Track;
 import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
@@ -42,6 +43,9 @@ class GpxWriterTest {
                     + "http://www.topografix.com/GPX/1/1/gpx.xsd\">\n"
                     + "    <metadata>\n"
                     + "        <name>My gpx file</name>\n"
+                    + "        <author>\n"
+                    + "            <name>Bernhard Angerer</name>\n"
+                    + "        </author>\n"
                     + "        <copyright author=\"gpx-stats-helper\">\n"
                     + "            <year>2025</year>\n"
                     + "            <license>free</license>\n"
@@ -73,6 +77,9 @@ class GpxWriterTest {
 
         final MetadataType metadataType = new MetadataType();
         metadataType.setName("My gpx file");
+        final PersonType personType = new PersonType();
+        personType.setName("Bernhard Angerer");
+        metadataType.setAuthor(personType);
         final CopyrightType copyrightType = new CopyrightType();
         copyrightType.setAuthor("gpx-stats-helper");
         copyrightType.setLicense("free");

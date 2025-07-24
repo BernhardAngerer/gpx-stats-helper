@@ -2,9 +2,15 @@
 <gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" creator="me" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd">
    <metadata>
       <name>My sport activities</name>
-      <copyright author="me">
+      <author>
+          <name>Bernhard Angerer</name>
+      </author>
+      <copyright author="Bernhard Angerer">
          <year>2022</year>
       </copyright>
+      <link href="https://github.com/BernhardAngerer">
+        <text>Github</text>
+      </link>
    </metadata>
    <trk>
       <name>Mountainbike-Tour to the Kampenwand/Germany</name>
