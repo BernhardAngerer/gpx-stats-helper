@@ -16,6 +16,18 @@ public final class DistanceCalculator {
     private DistanceCalculator() {
     }
 
+    /**
+     * Calculates distance traveled during ascending and descending elevation changes
+     * between a list of waypoints.
+     * <p>
+     * Only segments with valid elevation values on both ends are considered.
+     *
+     * @param waypointList ordered list of {@link Waypoint} objects (must have ≥ 2 elements)
+     * @return an {@link AscentDescentPair} where:
+     *         - {@code ascent} holds distance traveled while climbing
+     *         - {@code descent} holds distance while descending
+     *         Returns {@code null} if input is invalid or elevation data is incomplete.
+     */
     static AscentDescentPair fromWaypointList(final List<Waypoint> waypointList) {
         if (waypointList != null && waypointList.size() >= 2) {
             final AscentDescentPair distance = new AscentDescentPair();
@@ -43,6 +55,13 @@ public final class DistanceCalculator {
         return null;
     }
 
+    /**
+     * Computes the ascent and descent distance from a single {@link TrackSegment}.
+     *
+     * @param trackSegment the track segment to analyze
+     * @return an {@link AscentDescentPair} with distance in meters per elevation direction,
+     *         or {@code null} if data is missing or invalid
+     */
     static AscentDescentPair fromTrackSegment(final TrackSegment trackSegment) {
         if (trackSegment != null) {
             return fromWaypointList(trackSegment.getTrkpt());
@@ -50,6 +69,13 @@ public final class DistanceCalculator {
         return null;
     }
 
+    /**
+     * Aggregates ascent and descent distances over a list of {@link TrackSegment} entries.
+     *
+     * @param trackSegmentList the list of track segments to process
+     * @return combined {@link AscentDescentPair} with total ascending and descending distances,
+     *         or {@code null} if input is invalid or contains incomplete data
+     */
     static AscentDescentPair fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
         if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
             final AscentDescentPair result = new AscentDescentPair();
@@ -78,10 +104,12 @@ public final class DistanceCalculator {
     }
 
     /**
-     * Calculate the distance in meters.
+     * Calculates total ascending and descending distances for an entire GPX {@link Track}.
+     * <p>
+     * Only segments with valid elevation and coordinate data are included.
      *
-     * @param track
-     * @return distance in meters
+     * @param track the track to analyze
+     * @return {@link AscentDescentPair} of distances, or {@code null} if invalid
      */
     public static AscentDescentPair fromTrack(final Track track) {
         if (track != null) {

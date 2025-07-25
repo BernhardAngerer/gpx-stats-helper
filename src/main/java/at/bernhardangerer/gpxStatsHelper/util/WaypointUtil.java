@@ -1,6 +1,7 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
 import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
 
 import java.math.BigDecimal;
@@ -15,10 +16,12 @@ public final class WaypointUtil {
     }
 
     /**
-     * Return the first waypoint of the track.
+     * Returns the first {@link Waypoint} in the provided {@link Track}.
+     * <p>
+     * Looks into the first {@link TrackSegment} and returns its first {@link Waypoint}, if available.
      *
-     * @param track
-     * @return Waypoint
+     * @param track the GPX {@link Track} to examine
+     * @return the first {@link Waypoint}, or {@code null} if none found
      */
     public static Waypoint findFirstWaypoint(final Track track) {
         if (track != null && track.getTrkseg() != null && !track.getTrkseg().isEmpty()
@@ -33,10 +36,12 @@ public final class WaypointUtil {
     }
 
     /**
-     * Return the last waypoint of the track.
+     * Returns the last {@link Waypoint} in the provided {@link Track}.
+     * <p>
+     * Looks into the last {@link TrackSegment} and returns its last {@link Waypoint}, if available.
      *
-     * @param track
-     * @return Waypoint
+     * @param track the GPX {@link Track} to examine
+     * @return the last {@link Waypoint}, or {@code null} if none found
      */
     public static Waypoint findLastWaypoint(final Track track) {
         if (track != null && track.getTrkseg() != null && !track.getTrkseg().isEmpty()
@@ -52,11 +57,11 @@ public final class WaypointUtil {
     }
 
     /**
-     * Return the waypoint of the track which is farthest from the reference geo-position.
+     * Finds the {@link Waypoint} in the given {@link Track} that is farthest from the specified reference position.
      *
-     * @param referencePosition
-     * @param track
-     * @return Waypoint
+     * @param referencePosition the waypoint to measure distance from
+     * @param track             the {@link Track} containing waypoints
+     * @return the {@link Waypoint} with the maximum distance from the reference, or {@code null} if not found
      */
     public static Waypoint findFarthestWaypoint(final Waypoint referencePosition, final Track track) {
         if (referencePosition != null && track != null) {
@@ -69,22 +74,23 @@ public final class WaypointUtil {
     }
 
     /**
-     * Return coordinates and elevation formatted into a more readable string.
+     * Formats the given {@link Waypoint} into a readable coordinate string.
+     * <p>
+     * Includes elevation if available.
      *
-     * @param waypoint
-     * @return formated as string
+     * @param waypoint the {@link Waypoint} to format
+     * @return string formatted as "Lat xx.xxxx, Lon yy.yyyy, Ele zz.z" or {@code null} if waypoint is null
      */
     public static String formatWaypoint(final Waypoint waypoint) {
         return formatWaypoint(waypoint, true);
     }
 
     /**
-     * Return coordinates formatted into a more readable string.
-     * Optional: Elevation
+     * Formats the given {@link Waypoint} into a readable coordinate string.
      *
-     * @param waypoint
-     * @param withElevation
-     * @return formated as string
+     * @param waypoint      the {@link Waypoint} to format
+     * @param withElevation whether to include elevation in the output
+     * @return string formatted as "Lat xx.xxxx, Lon yy.yyyy[, Ele zz.z]" or {@code null} if waypoint is null
      */
     public static String formatWaypoint(final Waypoint waypoint, final boolean withElevation) {
         if (waypoint != null) {

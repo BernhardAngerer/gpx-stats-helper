@@ -12,11 +12,11 @@ public final class SpeedUtil {
     }
 
     /**
-     * Calculate speed from distance and duration.
+     * Calculates the average speed from a given distance and duration.
      *
-     * @param distance in meter
-     * @param duration in seconds
-     * @return speed in kilometer per hour
+     * @param distance the distance covered in meters
+     * @param duration the time taken in seconds
+     * @return the speed in kilometers per hour (km/h); returns {@code 0} if either input is non-positive
      */
     public static double calculateSpeed(final double distance, final long duration) {
         if (distance > 0 && duration > 0) {
@@ -26,10 +26,11 @@ public final class SpeedUtil {
     }
 
     /**
-     * Calculate speed from SpeedMetrics.
+     * Calculates the average speed based on a {@link SpeedMetrics} object,
+     * which encapsulates both distance and duration.
      *
-     * @param speedMetrics
-     * @return speed in kilometer per hour
+     * @param speedMetrics the {@code SpeedMetrics} instance containing distance (in meters) and duration (in seconds)
+     * @return the speed in kilometers per hour (km/h); returns {@code 0} if {@code speedMetrics} is {@code null}
      */
     public static double calculateSpeed(final SpeedMetrics speedMetrics) {
         if (speedMetrics != null) {

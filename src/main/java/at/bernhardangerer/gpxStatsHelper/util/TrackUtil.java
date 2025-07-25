@@ -1,6 +1,8 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
 import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
+import com.topografix.model.Waypoint;
 
 public final class TrackUtil {
 
@@ -8,10 +10,12 @@ public final class TrackUtil {
     }
 
     /**
-     * Count the number of waypoints of the track.
+     * Counts the total number of {@link Waypoint} entries across all {@link TrackSegment}s in the given GPX {@link Track}.
+     * <p>
+     * This is a useful utility for analytics, validation, or preview summaries.
      *
-     * @param track
-     * @return number of waypoints
+     * @param track the {@link Track} object to analyze
+     * @return total count of {@link Waypoint}s, or {@code 0} if track is {@code null}, has no segments, or empty points
      */
     public static long countWaypoints(final Track track) {
         if (track != null && track.getTrkseg() != null && !track.getTrkseg().isEmpty()) {

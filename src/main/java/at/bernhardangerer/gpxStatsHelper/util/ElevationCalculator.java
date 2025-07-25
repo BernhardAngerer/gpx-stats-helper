@@ -13,6 +13,15 @@ public final class ElevationCalculator {
     private ElevationCalculator() {
     }
 
+    /**
+     * Computes the elevation difference between two waypoints.
+     * Returns {@code null} if either waypoint is {@code null} or has no elevation data.
+     *
+     * @param fromWaypoint the starting waypoint
+     * @param toWaypoint   the ending waypoint
+     * @return elevation delta as {@link BigDecimal} in meters,
+     *         or {@code null} if elevation data is missing
+     */
     static BigDecimal fromWaypoints(final Waypoint fromWaypoint, final Waypoint toWaypoint) {
         if (fromWaypoint != null && fromWaypoint.getEle() != null && toWaypoint != null && toWaypoint.getEle() != null) {
             return toWaypoint.getEle().subtract(fromWaypoint.getEle());
@@ -20,6 +29,15 @@ public final class ElevationCalculator {
         return null;
     }
 
+    /**
+     * Calculates total ascent and descent from a list of waypoints.
+     * The elevation is computed as the sum of all positive and negative elevation deltas
+     * between consecutive waypoints.
+     *
+     * @param waypointList list of GPX waypoints (must have at least 2)
+     * @return an {@link AscentDescentPair} with ascent and descent in meters,
+     *         or {@code null} if input is invalid or contains incomplete elevation data
+     */
     static AscentDescentPair fromWaypointList(final List<Waypoint> waypointList) {
         if (waypointList != null && waypointList.size() >= 2) {
             final AscentDescentPair elevation = new AscentDescentPair();
@@ -46,6 +64,13 @@ public final class ElevationCalculator {
         return null;
     }
 
+    /**
+     * Calculates ascent and descent from a single {@link TrackSegment}.
+     *
+     * @param trackSegment the track segment containing waypoints
+     * @return an {@link AscentDescentPair} with ascent and descent in meters,
+     *         or {@code null} if input is invalid or incomplete
+     */
     static AscentDescentPair fromTrackSegment(final TrackSegment trackSegment) {
         if (trackSegment != null) {
             return fromWaypointList(trackSegment.getTrkpt());
@@ -53,6 +78,12 @@ public final class ElevationCalculator {
         return null;
     }
 
+    /**
+     * Aggregates ascent and descent across a list of track segments.
+     *
+     * @param trackSegmentList list of {@link TrackSegment}
+     * @return combined ascent and descent, or {@code null} if input is invalid
+     */
     static AscentDescentPair fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
         if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
             final AscentDescentPair delta = new AscentDescentPair();
@@ -81,10 +112,10 @@ public final class ElevationCalculator {
     }
 
     /**
-     * Calculate the ascent and descent elevation.
+     * Computes the total ascent and descent of an entire {@link Track}.
      *
-     * @param track
-     * @return ElevationDelta in meters
+     * @param track the GPX track containing one or more segments
+     * @return elevation statistics, or {@code null} if track is {@code null} or invalid
      */
     public static AscentDescentPair fromTrack(final Track track) {
         if (track != null) {

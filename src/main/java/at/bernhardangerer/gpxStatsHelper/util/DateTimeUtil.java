@@ -18,11 +18,11 @@ public final class DateTimeUtil {
     }
 
     /**
-     * Convert LocalDateTime in UTC to another time zone.
+     * Converts a {@link LocalDateTime} in UTC to a different time zone.
      *
-     * @param utcTime
-     * @param timeZone
-     * @return LocalDateTime into the provided time zone
+     * @param utcTime  the UTC-based LocalDateTime to convert
+     * @param timeZone target IANA time zone ID (e.g. "Europe/Vienna", "Asia/Tokyo")
+     * @return LocalDateTime in the target time zone, or the original UTC time if zone is {@code null} or "UTC"
      */
     public static LocalDateTime convertFromUtcTime(final LocalDateTime utcTime, String timeZone) {
         if (timeZone != null && !UTC.equals(timeZone)) {
@@ -33,11 +33,12 @@ public final class DateTimeUtil {
     }
 
     /**
-     * Calculate time differance between two provided LocalDateTime.
+     * Calculates the full difference between two {@link LocalDateTime} values
+     * in terms of years, months, days, hours, minutes, and seconds.
      *
-     * @param startTime
-     * @param endTime
-     * @return DateTimeSegments
+     * @param startTime the earlier time
+     * @param endTime   the later time
+     * @return {@link DateTimeSegments} object representing each time unit difference
      */
     public static DateTimeSegments calcDateTimeDifference(final LocalDateTime startTime, final LocalDateTime endTime) {
         LocalDateTime tempDateTime = startTime;
@@ -63,21 +64,22 @@ public final class DateTimeUtil {
     }
 
     /**
-     * Calculate time difference in seconds between two provided LocalDateTime.
+     * Calculates the total time difference in seconds between two {@link LocalDateTime} values.
      *
-     * @param startTime
-     * @param endTime
-     * @return time difference in seconds
+     * @param startTime the starting timestamp
+     * @param endTime   the ending timestamp
+     * @return time difference in seconds as {@code long}
      */
     public static long calcDateTimeDifferenceInSeconds(final LocalDateTime startTime, final LocalDateTime endTime) {
         return ChronoUnit.SECONDS.between(startTime, endTime);
     }
 
     /**
-     * Convert seconds to TimeSegments.
+     * Converts a number of seconds into a {@link TimeSegments} object
+     * representing hours, minutes, and seconds.
      *
-     * @param seconds
-     * @return TimeSegments
+     * @param seconds total duration in seconds
+     * @return {@link TimeSegments} with hours/minutes/seconds populated
      */
     public static TimeSegments convertFromSeconds(final long seconds) {
         final TimeSegments segments = new TimeSegments();
@@ -88,10 +90,11 @@ public final class DateTimeUtil {
     }
 
     /**
-     * Convert DateTimeSegments to seconds.
+     * Converts a {@link DateTimeSegments} instance into total number of seconds.
+     * Note: Only hours, minutes, and seconds fields are considered.
      *
-     * @param dateTimeSegments
-     * @return seconds
+     * @param dateTimeSegments object containing time units
+     * @return total time in seconds
      */
     public static long convertToSeconds(final DateTimeSegments dateTimeSegments) {
         return dateTimeSegments.getHours() * THREE_SIX_ZERO_ZERO + dateTimeSegments.getMinutes() * SIXTY + dateTimeSegments.getSeconds();

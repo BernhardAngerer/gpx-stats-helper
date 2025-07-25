@@ -17,12 +17,21 @@ public final class SlopeCalculator {
     }
 
     /**
-     * Generates a map of rounded percentage / distance summary.
+     * Generates a mapping of slope percentage (rounded to a step) to total distance in meters
+     * across a list of waypoints. The slope between each consecutive pair of waypoints is calculated,
+     * rounded using the provided {@link StepRoundingMode}, and grouped accordingly.
+     * <p>
+     * This is commonly used to build elevation/distance distribution charts (e.g. how many meters of ascent fall into 0–5%, 5–10%, etc).
      *
-     * @param waypointList list of waypoints
-     * @param percentageStep step in percentage
-     * @param stepRoundingMode StepRoundingMode
-     * @return a map of rounded percentage [%] / distance summary [m]
+     * @param waypointList     the list of ordered {@link Waypoint} entries (must contain at least 2 points)
+     * @param percentageStep   the rounding interval in percent (e.g. 5 means group by 5% slope bins)
+     * @param stepRoundingMode defines how to round slope values (UP, DOWN, or NEAREST)
+     * @return a {@code Map<Integer, Double>} where:
+     *         <ul>
+     *             <li><b>key</b> = slope % (rounded according to mode)</li>
+     *             <li><b>value</b> = total distance [m] covered under this slope bin</li>
+     *         </ul>
+     *         or {@code null} if the input list is {@code null} or contains fewer than two points
      */
     public static Map<Integer, Double> fromWaypointList(final List<Waypoint> waypointList, final int percentageStep,
                                                         final StepRoundingMode stepRoundingMode) {

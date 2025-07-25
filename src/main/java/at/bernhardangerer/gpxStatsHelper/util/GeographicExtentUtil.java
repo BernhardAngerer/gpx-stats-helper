@@ -2,6 +2,7 @@ package at.bernhardangerer.gpxStatsHelper.util;
 
 import at.bernhardangerer.gpxStatsHelper.model.BoundingBox;
 import com.topografix.model.Track;
+import com.topografix.model.TrackSegment;
 import com.topografix.model.Waypoint;
 
 import java.math.BigDecimal;
@@ -13,10 +14,15 @@ public final class GeographicExtentUtil {
     }
 
     /**
-     * Calculates the geographic bounding box (minimum and maximum latitude and longitude) for the given GPS track.
+     * Calculates the geographic bounding box (minimum and maximum latitude and longitude)
+     * that encloses all waypoints in the provided GPX {@link Track}.
+     * <p>
+     * The bounding box is useful for auto-zooming maps, validating coordinate ranges, or slicing datasets.
      *
-     * @param track
-     * @return BoundingBox
+     * @param track the GPX {@link Track} to analyze; must contain at least one {@link TrackSegment}
+     *              with non-empty {@link Waypoint} lists
+     * @return a {@link BoundingBox} representing minLat, minLon, maxLat, maxLon;
+     *         or {@code null} if the track or its segments are null/empty
      */
     public static BoundingBox findBounding(final Track track) {
         if (track != null && track.getTrkseg() != null && !track.getTrkseg().isEmpty()) {

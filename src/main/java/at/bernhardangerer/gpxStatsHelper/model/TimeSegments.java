@@ -16,9 +16,11 @@ public class TimeSegments {
     private long seconds;
 
     /**
-     * Formats the time segments into a more readable format.
+     * Formats this {@code TimeSegments} instance into a zero-padded, human-readable string in "HH:mm:ss" format.
+     * <p>
+     * Example: if hours = 3, minutes = 7, seconds = 4 → result = {@code "03:07:04"}
      *
-     * @return formated time segments
+     * @return a formatted time string, e.g., {@code "01:23:45"}
      */
     public String format() {
         final DecimalFormat df = new DecimalFormat("00");
