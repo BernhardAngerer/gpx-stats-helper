@@ -12,6 +12,7 @@ public final class Constants {
     public static final String M = "m";
     public static final String KM = "km";
     public static final String KMPH = "km/h";
+    public static final String MIN_PER_KM = "min/km";
     public static final String MSL = "m.s.l.";
     public static final String ESCAPE_DOUBLE_QUOTES = "\"";
 
@@ -23,6 +24,7 @@ public final class Constants {
 
     public static final DecimalFormat ONE_DECIMAL_FORMAT = new DecimalFormat("#.#");
     public static final DecimalFormat TWO_DECIMAL_FORMAT = new DecimalFormat("#.##");
+    public static final DecimalFormat TWO_DIGIT_PADDING_FORMAT = new DecimalFormat("00");
 
     public static final DateTimeFormatter FORMATTER_WITH_MILLIS =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");

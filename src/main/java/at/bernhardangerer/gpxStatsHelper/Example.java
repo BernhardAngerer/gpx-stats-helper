@@ -17,6 +17,7 @@ import at.bernhardangerer.gpxStatsHelper.util.GeoCoordinateConverter;
 import at.bernhardangerer.gpxStatsHelper.util.GeocodeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GeographicExtentUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GpxReader;
+import at.bernhardangerer.gpxStatsHelper.util.PaceUtil;
 import at.bernhardangerer.gpxStatsHelper.util.SlopeCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.SlopeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.SpeedAvgCalculator;
@@ -41,6 +42,7 @@ import static at.bernhardangerer.gpxStatsHelper.util.Constants.H;
 import static at.bernhardangerer.gpxStatsHelper.util.Constants.KM;
 import static at.bernhardangerer.gpxStatsHelper.util.Constants.KMPH;
 import static at.bernhardangerer.gpxStatsHelper.util.Constants.M;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.MIN_PER_KM;
 import static at.bernhardangerer.gpxStatsHelper.util.Constants.MSL;
 import static at.bernhardangerer.gpxStatsHelper.util.Constants.ONE_DECIMAL_FORMAT;
 import static at.bernhardangerer.gpxStatsHelper.util.Constants.ONE_HUNDRED;
@@ -106,15 +108,15 @@ public final class Example {
             System.out.println("\n\uD83D\uDCCF Distance & Elevation");
             final AscentDescentPair distance = DistanceCalculator.fromTrack(track);
             final double totalDistance = distance.getAscent().doubleValue() + distance.getDescent().doubleValue();
-            System.out.println("Total Distance: " + TWO_DECIMAL_FORMAT.format(totalDistance / ONE_THOUSAND) + SPACE + KM);
-            System.out.println("Distance Ascent: "
+            System.out.println("Distance (Total): " + TWO_DECIMAL_FORMAT.format(totalDistance / ONE_THOUSAND) + SPACE + KM);
+            System.out.println("Distance (Ascent): "
                     + TWO_DECIMAL_FORMAT.format(distance.getAscent().doubleValue() / ONE_THOUSAND) + SPACE + KM);
-            System.out.println("Distance Descent: "
+            System.out.println("Distance (Descent): "
                     + TWO_DECIMAL_FORMAT.format(distance.getDescent().doubleValue() / ONE_THOUSAND) + SPACE + KM);
 
             final AscentDescentPair elevation = ElevationCalculator.fromTrack(track);
-            System.out.println("Ascent Elevation: " + elevation.getAscent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
-            System.out.println("Descent Elevation: " + elevation.getDescent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
+            System.out.println("Elevation (Ascent): " + elevation.getAscent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
+            System.out.println("Elevation (Descent): " + elevation.getDescent().setScale(0, RoundingMode.HALF_UP) + SPACE + M);
 
             final ElevationRange range = ElevationRangeCalculator.fromTrack(track);
 
@@ -146,13 +148,13 @@ public final class Example {
             System.out.println("\n⏱\uFE0F Time & Duration");
             final DateTimeSegments durationTotal =
                     calcDateTimeDifference(firstWaypoint.getTime(), lastWaypoint.getTime());
-            System.out.println("Total Duration: " + durationTotal.format() + SPACE + H);
+            System.out.println("Duration (Total): " + durationTotal.format() + SPACE + H);
 
             final Long durationInMotion = DurationInMotionCalculator.fromTrack(track);
-            System.out.println("Duration In Motion: " + convertFromSeconds(durationInMotion).format() + SPACE + H);
+            System.out.println("Duration (Motion): " + convertFromSeconds(durationInMotion).format() + SPACE + H);
 
             final long durationAtRest = convertToSeconds(durationTotal) - durationInMotion;
-            System.out.println("Duration At Rest: " + convertFromSeconds(durationAtRest).format() + SPACE + H);
+            System.out.println("Duration (Rest): " + convertFromSeconds(durationAtRest).format() + SPACE + H);
 
             System.out.println("Start Time: " + DATE_TIME_FORMATTER.format(
                     DateTimeUtil.convertFromUtcTime(firstWaypoint.getTime(), CET)) + SPACE + H);
@@ -161,14 +163,20 @@ public final class Example {
 
             System.out.println("\n\uD83D\uDEB4 Speed & Movement");
             final Double speedMax = SpeedMaxCalculator.fromTrack(track);
-            System.out.println("Maximum Speed: " + ONE_DECIMAL_FORMAT.format(speedMax) + SPACE + KMPH);
+            System.out.println("Speed (Maximum): " + ONE_DECIMAL_FORMAT.format(speedMax) + SPACE + KMPH);
 
             final Double averageSpeed = SpeedAvgCalculator.fromTrack(track);
-            System.out.println("Average Speed: " + ONE_DECIMAL_FORMAT.format(averageSpeed) + SPACE + KMPH);
+            System.out.println("Speed (Average): " + ONE_DECIMAL_FORMAT.format(averageSpeed) + SPACE + KMPH);
+
+            final double paceTotal = PaceUtil.calculatePace(totalDistance, convertToSeconds(durationTotal));
+            System.out.println("Pace Average (Total): " + PaceUtil.format(paceTotal) + SPACE + MIN_PER_KM);
+            final double paceInMotion = PaceUtil.calculatePace(totalDistance, durationInMotion);
+            System.out.println("Pace Average (Motion): " + PaceUtil.format(paceInMotion) + SPACE + MIN_PER_KM);
 
             System.out.println("\n\uD83D\uDCCD Geopositions");
             System.out.println("Start Position: " + formatWaypoint(firstWaypoint));
             System.out.println("End Position: " + formatWaypoint(lastWaypoint));
+
             final Waypoint farthestWaypoint = WaypointUtil.findFarthestWaypoint(firstWaypoint, track);
             System.out.println("Farthest Point: " + formatWaypoint(farthestWaypoint));
 

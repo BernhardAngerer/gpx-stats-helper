@@ -29,6 +29,7 @@ This library enables developers to:
 
 ### 🚴 Speed & Movement
 - Max / average speed `[km/h]`
+- Total / In Motion average pace `[min/km]`
 
 ### 🗺️ Geographic Extents
 - Latitude range `[lat, lat]`
@@ -93,11 +94,11 @@ Link Href: "https://github.com/BernhardAngerer"
 Number Of Waypoints: 2108
 
 📏 Distance & Elevation
-Total Distance: 26,42 km
-Distance Ascent: 17,35 km
-Distance Descent: 9,07 km
-Ascent Elevation: 1008 m
-Descent Elevation: 997 m
+Distance (Total): 26,42 km
+Distance (Ascent): 17,35 km
+Distance (Descent): 9,07 km
+Elevation (Ascent): 1008 m
+Elevation (Descent): 997 m
 Highest Point: 1547 m.s.l.
 Lowest Point: 587 m.s.l.
 Slope between start and end point: 69 %
@@ -113,15 +114,17 @@ Latitude Range: 47.754356 => 47.80743
 Longitude Range: 12.334281 => 12.378897
 
 ⏱️ Time & Duration
-Total Duration: 02:36:34 h
-Duration In Motion: 02:15:36 h
-Duration At Rest: 00:20:58 h
+Duration (Total): 02:36:34 h
+Duration (Motion): 02:15:36 h
+Duration (Rest): 00:20:58 h
 Start Time: 07.09.2021, 15:37:42 h
 End Time: 07.09.2021, 18:14:16 h
 
 🚴 Speed & Movement
-Maximum Speed: 51,9 km/h
-Average Speed: 11,7 km/h
+Speed (Maximum): 51,9 km/h
+Speed (Average): 11,7 km/h
+Pace Average (Total): 05:56 min/km
+Pace Average (Motion): 05:08 min/km
 
 📍 Geopositions
 Start Position: Lat 47.80743, Lon 12.378228, Ele 587
@@ -132,7 +135,7 @@ Negative Peak 1: Lat 47.80743, Lon 12.378228, Ele 587
 Negative Peak 2: Lat 47.807049, Lon 12.378118, Ele 598
 
 🔄 Coordinate Format Conversion
-Lat 47.392036, Lon 11.266654 -> 47°23'31.330"N, 11°15'59.954"E
+Lat 47.80743, Lon 12.378228 -> 47°48'26.748"N, 12°22'41.621"E
 
 🗣️ Geolocation Metadata
 Start = End - Geoposition: Lindenstraße, Bergham, Kraimoos, Bernau am Chiemsee, Landkreis Rosenheim, Bayern, 83233, Deutschland
