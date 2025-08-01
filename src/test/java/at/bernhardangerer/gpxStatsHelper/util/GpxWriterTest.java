@@ -159,7 +159,7 @@ class GpxWriterTest {
         assertThrows(IllegalArgumentException.class, () -> GpxWriter.toFile(null, null));
     }
 
-    private static String canonicalize(String xmlInput) throws Exception {
+    private static String canonicalize(final String xmlInput) throws Exception {
         final Canonicalizer canonicalizer = Canonicalizer.getInstance(Canonicalizer.ALGO_ID_C14N_WITH_COMMENTS);
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         canonicalizer.canonicalize(xmlInput.getBytes(StandardCharsets.UTF_8), outputStream, false);

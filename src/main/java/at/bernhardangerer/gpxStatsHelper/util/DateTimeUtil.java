@@ -24,7 +24,7 @@ public final class DateTimeUtil {
      * @param timeZone target IANA time zone ID (e.g. "Europe/Vienna", "Asia/Tokyo")
      * @return LocalDateTime in the target time zone, or the original UTC time if zone is {@code null} or "UTC"
      */
-    public static LocalDateTime convertFromUtcTime(final LocalDateTime utcTime, String timeZone) {
+    public static LocalDateTime convertFromUtcTime(final LocalDateTime utcTime, final String timeZone) {
         if (timeZone != null && !UTC.equals(timeZone)) {
             final ZonedDateTime utcTimeZoned = ZonedDateTime.of(utcTime, ZoneId.of(UTC));
             return utcTimeZoned.withZoneSameInstant(ZoneId.of(timeZone)).toLocalDateTime();

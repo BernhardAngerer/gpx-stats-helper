@@ -79,13 +79,13 @@ public final class GpxWriter {
         }
     }
 
-    private static void ensureCreator(Gpx gpx) {
+    private static void ensureCreator(final Gpx gpx) {
         if (gpx.getCreator() == null || gpx.getCreator().isEmpty()) {
             gpx.setCreator("gpx-stats-helper");
         }
     }
 
-    private static JAXBElement<Gpx> createGpxJaxbElement(Gpx gpx) {
+    private static JAXBElement<Gpx> createGpxJaxbElement(final Gpx gpx) {
         final QName qName = new QName("http://www.topografix.com/GPX/1/1", "gpx");
         return new JAXBElement<>(qName, Gpx.class, gpx);
     }

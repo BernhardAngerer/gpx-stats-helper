@@ -25,7 +25,7 @@ public final class GeocodeService {
         this.client = new ApiClient();
     }
 
-    GeocodeService(ApiClient client) {
+    GeocodeService(final ApiClient client) {
         this.client = client;
     }
 

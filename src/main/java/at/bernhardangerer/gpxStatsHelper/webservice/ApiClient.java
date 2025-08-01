@@ -17,7 +17,7 @@ public final class ApiClient {
         this.client = HttpClient.newHttpClient();
     }
 
-    ApiClient(HttpClient client) {
+    ApiClient(final HttpClient client) {
         this.client = client;
     }
 

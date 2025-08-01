@@ -15,7 +15,8 @@ public final class DateTimeSegments extends TimeSegments {
     private long months;
     private long days;
 
-    public DateTimeSegments(long years, long months, long days, long hours, long minutes, long seconds) {
+    public DateTimeSegments(final long years, final long months, final long days, final long hours, final long minutes,
+                            final long seconds) {
         super(hours, minutes, seconds);
         this.years = years;
         this.months = months;

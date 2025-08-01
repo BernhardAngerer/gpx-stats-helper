@@ -82,7 +82,7 @@ class GeocodeServiceTest {
         verify(clientMock, never()).send(any());
     }
 
-    private String loadTestFile(String fileName) throws IOException {
+    private String loadTestFile(final String fileName) throws IOException {
         try (InputStream is = getClass().getResourceAsStream("/" + fileName)) {
             return new String(is.readAllBytes(), StandardCharsets.UTF_8);
         }

@@ -216,7 +216,7 @@ public final class Example {
         }
     }
 
-    private static GeocodeReverseModel getGeocodeReverseModel(Waypoint waypoint) {
+    private static GeocodeReverseModel getGeocodeReverseModel(final Waypoint waypoint) {
         try {
             return GeocodeUtil.convertFromJson(GEOCODE_SERVICE.reverseGeocodeAsJson(waypoint));
         } catch (Exception e) {
@@ -224,11 +224,11 @@ public final class Example {
         }
     }
 
-    private static void printPositionDescription(String text, GeocodeReverseModel pos) {
+    private static void printPositionDescription(final String text, final GeocodeReverseModel pos) {
         System.out.println(text + ": " + pos.getDisplayName());
     }
 
-    private static void printPositionUrl(String text, Waypoint waypoint) {
+    private static void printPositionUrl(final String text, final Waypoint waypoint) {
         System.out.println(text + " URL: " + GeocodeUtil.createOpenStreetMapUrl(waypoint));
     }
 }

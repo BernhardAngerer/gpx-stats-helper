@@ -112,7 +112,7 @@ public final class WaypointUtil {
      * @param ele  the elevation in meters
      * @return a {@code Waypoint} initialized with the given values
      */
-    public static Waypoint createWaypoint(double lat, double lon, int ele) {
+    public static Waypoint createWaypoint(final double lat, final double lon, final int ele) {
         return createWaypoint(lat, lon, ele, null);
     }
 
@@ -125,7 +125,7 @@ public final class WaypointUtil {
      * @param time the timestamp of the waypoint
      * @return a {@code Waypoint} initialized with the given values
      */
-    public static Waypoint createWaypoint(double lat, double lon, int ele, LocalDateTime time) {
+    public static Waypoint createWaypoint(final double lat, final double lon, final int ele, final LocalDateTime time) {
         final Waypoint wp = new Waypoint();
         wp.setLat(BigDecimal.valueOf(lat));
         wp.setLon(BigDecimal.valueOf(lon));
@@ -142,7 +142,7 @@ public final class WaypointUtil {
      * @param ele  the elevation in meters
      * @return a {@code Waypoint} initialized with the given values
      */
-    public static Waypoint createWaypoint(double lat, double lon, double ele) {
+    public static Waypoint createWaypoint(final double lat, final double lon, final double ele) {
         return createWaypoint(lat, lon, ele, null);
     }
 
@@ -155,7 +155,7 @@ public final class WaypointUtil {
      * @param time the timestamp of the waypoint
      * @return a {@code Waypoint} initialized with the given values
      */
-    public static Waypoint createWaypoint(double lat, double lon, double ele, LocalDateTime time) {
+    public static Waypoint createWaypoint(final double lat, final double lon, final double ele, final LocalDateTime time) {
         final Waypoint wp = new Waypoint();
         wp.setLat(BigDecimal.valueOf(lat));
         wp.setLon(BigDecimal.valueOf(lon));
