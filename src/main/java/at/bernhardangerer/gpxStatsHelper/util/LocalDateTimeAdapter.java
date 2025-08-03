@@ -5,28 +5,38 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Objects;
 
 import static at.bernhardangerer.gpxStatsHelper.util.Constants.FORMATTER_WITHOUT_MILLIS;
+import static at.bernhardangerer.gpxStatsHelper.util.Constants.FORMATTER_WITHOUT_MILLIS_WITH_OFFSET;
 import static at.bernhardangerer.gpxStatsHelper.util.Constants.FORMATTER_WITH_MILLIS;
 
 public final class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
 
+    private static final List<DateTimeFormatter> FORMATTERS = List.of(
+            FORMATTER_WITH_MILLIS,
+            FORMATTER_WITHOUT_MILLIS,
+            FORMATTER_WITHOUT_MILLIS_WITH_OFFSET
+    );
+
     @Override
     public LocalDateTime unmarshal(final String v) {
-        if (Objects.nonNull(v)) {
+        if (v == null) {
+            return null;
+        }
+
+        for (DateTimeFormatter formatter : FORMATTERS) {
             try {
-                return OffsetDateTime.parse(v, FORMATTER_WITH_MILLIS).toLocalDateTime();
+                return OffsetDateTime.parse(v, formatter).toLocalDateTime();
             } catch (DateTimeParseException ignored) {
-                try {
-                    return OffsetDateTime.parse(v, FORMATTER_WITHOUT_MILLIS).toLocalDateTime();
-                } catch (DateTimeParseException e) {
-                    throw new RuntimeException("Failed to parse datetime: " + v, e);
-                }
+                // Try next formatter
             }
         }
-        return null;
+
+        throw new RuntimeException("Failed to parse datetime: " + v);
     }
 
     @Override

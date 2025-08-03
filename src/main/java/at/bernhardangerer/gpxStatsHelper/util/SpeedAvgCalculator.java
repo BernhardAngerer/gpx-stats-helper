@@ -33,10 +33,13 @@ public final class SpeedAvgCalculator {
 
     static SpeedMetrics fromWaypointList(final List<Waypoint> waypointList) {
         if (waypointList != null && waypointList.size() >= 2) {
-            final SpeedMetrics speedMetrics = new SpeedMetrics();
+            SpeedMetrics speedMetrics = null;
             for (int count = 0; (count + 1) < waypointList.size(); count++) {
                 final SpeedMetrics tempSpeedMetrics = fromWaypoints(waypointList.get(count), waypointList.get(count + 1));
                 if (tempSpeedMetrics != null) {
+                    if (speedMetrics == null) {
+                        speedMetrics = new SpeedMetrics();
+                    }
                     speedMetrics.setDistance(speedMetrics.getDistance() + tempSpeedMetrics.getDistance());
                     speedMetrics.setDuration(speedMetrics.getDuration() + tempSpeedMetrics.getDuration());
                 }
@@ -55,10 +58,13 @@ public final class SpeedAvgCalculator {
 
     static SpeedMetrics fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
         if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
-            final SpeedMetrics speedMetrics = new SpeedMetrics();
+            SpeedMetrics speedMetrics = null;
             for (final TrackSegment trackSegment : trackSegmentList) {
                 final SpeedMetrics tempSpeedMetrics = fromTrackSegment(trackSegment);
                 if (tempSpeedMetrics != null) {
+                    if (speedMetrics == null) {
+                        speedMetrics = new SpeedMetrics();
+                    }
                     speedMetrics.setDistance(speedMetrics.getDistance() + tempSpeedMetrics.getDistance());
                     speedMetrics.setDuration(speedMetrics.getDuration() + tempSpeedMetrics.getDuration());
                 }

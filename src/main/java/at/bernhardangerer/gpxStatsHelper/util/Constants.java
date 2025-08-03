@@ -30,6 +30,8 @@ public final class Constants {
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
     public static final DateTimeFormatter FORMATTER_WITHOUT_MILLIS =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX");
+    public static final DateTimeFormatter FORMATTER_WITHOUT_MILLIS_WITH_OFFSET =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     private Constants() {
     }

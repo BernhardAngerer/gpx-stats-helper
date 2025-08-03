@@ -16,7 +16,7 @@ This library enables developers to:
 - Number of waypoints
 
 ### 📏 Distance & Elevation
-- Total / ascent / descent distance `[m]`
+- Total / ascent / flat / descent distance `[m]`
 - Ascent / descent elevation `[m]`
 - Lowest / highest point `[m]`
 - Slope between two waypoints as percentage `%`
@@ -95,8 +95,10 @@ Number Of Waypoints: 2108
 
 📏 Distance & Elevation
 Distance (Total): 26,42 km
-Distance (Ascent): 17,35 km
+Distance (Ascent): 9,56 km
+Distance (Flat): 7,78 km
 Distance (Descent): 9,07 km
+Distance (Unknown Elevation): 0 km
 Elevation (Ascent): 1008 m
 Elevation (Descent): 997 m
 Highest Point: 1547 m.s.l.

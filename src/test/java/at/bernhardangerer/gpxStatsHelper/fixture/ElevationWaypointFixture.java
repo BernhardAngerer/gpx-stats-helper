@@ -1,4 +1,4 @@
-package at.bernhardangerer.gpxStatsHelper.util;
+package at.bernhardangerer.gpxStatsHelper.fixture;
 
 import com.topografix.model.Waypoint;
 
@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-final class ElevationWaypointFixture {
+public final class ElevationWaypointFixture {
 
     private ElevationWaypointFixture() {
     }

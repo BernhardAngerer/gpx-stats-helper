@@ -43,14 +43,16 @@ public final class SlopeCalculator {
                 final Waypoint waypoint2 = waypointList.get(count + 1);
 
                 final Double slopePercent = calcSlopePercent(waypoint1, waypoint2);
-                final int roundedPercentageStep = roundToStep(slopePercent, percentageStep, stepRoundingMode);
+                if (slopePercent != null) {
+                    final int roundedPercentageStep = roundToStep(slopePercent, percentageStep, stepRoundingMode);
 
-                final Double deltaDistance = calcDistance(waypoint1, waypoint2);
+                    final Double deltaDistance = calcDistance(waypoint1, waypoint2);
 
-                if (result.containsKey(roundedPercentageStep)) {
-                    result.compute(roundedPercentageStep, (key, value) -> Double.sum(value, deltaDistance));
-                } else {
-                    result.put(roundedPercentageStep, deltaDistance);
+                    if (result.containsKey(roundedPercentageStep)) {
+                        result.compute(roundedPercentageStep, (key, value) -> Double.sum(value, deltaDistance));
+                    } else {
+                        result.put(roundedPercentageStep, deltaDistance);
+                    }
                 }
             }
 

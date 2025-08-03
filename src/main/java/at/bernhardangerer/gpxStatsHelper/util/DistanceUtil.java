@@ -52,10 +52,12 @@ public final class DistanceUtil {
      * @return Distance in Meters
      */
     static Double calcDistance(final Waypoint waypoint1, final Waypoint waypoint2) {
-        if (waypoint1 != null && waypoint1.getLat() != null && waypoint1.getLon() != null && waypoint1.getEle() != null
-                && waypoint2 != null && waypoint2.getLat() != null && waypoint2.getLon() != null && waypoint2.getEle() != null) {
+        if (waypoint1 != null && waypoint1.getLat() != null && waypoint1.getLon() != null
+                && waypoint2 != null && waypoint2.getLat() != null && waypoint2.getLon() != null) {
+            final double elevation1 = waypoint1.getEle() != null ? waypoint1.getEle().doubleValue() : 0;
+            final double elevation2 = waypoint2.getEle() != null ? waypoint2.getEle().doubleValue() : 0;
             return calcDistance(waypoint1.getLat().doubleValue(), waypoint2.getLat().doubleValue(), waypoint1.getLon().doubleValue(),
-                    waypoint2.getLon().doubleValue(), waypoint1.getEle().doubleValue(), waypoint2.getEle().doubleValue());
+                    waypoint2.getLon().doubleValue(), elevation1, elevation2);
         }
 
         return null;

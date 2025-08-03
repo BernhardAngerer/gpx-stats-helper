@@ -14,6 +14,9 @@ import static at.bernhardangerer.gpxStatsHelper.util.Constants.UTC;
 
 public final class DateTimeUtil {
 
+    private static final String TIME_MUST_NOT_BE_NULL = "startTime and endTime must not be null";
+    private static final String INVALID_TIME = "startTime must be before endTime";
+
     private DateTimeUtil() {
     }
 
@@ -39,8 +42,16 @@ public final class DateTimeUtil {
      * @param startTime the earlier time
      * @param endTime   the later time
      * @return {@link DateTimeSegments} object representing each time unit difference
+     * @throws IllegalArgumentException if startTime or endTime is invalid
      */
     public static DateTimeSegments calcDateTimeDifference(final LocalDateTime startTime, final LocalDateTime endTime) {
+        if (startTime == null || endTime == null) {
+            throw new IllegalArgumentException(TIME_MUST_NOT_BE_NULL);
+        }
+        if (startTime.isAfter(endTime)) {
+            throw new IllegalArgumentException(INVALID_TIME);
+        }
+
         LocalDateTime tempDateTime = startTime;
 
         final long years = tempDateTime.until(endTime, ChronoUnit.YEARS);
@@ -69,8 +80,16 @@ public final class DateTimeUtil {
      * @param startTime the starting timestamp
      * @param endTime   the ending timestamp
      * @return time difference in seconds as {@code long}
+     * @throws IllegalArgumentException if startTime or endTime is invalid
      */
     public static long calcDateTimeDifferenceInSeconds(final LocalDateTime startTime, final LocalDateTime endTime) {
+        if (startTime == null || endTime == null) {
+            throw new IllegalArgumentException(TIME_MUST_NOT_BE_NULL);
+        }
+        if (startTime.isAfter(endTime)) {
+            throw new IllegalArgumentException(INVALID_TIME);
+        }
+
         return ChronoUnit.SECONDS.between(startTime, endTime);
     }
 
@@ -95,8 +114,13 @@ public final class DateTimeUtil {
      *
      * @param dateTimeSegments object containing time units
      * @return total time in seconds
+     * @throws IllegalArgumentException if dateTimeSegments is null
      */
-    public static long convertToSeconds(final DateTimeSegments dateTimeSegments) {
+    public static Long convertToSeconds(final DateTimeSegments dateTimeSegments) {
+        if (dateTimeSegments == null) {
+            throw new IllegalArgumentException("DateTimeSegments must not be null");
+        }
+
         return dateTimeSegments.getHours() * THREE_SIX_ZERO_ZERO + dateTimeSegments.getMinutes() * SIXTY + dateTimeSegments.getSeconds();
     }
 }

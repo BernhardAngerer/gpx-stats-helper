@@ -1,6 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
-import at.bernhardangerer.gpxStatsHelper.model.ElevationRange;
+import at.bernhardangerer.gpxStatsHelper.model.ElevationExtremes;
 import com.topografix.model.Waypoint;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -80,8 +80,9 @@ public final class ElevationPeakUtil {
 
         final List<Waypoint> peaks = new ArrayList<>();
         if (isValidWaypointList(waypoints)) {
-            final ElevationRange elevationRange = ElevationRangeCalculator.fromWaypointList(waypoints);
-            final BigDecimal elevationDiff = elevationRange.getHighest().getEle().subtract(elevationRange.getLowest().getEle());
+            final ElevationExtremes elevationExtremes = ElevationExtremesCalculator.fromWaypointList(waypoints);
+            final BigDecimal elevationDiff =
+                    elevationExtremes.getHighestPoint().getEle().subtract(elevationExtremes.getLowestPoint().getEle());
 
             if (elevationDiff.compareTo(thresholdInMeters) < 0) {
                 return peaks;

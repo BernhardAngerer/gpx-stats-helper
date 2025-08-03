@@ -30,12 +30,12 @@ public final class SpeedUtil {
      * which encapsulates both distance and duration.
      *
      * @param speedMetrics the {@code SpeedMetrics} instance containing distance (in meters) and duration (in seconds)
-     * @return the speed in kilometers per hour (km/h); returns {@code 0} if {@code speedMetrics} is {@code null}
+     * @return the speed in kilometers per hour (km/h); returns {@code null} if {@code speedMetrics} is {@code null}
      */
-    public static double calculateSpeed(final SpeedMetrics speedMetrics) {
+    public static Double calculateSpeed(final SpeedMetrics speedMetrics) {
         if (speedMetrics != null) {
             return calculateSpeed(speedMetrics.getDistance(), speedMetrics.getDuration());
         }
-        return 0;
+        return null;
     }
 }

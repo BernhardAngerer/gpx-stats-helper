@@ -6,6 +6,7 @@ import com.topografix.model.Waypoint;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil.calcDateTimeDifferenceInSeconds;
 
@@ -57,10 +58,16 @@ public final class DurationInMotionCalculator {
 
     static Long fromTrackSegmentList(final List<TrackSegment> trackSegmentList) {
         if (trackSegmentList != null && !trackSegmentList.isEmpty()) {
-            return trackSegmentList.stream()
+            final List<Long> durations = trackSegmentList.stream()
                     .map(DurationInMotionCalculator::fromTrackSegment)
                     .filter(Objects::nonNull)
-                    .reduce(0L, Long::sum);
+                    .collect(Collectors.toList());
+
+            if (durations.isEmpty()) {
+                return null;
+            }
+
+            return durations.stream().reduce(0L, Long::sum);
         }
         return null;
     }

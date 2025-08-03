@@ -44,7 +44,7 @@ public final class ElevationCalculator {
             for (int count = 0; (count + 1) < waypointList.size(); count++) {
                 final BigDecimal elevationDelta = fromWaypoints(waypointList.get(count), waypointList.get(count + 1));
                 if (elevationDelta != null) {
-                    if (elevationDelta.doubleValue() >= 0) {
+                    if (elevationDelta.doubleValue() > 0) {
                         if (elevation.getAscent() == null) {
                             elevation.setAscent(BigDecimal.ZERO);
                         }
