@@ -1,5 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
+import at.bernhardangerer.gpxStatsHelper.enumeration.SlopeSensitivity;
 import at.bernhardangerer.gpxStatsHelper.fixture.GpxFixture;
 import at.bernhardangerer.gpxStatsHelper.model.ElevationProfile;
 import com.topografix.model.Gpx;
@@ -23,18 +24,44 @@ class DistanceCalculatorTest {
     @Test
     void fromWaypointList() {
         final List<Waypoint> waypointList = GPX_TYPE.getTrk().get(0).getTrkseg().get(0).getTrkpt();
+        final double expectedTotalDistance = 70.12596699240031;
 
-        ElevationProfile distance = DistanceCalculator.fromWaypointList(waypointList);
+        ElevationProfile distance = DistanceCalculator.fromWaypointList(waypointList, SlopeSensitivity.HIGHEST);
         assertNotNull(distance);
         assertEquals(11.822080163097478, distance.getAscent().doubleValue());
         assertEquals(47.831457437114850, distance.getFlat().doubleValue());
         assertEquals(10.472429392187978, distance.getDescent().doubleValue());
         assertNull(distance.getUnknown());
+        assertEquals(expectedTotalDistance, distance.sum().doubleValue());
 
-        distance = DistanceCalculator.fromWaypointList(null);
+        distance = DistanceCalculator.fromWaypointList(waypointList, SlopeSensitivity.HIGH);
+        assertNotNull(distance);
+        assertEquals(11.822080163097478, distance.getAscent().doubleValue());
+        assertEquals(33.0841264721799, distance.getFlat().doubleValue());
+        assertEquals(25.219760357122922, distance.getDescent().doubleValue());
+        assertNull(distance.getUnknown());
+        assertEquals(expectedTotalDistance, distance.sum().doubleValue());
+
+        distance = DistanceCalculator.fromWaypointList(waypointList, SlopeSensitivity.MEDIUM);
+        assertNotNull(distance);
+        assertEquals(22.166428881868878, distance.getAscent().doubleValue());
+        assertEquals(0.0, distance.getFlat().doubleValue());
+        assertEquals(47.959538110531426, distance.getDescent().doubleValue());
+        assertNull(distance.getUnknown());
+        assertEquals(expectedTotalDistance, distance.sum().doubleValue());
+
+        distance = DistanceCalculator.fromWaypointList(waypointList, SlopeSensitivity.LOW);
+        assertNotNull(distance);
+        assertEquals(0.0, distance.getAscent().doubleValue());
+        assertEquals(0.0, distance.getFlat().doubleValue());
+        assertEquals(70.12596699240031, distance.getDescent().doubleValue());
+        assertNull(distance.getUnknown());
+        assertEquals(expectedTotalDistance, distance.sum().doubleValue());
+
+        distance = DistanceCalculator.fromWaypointList(null, SlopeSensitivity.HIGHEST);
         assertNull(distance);
 
-        distance = DistanceCalculator.fromWaypointList(new ArrayList<>());
+        distance = DistanceCalculator.fromWaypointList(new ArrayList<>(), SlopeSensitivity.HIGHEST);
         assertNull(distance);
     }
 
@@ -42,7 +69,7 @@ class DistanceCalculatorTest {
     void fromWaypointListWithoutElevation() {
         final List<Waypoint> waypointList = GPX_TYPE_WITHOUT_ELEVATION.getTrk().get(0).getTrkseg().get(0).getTrkpt();
 
-        final ElevationProfile distance = DistanceCalculator.fromWaypointList(waypointList);
+        final ElevationProfile distance = DistanceCalculator.fromWaypointList(waypointList, SlopeSensitivity.HIGHEST);
         assertNotNull(distance);
         assertNull(distance.getAscent());
         assertNull(distance.getFlat());
@@ -54,17 +81,17 @@ class DistanceCalculatorTest {
     void fromTrackSegment() {
         final TrackSegment trackSegment = GPX_TYPE.getTrk().get(0).getTrkseg().get(0);
 
-        ElevationProfile distance = DistanceCalculator.fromTrackSegment(trackSegment);
+        ElevationProfile distance = DistanceCalculator.fromTrackSegment(trackSegment, SlopeSensitivity.HIGHEST);
         assertNotNull(distance);
         assertEquals(11.822080163097478, distance.getAscent().doubleValue());
         assertEquals(47.831457437114850, distance.getFlat().doubleValue());
         assertEquals(10.472429392187978, distance.getDescent().doubleValue());
         assertNull(distance.getUnknown());
 
-        distance = DistanceCalculator.fromTrackSegment(null);
+        distance = DistanceCalculator.fromTrackSegment(null, SlopeSensitivity.HIGHEST);
         assertNull(distance);
 
-        distance = DistanceCalculator.fromTrackSegment(new TrackSegment());
+        distance = DistanceCalculator.fromTrackSegment(new TrackSegment(), SlopeSensitivity.HIGHEST);
         assertNull(distance);
     }
 
@@ -72,7 +99,7 @@ class DistanceCalculatorTest {
     void fromTrackSegmentWithoutElevation() {
         final TrackSegment trackSegment = GPX_TYPE_WITHOUT_ELEVATION.getTrk().get(0).getTrkseg().get(0);
 
-        final ElevationProfile distance = DistanceCalculator.fromTrackSegment(trackSegment);
+        final ElevationProfile distance = DistanceCalculator.fromTrackSegment(trackSegment, SlopeSensitivity.HIGHEST);
         assertNotNull(distance);
         assertNull(distance.getAscent());
         assertNull(distance.getFlat());
@@ -84,17 +111,17 @@ class DistanceCalculatorTest {
     void fromTrackSegmentList() {
         final List<TrackSegment> trackSegmentList = GPX_TYPE.getTrk().get(0).getTrkseg();
 
-        ElevationProfile distance = DistanceCalculator.fromTrackSegmentList(trackSegmentList);
+        ElevationProfile distance = DistanceCalculator.fromTrackSegmentList(trackSegmentList, SlopeSensitivity.HIGHEST);
         assertNotNull(distance);
         assertEquals(11.822080163097478, distance.getAscent().doubleValue());
         assertEquals(117.0878647797619, distance.getFlat().doubleValue());
         assertEquals(154.33773779672697, distance.getDescent().doubleValue());
         assertNull(distance.getUnknown());
 
-        distance = DistanceCalculator.fromTrackSegmentList(null);
+        distance = DistanceCalculator.fromTrackSegmentList(null, SlopeSensitivity.HIGHEST);
         assertNull(distance);
 
-        distance = DistanceCalculator.fromTrackSegmentList(new ArrayList<>());
+        distance = DistanceCalculator.fromTrackSegmentList(new ArrayList<>(), SlopeSensitivity.HIGHEST);
         assertNull(distance);
     }
 
@@ -102,7 +129,7 @@ class DistanceCalculatorTest {
     void fromTrackSegmentListWithoutElevation() {
         final List<TrackSegment> trackSegmentList = GPX_TYPE_WITHOUT_ELEVATION.getTrk().get(0).getTrkseg();
 
-        final ElevationProfile distance = DistanceCalculator.fromTrackSegmentList(trackSegmentList);
+        final ElevationProfile distance = DistanceCalculator.fromTrackSegmentList(trackSegmentList, SlopeSensitivity.HIGHEST);
         assertNotNull(distance);
         assertNull(distance.getAscent());
         assertNull(distance.getFlat());
@@ -113,30 +140,83 @@ class DistanceCalculatorTest {
     @Test
     void fromTrack() {
         final Track track = GPX_TYPE.getTrk().get(0);
+        final double expectedTotalDistance = 283.247682739586360;
 
-        ElevationProfile distance = DistanceCalculator.fromTrack(track);
+        ElevationProfile distance = DistanceCalculator.fromTrack(track, SlopeSensitivity.HIGHEST);
         assertNotNull(distance);
         assertEquals(11.822080163097478, distance.getAscent().doubleValue());
         assertEquals(117.0878647797619, distance.getFlat().doubleValue());
         assertEquals(154.33773779672697, distance.getDescent().doubleValue());
         assertNull(distance.getUnknown());
+        assertEquals(expectedTotalDistance, distance.sum().doubleValue());
 
-        distance = DistanceCalculator.fromTrack(null);
+        distance = DistanceCalculator.fromTrack(track, SlopeSensitivity.HIGH);
+        assertNotNull(distance);
+        assertEquals(11.822080163097478, distance.getAscent().doubleValue());
+        assertEquals(91.55728509940407, distance.getFlat().doubleValue());
+        assertEquals(179.86831747708482, distance.getDescent().doubleValue());
+        assertNull(distance.getUnknown());
+        assertEquals(expectedTotalDistance, distance.sum().doubleValue());
+
+        distance = DistanceCalculator.fromTrack(track, SlopeSensitivity.MEDIUM);
+        assertNotNull(distance);
+        assertEquals(22.166428881868878, distance.getAscent().doubleValue());
+        assertEquals(47.56586209331613, distance.getFlat().doubleValue());
+        assertEquals(213.51539176440136, distance.getDescent().doubleValue());
+        assertNull(distance.getUnknown());
+        assertEquals(expectedTotalDistance, distance.sum().doubleValue());
+
+        distance = DistanceCalculator.fromTrack(track, SlopeSensitivity.LOW);
+        assertNotNull(distance);
+        assertEquals(0.0, distance.getAscent().doubleValue());
+        assertEquals(37.31460287337097, distance.getFlat().doubleValue());
+        assertEquals(245.9330798662154, distance.getDescent().doubleValue());
+        assertNull(distance.getUnknown());
+        assertEquals(expectedTotalDistance, distance.sum().doubleValue());
+
+        distance = DistanceCalculator.fromTrack(null, SlopeSensitivity.HIGHEST);
         assertNull(distance);
 
-        distance = DistanceCalculator.fromTrack(new Track());
+        distance = DistanceCalculator.fromTrack(new Track(), SlopeSensitivity.HIGHEST);
         assertNull(distance);
     }
 
     @Test
     void fromTrackWithoutElevation() {
         final Track track = GPX_TYPE_WITHOUT_ELEVATION.getTrk().get(0);
+        final double expectedTotalDistance = 282.998658999786672;
+        final double expectedUnknownDistance = expectedTotalDistance;
 
-        final ElevationProfile distance = DistanceCalculator.fromTrack(track);
+        ElevationProfile distance = DistanceCalculator.fromTrack(track, SlopeSensitivity.HIGHEST);
         assertNotNull(distance);
         assertNull(distance.getAscent());
         assertNull(distance.getFlat());
         assertNull(distance.getDescent());
-        assertEquals(282.998658999786672, distance.getUnknown().doubleValue());
+        assertEquals(expectedUnknownDistance, distance.getUnknown().doubleValue());
+        assertEquals(expectedTotalDistance, distance.sum().doubleValue());
+
+        distance = DistanceCalculator.fromTrack(track, SlopeSensitivity.HIGH);
+        assertNotNull(distance);
+        assertNull(distance.getAscent());
+        assertNull(distance.getFlat());
+        assertNull(distance.getDescent());
+        assertEquals(expectedUnknownDistance, distance.getUnknown().doubleValue());
+        assertEquals(expectedTotalDistance, distance.sum().doubleValue());
+
+        distance = DistanceCalculator.fromTrack(track, SlopeSensitivity.MEDIUM);
+        assertNotNull(distance);
+        assertNull(distance.getAscent());
+        assertNull(distance.getFlat());
+        assertNull(distance.getDescent());
+        assertEquals(expectedUnknownDistance, distance.getUnknown().doubleValue());
+        assertEquals(expectedTotalDistance, distance.sum().doubleValue());
+
+        distance = DistanceCalculator.fromTrack(track, SlopeSensitivity.LOW);
+        assertNotNull(distance);
+        assertNull(distance.getAscent());
+        assertNull(distance.getFlat());
+        assertNull(distance.getDescent());
+        assertEquals(expectedUnknownDistance, distance.getUnknown().doubleValue());
+        assertEquals(expectedTotalDistance, distance.sum().doubleValue());
     }
 }

@@ -1,5 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper;
 
+import at.bernhardangerer.gpxStatsHelper.enumeration.SlopeSensitivity;
 import at.bernhardangerer.gpxStatsHelper.enumeration.StepRoundingMode;
 import at.bernhardangerer.gpxStatsHelper.model.AscentDescentPair;
 import at.bernhardangerer.gpxStatsHelper.model.BoundingBox;
@@ -108,7 +109,7 @@ public final class Example {
             System.out.println("Number Of Waypoints: " + numberOfWaypoints);
 
             System.out.println("\n\uD83D\uDCCF Distance & Elevation");
-            final ElevationProfile distance = DistanceCalculator.fromTrack(track);
+            final ElevationProfile distance = DistanceCalculator.fromTrack(track, SlopeSensitivity.HIGHEST);
             final double totalDistance = distance.sum().doubleValue();
             System.out.println("Distance (Total): " + TWO_DECIMAL_FORMAT.format(totalDistance / ONE_THOUSAND) + SPACE + KM);
             System.out.println("Distance (Ascent): "

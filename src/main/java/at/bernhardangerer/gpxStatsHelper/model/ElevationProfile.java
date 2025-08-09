@@ -36,9 +36,8 @@ public final class ElevationProfile extends AscentDescentPair {
      * @return sum of all fields
      */
     public BigDecimal sum() {
-        return (getAscent() != null ? getAscent() : BigDecimal.ZERO)
-                .add(flat != null ? flat : BigDecimal.ZERO)
-                .add(getDescent() != null ? getDescent() : BigDecimal.ZERO)
-                .add(unknown != null ? unknown : BigDecimal.ZERO);
+        return (flat != null ? flat : BigDecimal.ZERO)
+                .add(unknown != null ? unknown : BigDecimal.ZERO)
+                .add(super.sum());
     }
 }
