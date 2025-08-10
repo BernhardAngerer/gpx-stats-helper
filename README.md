@@ -149,4 +149,4 @@ Start = End - Geoposition URL: https://nominatim.openstreetmap.org/ui/reverse.ht
 
 ## 📦 Dependency (Maven / Gradle)
 
-Add the dependency via https://jitpack.io/private#BernhardAngerer/gpx-stats-helper/2.1.0
+Add the dependency via https://jitpack.io/private#BernhardAngerer/gpx-stats-helper/4.0.0
