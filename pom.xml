@@ -4,7 +4,7 @@
 
     <groupId>at.bernhardangerer</groupId>
     <artifactId>gpx-stats-helper</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>gpx-stats-helper</name>
     <description>GPX statistic helper library</description>
@@ -200,7 +200,7 @@
         <connection>scm:git:git@github.com:BernhardAngerer/gpx-stats-helper.git</connection>
         <developerConnection>scm:git:git@github.com:BernhardAngerer/gpx-stats-helper.git</developerConnection>
         <url>https://github.com/BernhardAngerer/gpx-stats-helper</url>
-        <tag>4.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
     <distributionManagement>
         <repository>
