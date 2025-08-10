@@ -76,6 +76,7 @@ public final class Example {
         final String pathName = "example/example1.gpx";
         final Gpx gpx = GpxReader.fromFile(pathName);
         System.out.println("File: \"" + pathName + ESCAPE_DOUBLE_QUOTES);
+        final SlopeSensitivity slopeSensitivity = SlopeSensitivity.HIGHEST;
 
         if (gpx.getMetadata() != null) {
             System.out.println("\n\uD83D\uDDC2\uFE0F Metadata");
@@ -109,7 +110,7 @@ public final class Example {
             System.out.println("Number Of Waypoints: " + numberOfWaypoints);
 
             System.out.println("\n\uD83D\uDCCF Distance & Elevation");
-            final ElevationProfile distance = DistanceCalculator.fromTrack(track, SlopeSensitivity.HIGHEST);
+            final ElevationProfile distance = DistanceCalculator.fromTrack(track, slopeSensitivity);
             final double totalDistance = distance.sum().doubleValue();
             System.out.println("Distance (Total): " + TWO_DECIMAL_FORMAT.format(totalDistance / ONE_THOUSAND) + SPACE + KM);
             System.out.println("Distance (Ascent): "
@@ -152,8 +153,8 @@ public final class Example {
             }
 
             final int percentageStep = 10;
-            final Map<Integer, Double> percentageStepMap =
-                    SlopeCalculator.fromWaypointList(track.getTrkseg().get(0).getTrkpt(), percentageStep, StepRoundingMode.DOWN);
+            final Map<Integer, Double> percentageStepMap = SlopeCalculator.fromWaypointList(
+                    track.getTrkseg().get(0).getTrkpt(), percentageStep, StepRoundingMode.DOWN, slopeSensitivity);
             percentageStepMap.entrySet().stream()
                     .sorted(Map.Entry.<Integer, Double>comparingByKey().reversed())
                     .forEach(entry -> System.out.println(

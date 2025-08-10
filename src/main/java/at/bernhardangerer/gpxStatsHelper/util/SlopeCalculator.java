@@ -1,5 +1,6 @@
 package at.bernhardangerer.gpxStatsHelper.util;
 
+import at.bernhardangerer.gpxStatsHelper.enumeration.SlopeSensitivity;
 import at.bernhardangerer.gpxStatsHelper.enumeration.StepRoundingMode;
 import com.topografix.model.Waypoint;
 
@@ -7,9 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static at.bernhardangerer.gpxStatsHelper.util.DistanceUtil.calcDistance;
 import static at.bernhardangerer.gpxStatsHelper.util.RoundingUtil.roundToStep;
-import static at.bernhardangerer.gpxStatsHelper.util.SlopeUtil.calcSlopePercent;
 
 public final class SlopeCalculator {
 
@@ -17,49 +16,72 @@ public final class SlopeCalculator {
     }
 
     /**
-     * Generates a mapping of slope percentage (rounded to a step) to total distance in meters
-     * across a list of waypoints. The slope between each consecutive pair of waypoints is calculated,
-     * rounded using the provided {@link StepRoundingMode}, and grouped accordingly.
+     * Computes a histogram of traveled distances grouped by rounded average slope percentage.
      * <p>
-     * This is commonly used to build elevation/distance distribution charts (e.g. how many meters of ascent fall into 0–5%, 5–10%, etc).
+     * This method applies a sliding window defined by the given {@link SlopeSensitivity} to calculate
+     * the average slope for each segment in the {@code waypointList}. The slope for a segment is
+     * calculated as the average of all sub-segment slopes between the start and end of the window.
+     * Each segment's distance is then added to a bucket corresponding to its slope percentage,
+     * rounded to the nearest multiple of {@code percentageStep} using the specified
+     * {@link StepRoundingMode}.
+     * <p>
+     * Distances for segments with no valid slope measurements in the window are classified
+     * as having a slope of {@code 0.0}.
+     * <p>
+     * The sum of all values in the returned map equals the total traveled distance, regardless
+     * of the chosen {@code sensitivity}.
      *
-     * @param waypointList     the list of ordered {@link Waypoint} entries (must contain at least 2 points)
-     * @param percentageStep   the rounding interval in percent (e.g. 5 means group by 5% slope bins)
-     * @param stepRoundingMode defines how to round slope values (UP, DOWN, or NEAREST)
-     * @return a {@code Map<Integer, Double>} where:
-     *         <ul>
-     *             <li><b>key</b> = slope % (rounded according to mode)</li>
-     *             <li><b>value</b> = total distance [m] covered under this slope bin</li>
-     *         </ul>
-     *         or {@code null} if the input list is {@code null} or contains fewer than two points
+     * @param waypointList   the ordered list of waypoints representing the track; must contain
+     *                       at least two waypoints
+     * @param percentageStep the slope percentage bucket size (e.g., 5 groups slopes into
+     *                       -10%, -5%, 0%, 5%, 10%, etc.)
+     * @param stepRoundingMode the rounding strategy to apply when assigning slope percentages
+     *                         to buckets
+     * @param sensitivity    the slope sensitivity settings that determine the sliding window size
+     * @return a map where the key is the rounded slope percentage bucket, and the value is the
+     *         total distance (in meters) traveled in that slope range; or {@code null} if
+     *         {@code waypointList} or {@code sensitivity} is {@code null}, or if fewer than two
+     *         waypoints are provided
      */
     public static Map<Integer, Double> fromWaypointList(final List<Waypoint> waypointList, final int percentageStep,
-                                                        final StepRoundingMode stepRoundingMode) {
-        if (waypointList != null && waypointList.size() >= 2) {
-            final Map<Integer, Double> result = new HashMap<>();
-
-            for (int count = 0; (count + 1) < waypointList.size(); count++) {
-                final Waypoint waypoint1 = waypointList.get(count);
-                final Waypoint waypoint2 = waypointList.get(count + 1);
-
-                final Double slopePercent = calcSlopePercent(waypoint1, waypoint2);
-                if (slopePercent != null) {
-                    final int roundedPercentageStep = roundToStep(slopePercent, percentageStep, stepRoundingMode);
-
-                    final Double deltaDistance = calcDistance(waypoint1, waypoint2);
-
-                    if (result.containsKey(roundedPercentageStep)) {
-                        result.compute(roundedPercentageStep, (key, value) -> Double.sum(value, deltaDistance));
-                    } else {
-                        result.put(roundedPercentageStep, deltaDistance);
-                    }
-                }
-            }
-
-            return result;
+                                                        final StepRoundingMode stepRoundingMode,
+                                                        final SlopeSensitivity sensitivity) {
+        if (waypointList == null || sensitivity == null || waypointList.size() < 2) {
+            return null;
         }
 
-        return null;
+        final int windowSize = Math.min(sensitivity.getWindowSize(), waypointList.size());
+        final int half = windowSize / 2;
+        final int n = waypointList.size();
+        final Map<Integer, Double> result = new HashMap<>();
+
+        for (int iter = 0; iter < n - 1; iter++) {
+            int start = iter + 1 - half;
+            if (start < 0) {
+                start = 0;
+            } else if (start > n - windowSize) {
+                start = n - windowSize;
+            }
+            final int end = start + windowSize - 1;
+
+            // --- Average slope calculation ---
+            double totalSlope = 0.0;
+            int slopeCount = 0;
+            for (int avgIter = start; avgIter < end; avgIter++) {
+                final Double segSlope = SlopeUtil.calcSlopePercent(waypointList.get(avgIter), waypointList.get(avgIter + 1));
+                if (segSlope != null) {
+                    totalSlope += segSlope;
+                    slopeCount++;
+                }
+            }
+            final double avgSlopePercent = (slopeCount > 0) ? (totalSlope / slopeCount) : 0.0;
+
+            final Double distance = DistanceUtil.calcDistance(waypointList.get(iter), waypointList.get(iter + 1));
+            final int roundedStep = roundToStep(avgSlopePercent, percentageStep, stepRoundingMode);
+            result.merge(roundedStep, distance, Double::sum);
+        }
+
+        return result;
     }
 
 }

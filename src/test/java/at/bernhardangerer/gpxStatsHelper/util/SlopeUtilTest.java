@@ -62,4 +62,15 @@ class SlopeUtilTest {
         slopePercent = SlopeUtil.calcSlopePercent(null, null);
         assertNull(slopePercent);
     }
+
+    @Test
+    void calcSlopePercentFromWaypointsExtremeNegative() {
+        final Waypoint waypoint1 = createWaypoint(47.758945, 12.365051, 1494);
+        final Waypoint waypoint2 = createWaypoint(47.758945, 12.365019, 1491);
+
+        final Double slopePercent = SlopeUtil.calcSlopePercent(waypoint1, waypoint2);
+        assertNotNull(slopePercent);
+        assertTrue(slopePercent < 0);
+        assertEquals(-125.41650496999428, slopePercent);
+    }
 }
