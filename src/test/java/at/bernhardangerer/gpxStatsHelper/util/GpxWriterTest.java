@@ -38,37 +38,38 @@ class GpxWriterTest {
     private Gpx gpx;
 
     private final String canonicalizedGpxString =
-            "<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
-                    + "creator=\"gpx-stats-helper\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 "
-                    + "http://www.topografix.com/GPX/1/1/gpx.xsd\">\n"
-                    + "    <metadata>\n"
-                    + "        <name>My gpx file</name>\n"
-                    + "        <author>\n"
-                    + "            <name>Bernhard Angerer</name>\n"
-                    + "        </author>\n"
-                    + "        <copyright author=\"gpx-stats-helper\">\n"
-                    + "            <year>2025</year>\n"
-                    + "            <license>free</license>\n"
-                    + "        </copyright>\n"
-                    + "    </metadata>\n"
-                    + "    <trk>\n"
-                    + "        <name>My short tour</name>\n"
-                    + "        <trkseg>\n"
-                    + "            <trkpt lat=\"47.80743\" lon=\"12.378228\">\n"
-                    + "                <ele>587</ele>\n"
-                    + "                <time>2025-04-07T16:14:16Z</time>\n"
-                    + "            </trkpt>\n"
-                    + "            <trkpt lat=\"47.807343\" lon=\"12.378138\">\n"
-                    + "                <ele>588</ele>\n"
-                    + "                <time>2025-04-07T16:14:17Z</time>\n"
-                    + "            </trkpt>\n"
-                    + "            <trkpt lat=\"47.807343\" lon=\"12.378\">\n"
-                    + "                <ele>589</ele>\n"
-                    + "                <time>2025-04-07T16:14:18Z</time>\n"
-                    + "            </trkpt>\n"
-                    + "        </trkseg>\n"
-                    + "    </trk>\n"
-                    + "</gpx>";
+            """
+                    <gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+                    creator="gpx-stats-helper" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 \
+                    http://www.topografix.com/GPX/1/1/gpx.xsd">
+                        <metadata>
+                            <name>My gpx file</name>
+                            <author>
+                                <name>Bernhard Angerer</name>
+                            </author>
+                            <copyright author="gpx-stats-helper">
+                                <year>2025</year>
+                                <license>free</license>
+                            </copyright>
+                        </metadata>
+                        <trk>
+                            <name>My short tour</name>
+                            <trkseg>
+                                <trkpt lat="47.80743" lon="12.378228">
+                                    <ele>587</ele>
+                                    <time>2025-04-07T16:14:16Z</time>
+                                </trkpt>
+                                <trkpt lat="47.807343" lon="12.378138">
+                                    <ele>588</ele>
+                                    <time>2025-04-07T16:14:17Z</time>
+                                </trkpt>
+                                <trkpt lat="47.807343" lon="12.378">
+                                    <ele>589</ele>
+                                    <time>2025-04-07T16:14:18Z</time>
+                                </trkpt>
+                            </trkseg>
+                        </trk>
+                    </gpx>""";
 
     @BeforeEach
     void init() throws DatatypeConfigurationException {

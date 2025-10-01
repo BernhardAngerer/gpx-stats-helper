@@ -31,9 +31,7 @@ class RoundingUtilTest {
 
     @Test
     public void testIntInvalidRoundingModeThrows() {
-        final Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            RoundingUtil.roundToStep(10, 2, null);
-        });
+        final Exception exception = assertThrows(IllegalArgumentException.class, () -> RoundingUtil.roundToStep(10, 2, null));
         assertEquals("StepRoundingMode must not be null", exception.getMessage());
     }
 

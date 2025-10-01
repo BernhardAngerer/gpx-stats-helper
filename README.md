@@ -47,7 +47,7 @@ This library enables developers to:
   *(using the free [Nominatim API](https://nominatim.org/release-docs/develop/api/Reverse/) for reverse geocoding based on OpenStreetMap data)*
 
 ## ✅ Requirements
-+ Java 11+
++ Java 17+
 + Maven
 
 ## 🚀 Examples

@@ -55,9 +55,7 @@ class ApiClientTest {
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class))).thenReturn(mockHttpResponse);
         when(mockHttpResponse.statusCode()).thenReturn(500);
 
-        final WebserviceCallException ex = assertThrows(WebserviceCallException.class, () -> {
-            apiClient.sendHttpRequest(testUri);
-        });
+        final WebserviceCallException ex = assertThrows(WebserviceCallException.class, () -> apiClient.sendHttpRequest(testUri));
         assertTrue(ex.getMessage().contains("Endpoint responded with status code 500"));
     }
 }

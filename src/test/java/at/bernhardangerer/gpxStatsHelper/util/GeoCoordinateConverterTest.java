@@ -24,9 +24,8 @@ class GeoCoordinateConverterTest {
 
     @Test
     public void testWaypointToDmsNullWaypointThrowsException() {
-        final IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            GeoCoordinateConverter.waypointToDms(null);
-        });
+        final IllegalArgumentException thrown =
+                assertThrows(IllegalArgumentException.class, () -> GeoCoordinateConverter.waypointToDms(null));
         assertEquals("Waypoint, Lat or Lon must not be null!", thrown.getMessage());
     }
 
@@ -36,9 +35,8 @@ class GeoCoordinateConverterTest {
         waypoint.setLat(null);
         waypoint.setLon(BigDecimal.valueOf(12.345));
 
-        final IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            GeoCoordinateConverter.waypointToDms(waypoint);
-        });
+        final IllegalArgumentException thrown =
+                assertThrows(IllegalArgumentException.class, () -> GeoCoordinateConverter.waypointToDms(waypoint));
         assertEquals("Waypoint, Lat or Lon must not be null!", thrown.getMessage());
     }
 
@@ -48,9 +46,8 @@ class GeoCoordinateConverterTest {
         waypoint.setLat(BigDecimal.valueOf(12.345));
         waypoint.setLon(null);
 
-        final IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            GeoCoordinateConverter.waypointToDms(waypoint);
-        });
+        final IllegalArgumentException thrown =
+                assertThrows(IllegalArgumentException.class, () -> GeoCoordinateConverter.waypointToDms(waypoint));
         assertEquals("Waypoint, Lat or Lon must not be null!", thrown.getMessage());
     }
 

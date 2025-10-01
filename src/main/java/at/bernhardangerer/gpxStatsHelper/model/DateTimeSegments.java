@@ -30,20 +30,20 @@ public final class DateTimeSegments extends TimeSegments {
                     .append(" years");
         }
         if (months > 0) {
-            if (stringBuilder.length() > 0) {
+            if (!stringBuilder.isEmpty()) {
                 stringBuilder.append(SEPARATOR);
             }
             stringBuilder.append(months)
                     .append(" months");
         }
         if (days > 0) {
-            if (stringBuilder.length() > 0) {
+            if (!stringBuilder.isEmpty()) {
                 stringBuilder.append(SEPARATOR);
             }
             stringBuilder.append(days)
                     .append(" days");
         }
-        if (stringBuilder.length() > 0) {
+        if (!stringBuilder.isEmpty()) {
             stringBuilder.append(SEPARATOR);
         }
 

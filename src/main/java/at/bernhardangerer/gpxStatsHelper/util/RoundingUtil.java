@@ -92,12 +92,11 @@ public final class RoundingUtil {
             throw new IllegalArgumentException(INVALID_STEP_ROUNDING_MODE);
         }
 
-        switch (stepRoundingMode) {
-            case UP: return roundUpToStep(input, step);
-            case DOWN: return roundDownToStep(input, step);
-            case NEAREST: return roundToNearestStep(input, step);
-            default: throw new IllegalArgumentException(UNSUPPORTED_STEP_ROUNDING_MODE);
-        }
+        return switch (stepRoundingMode) {
+            case UP -> roundUpToStep(input, step);
+            case DOWN -> roundDownToStep(input, step);
+            case NEAREST -> roundToNearestStep(input, step);
+        };
     }
 
     /**
@@ -114,11 +113,10 @@ public final class RoundingUtil {
             throw new IllegalArgumentException(INVALID_STEP_ROUNDING_MODE);
         }
 
-        switch (stepRoundingMode) {
-            case UP: return roundUpToStep(input, step);
-            case DOWN: return roundDownToStep(input, step);
-            case NEAREST: return roundToNearestStep(input, step);
-            default: throw new IllegalArgumentException(UNSUPPORTED_STEP_ROUNDING_MODE);
-        }
+        return switch (stepRoundingMode) {
+            case UP -> roundUpToStep(input, step);
+            case DOWN -> roundDownToStep(input, step);
+            case NEAREST -> roundToNearestStep(input, step);
+        };
     }
 }

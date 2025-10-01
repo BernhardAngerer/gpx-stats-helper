@@ -34,10 +34,10 @@ class GeographicExtentUtilTest {
         final BoundingBox box = GeographicExtentUtil.findBounding(track);
 
         assertNotNull(box);
-        assertEquals(new BigDecimal("47.807343"), box.getMinLat());
-        assertEquals(new BigDecimal("12.378"), box.getMinLon());
-        assertEquals(new BigDecimal("47.80743"), box.getMaxLat());
-        assertEquals(new BigDecimal("12.378228"), box.getMaxLon());
+        assertEquals(new BigDecimal("47.807343"), box.minLat());
+        assertEquals(new BigDecimal("12.378"), box.minLon());
+        assertEquals(new BigDecimal("47.80743"), box.maxLat());
+        assertEquals(new BigDecimal("12.378228"), box.maxLon());
     }
 
     @Test

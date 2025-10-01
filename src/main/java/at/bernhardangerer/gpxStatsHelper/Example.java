@@ -5,16 +5,16 @@ import at.bernhardangerer.gpxStatsHelper.enumeration.StepRoundingMode;
 import at.bernhardangerer.gpxStatsHelper.model.AscentDescentPair;
 import at.bernhardangerer.gpxStatsHelper.model.BoundingBox;
 import at.bernhardangerer.gpxStatsHelper.model.DateTimeSegments;
-import at.bernhardangerer.gpxStatsHelper.model.ElevationProfile;
 import at.bernhardangerer.gpxStatsHelper.model.ElevationExtremes;
+import at.bernhardangerer.gpxStatsHelper.model.ElevationProfile;
 import at.bernhardangerer.gpxStatsHelper.model.api.GeocodeReverseModel;
 import at.bernhardangerer.gpxStatsHelper.service.GeocodeService;
 import at.bernhardangerer.gpxStatsHelper.util.DateTimeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.DistanceCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.DurationInMotionCalculator;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationCalculator;
-import at.bernhardangerer.gpxStatsHelper.util.ElevationPeakUtil;
 import at.bernhardangerer.gpxStatsHelper.util.ElevationExtremesCalculator;
+import at.bernhardangerer.gpxStatsHelper.util.ElevationPeakUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GeoCoordinateConverter;
 import at.bernhardangerer.gpxStatsHelper.util.GeocodeUtil;
 import at.bernhardangerer.gpxStatsHelper.util.GeographicExtentUtil;
@@ -163,8 +163,8 @@ public final class Example {
 
             System.out.println("\n\uD83D\uDDFA\uFE0F Geographic Extents");
             final BoundingBox boundingBox = GeographicExtentUtil.findBounding(track);
-            System.out.println("Latitude Range: " + boundingBox.getMinLat() + " => " + boundingBox.getMaxLat());
-            System.out.println("Longitude Range: " + boundingBox.getMinLon() + " => " + boundingBox.getMaxLon());
+            System.out.println("Latitude Range: " + boundingBox.minLat() + " => " + boundingBox.maxLat());
+            System.out.println("Longitude Range: " + boundingBox.minLon() + " => " + boundingBox.maxLon());
 
             System.out.println("\n⏱\uFE0F Time & Duration");
             DateTimeSegments durationTotal = null;
@@ -220,16 +220,14 @@ public final class Example {
             final List<Waypoint> positivePeaks =
                     ElevationPeakUtil.findPositivePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
             final AtomicInteger counter = new AtomicInteger(0);
-            positivePeaks.forEach(waypoint -> {
-                System.out.println("Positive Peak " + counter.incrementAndGet() + ": " + formatWaypoint(waypoint));
-            });
+            positivePeaks.forEach(
+                    waypoint -> System.out.println("Positive Peak " + counter.incrementAndGet() + ": " + formatWaypoint(waypoint)));
 
             final List<Waypoint> negativePeaks =
                     ElevationPeakUtil.findNegativePeaks(track.getTrkseg().get(0).getTrkpt(), BigDecimal.valueOf(ONE_HUNDRED));
             counter.set(0);
-            negativePeaks.forEach(waypoint -> {
-                System.out.println("Negative Peak " + counter.incrementAndGet() + ": " + formatWaypoint(waypoint));
-            });
+            negativePeaks.forEach(
+                    waypoint -> System.out.println("Negative Peak " + counter.incrementAndGet() + ": " + formatWaypoint(waypoint)));
 
             System.out.println("\n\uD83D\uDD04 Coordinate Format Conversion");
             System.out.println(formatWaypoint(firstWaypoint, false) + " -> " + GeoCoordinateConverter.waypointToDms(firstWaypoint));
