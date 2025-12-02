@@ -30,7 +30,7 @@
         <dependency>
             <groupId>org.jvnet.jaxb</groupId>
             <artifactId>jaxb-plugins</artifactId>
-            <version>4.0.11</version>
+            <version>4.0.12</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
@@ -106,7 +106,7 @@
                         <plugin>
                             <groupId>org.jvnet.jaxb</groupId>
                             <artifactId>jaxb-plugins</artifactId>
-                            <version>4.0.11</version>
+                            <version>4.0.12</version>
                         </plugin>
                     </plugins>
                 </configuration>
